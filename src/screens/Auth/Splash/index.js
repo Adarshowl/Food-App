@@ -51,6 +51,7 @@ const Splash = ({ navigation }) => {
         await getAppCurrencyConfiguration();
         await getUserFromStorage();
         navigation.replace('MainContainer');
+        // new change
         ShowConsoleLogMessage(error);
       } finally {
         await getUserFromStorage();
