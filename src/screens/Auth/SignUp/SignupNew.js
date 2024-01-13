@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -17,12 +17,12 @@ import {
   View,
 } from 'react-native';
 // import Fontisto from 'react-native-vector-icons/Fontisto'
-import {SIZES, STRING} from '../../../constants';
+import { SIZES, STRING } from '../../../constants';
 import ImagePicker from 'react-native-image-crop-picker';
 import icons from '../../../constants/icons';
-import {requestExternalWritePermission} from '../../../utils/RequestUserPermission';
-import {COLORS} from '../../../constants/Colors';
-import {FONTS} from '../../../constants/Fonts';
+import { requestExternalWritePermission } from '../../../utils/RequestUserPermission';
+import { COLORS } from '../../../constants/Colors';
+import { FONTS } from '../../../constants/Fonts';
 import Foundation from 'react-native-vector-icons/Foundation';
 import GlobalStyle from '../../../styles/GlobalStyle';
 import Fontisto from 'react-native-vector-icons/Fontisto';
@@ -32,6 +32,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import VegUrbanEditText from '../../../utils/EditText/VegUrbanEditText';
 import VegUrbanFloatEditText from '../../../utils/EditText/VegUrbanFloatEditText';
 import VegUrbanCommonBtn from '../../../utils/VegUrbanCommonBtn';
+import VegUrbanProgressBar from '../../../utils/VegUrbanProgressBar';
 import OtpInputs from 'react-native-otp-inputs';
 import PhoneInput from 'react-native-phone-number-input';
 // import {useDispatch} from 'react-redux';
@@ -42,8 +43,8 @@ import {
 } from '../../../utils/Utility';
 import themeContext from '../../../constants/themeContext';
 import '../../../assets/i18n/i18n';
-import {useTranslation} from 'react-i18next';
-import {useDispatch, useSelector} from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   deleteUser,
   getUserProfile,
@@ -55,18 +56,18 @@ import {
   updateLoginCount,
   userTokenSuccess,
 } from '../../../redux/actions';
-import {USER_DATA} from '../../../redux/type';
+import { USER_DATA } from '../../../redux/type';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   clearRealm,
   doSaveImage,
   getSavedImage,
 } from '../../../utils/RealmUtility';
-import {updateCartDataLength} from '../../../redux/actions/HomeApi';
-import {EventRegister} from 'react-native-event-listeners';
+import { updateCartDataLength } from '../../../redux/actions/HomeApi';
+import { EventRegister } from 'react-native-event-listeners';
 import VegUrbanCommonToolBar from '../../../utils/VegUrbanCommonToolBar';
 
-const SignupNew = ({navigation}) => {
+const SignupNew = ({ navigation }) => {
   const theme = useContext(themeContext);
 
   const dispatch = useDispatch();
@@ -74,6 +75,94 @@ const SignupNew = ({navigation}) => {
   const userToken = useSelector(state => state?.state?.userToken);
   const userData = useSelector(state => state?.state?.userData);
   // ShowConsoleLogMessage(userToken);
+  // console.log("token", userData)
+
+  const [showCameraModal, setShowCameraModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState(null);
+  const [havePermission, setHavePermission] = useState(false);
+
+  const openImageCamera = () => {
+    // ImagePicker.openCamera({
+    //   multiple: false,
+    //   cropping: true,
+    //   includeBase64: true,
+    // }).then(images => {
+    //   // const updatedUserData = { ...userData, profile_img: images.path };
+    //   // setUserData(updatedUserData);
+
+    //   setImage('data:image/jpeg;base64,' + images?.data);
+
+    //   setShowCameraModal(false);
+    // });
+    try {
+      ImagePicker.openCamera({
+        multiple: false,
+        cropping: true,
+        includeBase64: true,
+      }).then(images => {
+        setImage('data:image/jpeg;base64,' + images?.data);
+      });
+    } catch (error) {
+      ShowConsoleLogMessage('Image picker error => ' + JSON.stringify(error));
+    }
+  };
+ 
+
+  const openImagePicker = () => {
+    try {
+      ImagePicker.openPicker({
+        multiple: false,
+        cropping: true,
+        includeBase64: true,
+      }).then(images => {
+        setImage('data:image/jpeg;base64,' + images?.data);
+      });
+    } catch (error) {
+      ShowConsoleLogMessage('Image picker error => ' + JSON.stringify(error));
+    }
+  };
+  // const dispatch = useDispatch()
+  // const userData = useSelector(state => state.state?.userData);
+
+  useEffect(() => {
+    let permission = requestExternalWritePermission();
+    setHavePermission(permission);
+    // setImage(icons.img_place)
+
+    const requestCameraPermission = async () => {
+      if (Platform.OS === 'android') {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.CAMERA,
+            {
+              title: 'Camera Permission',
+              message: 'App needs camera permission',
+            },
+          );
+          // If WRITE_EXTERNAL_STORAGE Permission is granted
+          return granted === PermissionsAndroid.RESULTS.GRANTED;
+        } catch (err) {
+          console.warn(err);
+          alert('Write permission err', err);
+        }
+        return false;
+      } else {
+        return true;
+      }
+    };
+    requestCameraPermission();
+  }, []);
+
+  useEffect(() => {
+    // getUserFromStorage();
+    // setTimeout(async () => {
+    //   await getUserFromStorage();
+    // }, 0);
+  }, []);
+  // const [userData, setUserData] = useState({});
+
+  
 
   useEffect(() => {
     setUserName(userData?.name + '');
@@ -105,11 +194,16 @@ const SignupNew = ({navigation}) => {
       .catch(error => {
         ShowConsoleLogMessage(error);
       })
-      .finally(() => {});
+      .finally(() => { });
   };
 
   const handleUpdate = () => {
+    // Start loading
+    setLoading(true);
+
     if (validateFieldNotEmpty(username)) {
+      // Stop loading if validation fails
+      setLoading(false);
       ShowToastMessage('Please enter name');
     } else {
       dispatch(showProgressBar(true));
@@ -123,7 +217,17 @@ const SignupNew = ({navigation}) => {
           successCallback,
           errorCallback,
           BannerErrorCallback,
-        );
+        )
+          .then(() => {
+            // Stop loading on success
+            // navigation.goBack();
+
+            setLoading(false);
+          })
+          .catch(() => {
+            // Stop loading on error
+            setLoading(false);
+          });
       });
     }
   };
@@ -161,7 +265,7 @@ const SignupNew = ({navigation}) => {
           navigation.goBack();
         },
         data => {
-          navigation.goBack();
+          // navigation.goBack();
           ShowConsoleLogMessage(data);
           ShowToastMessage(data?.message);
         },
@@ -205,7 +309,7 @@ const SignupNew = ({navigation}) => {
     ShowToastMessage(error);
   };
 
-  const {t, i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
   const [date, setDate] = useState('');
 
   const [mobile, setMobile] = useState('');
@@ -235,9 +339,9 @@ const SignupNew = ({navigation}) => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const genderOptions = [
-    {label: 'Other', value: 'Other'},
-    {label: 'Male', value: 'Male'},
-    {label: 'Female', value: 'Female'},
+    { label: 'Other', value: 'Other' },
+    { label: 'Male', value: 'Male' },
+    { label: 'Female', value: 'Female' },
   ];
 
   const handleGenderChange = value => {
@@ -277,86 +381,9 @@ const SignupNew = ({navigation}) => {
 
   const error = '';
 
-  const getBorderWidth = () => {
-    if (error) {
-      return 1;
-    }
-    if (focused) {
-      return 1;
-    } else {
-      return 0.2;
-    }
-  };
+  
 
-  const getBorderRadisu = () => {
-    if (error) {
-      return 1;
-    }
-    if (focused) {
-      return 12;
-    } else {
-      return 12;
-    }
-  };
-  const getBorderColor = () => {
-    if (error) {
-      return COLORS.red;
-    }
-
-    if (focused) {
-      return theme?.colors?.colorPrimary;
-    } else {
-      return COLORS.bg_color;
-    }
-  };
-
-  const getBgColor = () => {
-    if (error) {
-      return COLORS.red;
-    }
-    if (focused) {
-      return theme?.colors?.bg;
-    } else {
-      // return COLORS.lightest_gray1;
-      // return COLORS.bg_color;
-      return theme?.colors?.bg;
-    }
-  };
-  const getBorderWidth2 = () => {
-    if (error) {
-      return 1;
-    }
-    if (focused2) {
-      return 1;
-    } else {
-      return 0.2;
-    }
-  };
-
-  const getBorderColor2 = () => {
-    if (error) {
-      return COLORS.red;
-    }
-
-    if (focused2) {
-      return theme?.colors?.colorPrimary;
-    } else {
-      return COLORS.bg_color;
-    }
-  };
-
-  const getBgColor2 = () => {
-    if (error) {
-      return COLORS.red;
-    }
-    if (focused2) {
-      return theme?.colors?.bg_color;
-    } else {
-      // return COLORS.lightest_gray1;
-      // return COLORS.bg_color;
-      return theme?.colors?.bg_color;
-    }
-  };
+  
   const closeSignUpModal = () => {
     setShow(!show);
   };
@@ -383,79 +410,7 @@ const SignupNew = ({navigation}) => {
   const handleRememberMeToggle = () => {
     setRememberMe(!rememberMe);
   };
-  const [showCameraModal, setShowCameraModal] = useState(false);
-
-  const openImageCamera = () => {
-    ImagePicker.openCamera({
-      multiple: false,
-      cropping: true,
-      includeBase64: true,
-    }).then(images => {
-      // const updatedUserData = { ...userData, profile_img: images.path };
-      // setUserData(updatedUserData);
-
-      setImage('data:image/jpeg;base64,' + images?.data);
-
-      setShowCameraModal(false);
-    });
-  };
-  const [loading, setLoading] = useState(false);
-
-  // const dispatch = useDispatch()
-  // const userData = useSelector(state => state.state?.userData);
-
-  useEffect(() => {
-    let permission = requestExternalWritePermission();
-    setHavePermission(permission);
-    // setImage(icons.img_place)
-
-    const requestCameraPermission = async () => {
-      if (Platform.OS === 'android') {
-        try {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.CAMERA,
-            {
-              title: 'Camera Permission',
-              message: 'App needs camera permission',
-            },
-          );
-          // If WRITE_EXTERNAL_STORAGE Permission is granted
-          return granted === PermissionsAndroid.RESULTS.GRANTED;
-        } catch (err) {
-          console.warn(err);
-          alert('Write permission err', err);
-        }
-        return false;
-      } else {
-        return true;
-      }
-    };
-    requestCameraPermission();
-  }, []);
-
-  useEffect(() => {
-    // getUserFromStorage();
-    // setTimeout(async () => {
-    //   await getUserFromStorage();
-    // }, 0);
-  }, []);
-  // const [userData, setUserData] = useState({});
-  const [havePermission, setHavePermission] = useState(false);
-
-  const openImagePicker = () => {
-    try {
-      ImagePicker.openPicker({
-        multiple: false,
-        cropping: true,
-        includeBase64: true,
-      }).then(images => {
-        setImage('data:image/jpeg;base64,' + images?.data);
-      });
-    } catch (error) {
-      ShowConsoleLogMessage('Image picker error => ' + JSON.stringify(error));
-    }
-  };
-  const [image, setImage] = useState(null);
+ 
   const renderCameraModal = () => {
     return (
       <Modal
@@ -563,7 +518,7 @@ const SignupNew = ({navigation}) => {
       <Modal
         visible={show}
         animationType="slide"
-        style={{flexGrow: 1}}
+        style={{ flexGrow: 1 }}
         transparent={true}
         onRequestClose={() => {
           closeSignUpModal();
@@ -571,7 +526,7 @@ const SignupNew = ({navigation}) => {
         <View style={GlobalStyle.signupModalBg}>
           <TouchableOpacity
             activeOpacity={1}
-            onPress={() => {}}
+            onPress={() => { }}
             style={GlobalStyle.signupModalBgTrans}
           />
           <View
@@ -774,7 +729,7 @@ const SignupNew = ({navigation}) => {
                   ]}
                   placeholder={t('mobile')}
                   placeholderTextColor={theme.colors?.white}
-                  codeTextStyle={{color: theme.colors?.white}}
+                  codeTextStyle={{ color: theme.colors?.white }}
                   textInputStyle={{
                     fontFamily: 'OpenSans-Medium',
                     color: theme.colors?.white,
@@ -893,6 +848,9 @@ const SignupNew = ({navigation}) => {
           backgroundColor: theme?.colors?.bg_color_onBoard,
         },
       ]}>
+      <VegUrbanProgressBar
+        loading={loading}
+      />
       <View
         style={[
           GlobalStyle.commonToolbarBG,
@@ -908,7 +866,7 @@ const SignupNew = ({navigation}) => {
           style={[
             styles.backIcon,
             {
-              transform: [{scaleX: I18nManager.isRTL ? -1 : 1}],
+              transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
             },
           ]}
           onPress={() => {
@@ -971,10 +929,10 @@ const SignupNew = ({navigation}) => {
                 alignSelf: 'center',
                 alignItems: 'center',
               }}
-              // source={icons.profile_placeholder}
+            // source={icons.profile_placeholder}
             >
               <Image
-                source={{uri: image}}
+                source={{ uri: image }}
                 style={{
                   height: 100,
                   width: 100,
@@ -1000,7 +958,7 @@ const SignupNew = ({navigation}) => {
                 borderColor: COLORS?.gray,
                 // backgroundColor: theme?.colors?.bg
               }}
-              // source={icons.profile_placeholder}
+            // source={icons.profile_placeholder}
             >
               <Image
                 // source={icons.img_place}
@@ -1097,7 +1055,7 @@ const SignupNew = ({navigation}) => {
             ]}>
             <FlatList
               data={genderOptions}
-              renderItem={({item}) => (
+              renderItem={({ item }) => (
                 <TouchableOpacity
                   style={styles.modalItem}
                   onPress={() => handleGenderChange(item.value)}>
@@ -1134,7 +1092,7 @@ const SignupNew = ({navigation}) => {
           textSize={18}
           text={'Update'}
           textColor={theme.colors?.text}
-          backgroundColor={theme.colors?.black}
+          backgroundColor={theme.colors?.colorPrimary}
           onPress={() => {
             // handleButtonPress()
             handleUpdate();
@@ -1172,7 +1130,7 @@ const SignupNew = ({navigation}) => {
                   },
                 },
               ],
-              {cancelable: false},
+              { cancelable: false },
             );
           }}
           textStyle={{

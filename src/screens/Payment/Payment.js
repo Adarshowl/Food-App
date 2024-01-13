@@ -1,4 +1,4 @@
-import React, {memo, useContext, useEffect, useState} from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -10,15 +10,15 @@ import {
   Text,
   View,
 } from 'react-native';
-import {COLORS} from '../../constants/Colors';
+import { COLORS } from '../../constants/Colors';
 import VegUrbanCommonToolBar from '../../utils/VegUrbanCommonToolBar';
-import {icons, STRING} from '../../constants';
+import { icons, STRING } from '../../constants';
 import GlobalStyle from '../../styles/GlobalStyle';
 import PaymentItem from './PaymentItem';
 import VegUrbanCommonBtn from '../../utils/VegUrbanCommonBtn';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {FONTS} from '../../constants/Fonts';
+import { FONTS } from '../../constants/Fonts';
 
 import {
   ShowConsoleLogMessage,
@@ -26,20 +26,20 @@ import {
   validateFieldNotEmpty,
 } from '../../utils/Utility';
 import themeContext from '../../constants/themeContext';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   createUserOrder,
   emptyCartInOneShot,
   getAvailablePaymentMethods,
   getSecretForStripe,
 } from '../../redux/actions/CartApi';
-import {showProgressBar} from '../../redux/actions';
-import {confirmPayment, usePaymentSheet} from '@stripe/stripe-react-native';
-import {updateCartDataLength} from '../../redux/actions/HomeApi';
+import { showProgressBar } from '../../redux/actions';
+import { confirmPayment, usePaymentSheet } from '@stripe/stripe-react-native';
+import { updateCartDataLength } from '../../redux/actions/HomeApi';
 
-const Payment = ({route}) => {
-  const {initPaymentSheet, presentPaymentSheet, loading} = usePaymentSheet();
+const Payment = ({ route }) => {
+  const { initPaymentSheet, presentPaymentSheet, loading } = usePaymentSheet();
 
   const dispatch = useDispatch();
   // const isFocused = useIsFocused();
@@ -47,7 +47,33 @@ const Payment = ({route}) => {
   const userToken = useSelector(state => state?.state?.userToken);
   const userData = useSelector(state => state?.state?.userData);
   const [orderId, setOrderId] = useState('');
-  const [payData, setPayData] = useState([]);
+  // const [payData, setPayData] = useState([]);
+
+
+
+  const [payData, setPayData] = useState([
+   
+    {
+      image: "https://cdn-icons-png.flaticon.com/128/732/732096.png",
+      name: 'Paypal',
+    },
+    {
+      image: 'https://cdn-icons-png.flaticon.com/128/37/37760.png',
+      name: 'Apple Pay',
+    },
+
+    {
+      image: 'https://cdn-icons-png.flaticon.com/128/299/299409.png',
+      // 'https://play-lh.googleusercontent.com/HArtbyi53u0jnqhnnxkQnMx9dHOERNcprZyKnInd2nrfM7Wd9ivMNTiz7IJP6-mSpwk',
+      name: 'Google Pay',
+    },
+    {
+      image: "https://static.vecteezy.com/system/resources/thumbnails/000/512/317/small/235_-_2_-_Wallet.jpg",
+      name: 'Wallet',
+    },
+
+
+  ]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedPaymentId, setSelectedPaymentId] = useState(null);
@@ -57,166 +83,163 @@ const Payment = ({route}) => {
   const [show, setShow] = useState(false);
 
   const theme = useContext(themeContext);
-  const {t, i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [receivedItem, setReceivedItem] = useState(null);
 
-  useEffect(() => {
-    let {item} = route?.params;
+  // useEffect(() => {
+  //   // let {item} = route?.params;
 
-    setReceivedItem(item);
-    // ShowConsoleLogMessage(JSON.stringify(item));
-    dispatch(showProgressBar(true));
-    dispatch(() => {
-      getAvailablePaymentMethods(
-        dispatch,
-        navigation,
-        paymentSuccessCallback,
-        paymentFailureCallback,
-        paymentErrorCallback,
-      );
-    });
-  }, []);
+  //   // setReceivedItem(item);
+  //   // ShowConsoleLogMessage(JSON.stringify(item));
+  //   dispatch(showProgressBar(true));
+  //   dispatch(() => {
+  //     getAvailablePaymentMethods(
+  //       dispatch,
+  //       navigation,
+  //       paymentSuccessCallback,
+  //       paymentFailureCallback,
+  //       paymentErrorCallback,
+  //     );
+  //   });
+  // }, []);
 
-  const paymentSuccessCallback = data => {
-    // ShowConsoleLogMessage(JSON.stringify(data?.response));
-    dispatch(showProgressBar(false));
-    // let a = data?.response?.map(item => {
-    //   return {
-    //     ...item,
-    //     selected: false,
-    //   };
-    // });
+  // const paymentSuccessCallback = data => {
+  //   // ShowConsoleLogMessage(JSON.stringify(data?.response));
+  //   dispatch(showProgressBar(false));
+  //   // let a = data?.response?.map(item => {
+  //   //   return {
+  //   //     ...item,
+  //   //     selected: false,
+  //   //   };
+  //   // });
 
-    let a = data?.paymentData?.map(item => {
-      return {
-        ...item,
-        selected: false,
-      };
-    });
-    setSelectedPaymentId(null);
-    setCurrencyData(data?.currencyData);
-    setPayData(a);
-  };
-  const paymentFailureCallback = data => {
-    dispatch(showProgressBar(false));
-    setSelectedPaymentId(null);
-    setPayData([]);
-    setTimeout(() => {
-      ShowToastMessage(data?.message || 'Something went wrong.');
-    }, 100);
-  };
-  const orderSuccessCallback = data => {
-    // ShowConsoleLogMessage(JSON.stringify(data?.response));
-    dispatch(showProgressBar(false));
-    setIsModalVisible(!isModalVisible);
-    // setOrderId(data?.orderIds[0] + '');
-    clearCart();
-  };
+  //   let a = data?.paymentData?.map(item => {
+  //     return {
+  //       ...item,
+  //       selected: false,
+  //     };
+  //   });
+  //   setSelectedPaymentId(null);
+  //   setCurrencyData(data?.currencyData);
+  //   // setPayData(a);
+  // };
+  // const paymentFailureCallback = data => {
+  //   dispatch(showProgressBar(false));
+  //   setSelectedPaymentId(null);
+  //   setPayData([]);
+  //   setTimeout(() => {
+  //     ShowToastMessage(data?.message || 'Something went wrong.');
+  //   }, 100);
+  // };
+  // const orderSuccessCallback = data => {
+  //   // ShowConsoleLogMessage(JSON.stringify(data?.response));
+  //   dispatch(showProgressBar(false));
+  //   setIsModalVisible(!isModalVisible);
+  //   // setOrderId(data?.orderIds[0] + '');
+  //   clearCart();
+  // };
 
-  const stripeSuccessCallback = data => {
-    initializePaymentSheet(
-      data?.data?.ephemeralKey,
-      data?.data?.paymentIntent,
-      data?.data?.customer,
-    );
-    dispatch(showProgressBar(false));
-  };
-  const stripeErrorCallback = data => {
-    ShowConsoleLogMessage(JSON.stringify(data));
-    ShowToastMessage(JSON.stringify(data?.message));
-    dispatch(showProgressBar(false));
-  };
+  // const stripeSuccessCallback = data => {
+  //   initializePaymentSheet(
+  //     data?.data?.ephemeralKey,
+  //     data?.data?.paymentIntent,
+  //     data?.data?.customer,
+  //   );
+  //   dispatch(showProgressBar(false));
+  // };
+  // const stripeErrorCallback = data => {
+  //   ShowConsoleLogMessage(JSON.stringify(data));
+  //   ShowToastMessage(JSON.stringify(data?.message));
+  //   dispatch(showProgressBar(false));
+  // };
 
-  const initializePaymentSheet = async (
-    ephemeralKey,
-    paymentIntent,
-    customer,
-  ) => {
-    // ShowConsoleLogMessage(
-    //   ephemeralKey + ' ==== ' + paymentIntent + ' ==== ' + customer,
-    // );
+  // const initializePaymentSheet = async (
+  //   ephemeralKey,
+  //   paymentIntent,
+  //   customer,
+  // ) => {
+   
 
-    const {error} = await initPaymentSheet({
-      customerId: customer,
+  //   const { error } = await initPaymentSheet({
+  //     customerId: customer,
 
-      customerEphemeralKeySecret: ephemeralKey,
-      paymentIntentClientSecret: paymentIntent,
-      merchantDisplayName: 'Multi Vendor',
-      allowsDelayedPaymentMethods: true,
+  //     customerEphemeralKeySecret: ephemeralKey,
+  //     paymentIntentClientSecret: paymentIntent,
+  //     merchantDisplayName: 'Multi Vendor',
+  //     allowsDelayedPaymentMethods: true,
 
-      googlePay: true,
-      applePay: true,
-      merchantCountryCode: 'US',
-      testEnv: true,
-      // returnURL: 'com.multi_vendor://stripe-redirect',
-    });
-    if (error) {
-      Alert.alert(`Error code: ${error.code}`, error?.message);
-    } else {
-      // await new Promise(resolve => setTimeout(resolve, 2500));
-      await presentSheet(paymentIntent);
-    }
-  };
+  //     googlePay: true,
+  //     applePay: true,
+  //     merchantCountryCode: 'US',
+  //     testEnv: true,
+  //     // returnURL: 'com.multi_vendor://stripe-redirect',
+  //   });
+  //   if (error) {
+  //     Alert.alert(`Error code: ${error.code}`, error?.message);
+  //   } else {
+  //     // await new Promise(resolve => setTimeout(resolve, 2500));
+  //     await presentSheet(paymentIntent);
+  //   }
+  // };
 
-  const presentSheet = async paymentIntent => {
-    ShowConsoleLogMessage('presentSheet   ');
-    const {error} = await presentPaymentSheet();
-    if (error) {
-      Alert.alert(`Error code: ${error.code}`, error?.message);
-    } else {
-      // Alert.alert('Success', 'Payment done successfully');
-      confirmPaymentSheet1(paymentIntent);
-      // handleConfirmPayment();
-    }
-  };
+  // const presentSheet = async paymentIntent => {
+  //   ShowConsoleLogMessage('presentSheet   ');
+  //   const { error } = await presentPaymentSheet();
+  //   if (error) {
+  //     Alert.alert(`Error code: ${error.code}`, error?.message);
+  //   } else {
+  //     // Alert.alert('Success', 'Payment done successfully');
+  //     confirmPaymentSheet1(paymentIntent);
+  //     // handleConfirmPayment();
+  //   }
+  // };
 
-  const confirmPaymentSheet1 = async clientSecret => {
-    try {
-      confirmPayment(clientSecret, {
-        paymentMethodType: 'Card',
-      })
-        .then(confirmPayments => {
-          console.log(confirmPayments, ' -> confirmPayments');
-        })
-        .catch(error => {
-          console.log(error, ' -> error ');
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const confirmPaymentSheet1 = async clientSecret => {
+  //   try {
+  //     confirmPayment(clientSecret, {
+  //       paymentMethodType: 'Card',
+  //     })
+  //       .then(confirmPayments => {
+  //         console.log(confirmPayments, ' -> confirmPayments');
+  //       })
+  //       .catch(error => {
+  //         console.log(error, ' -> error ');
+  //       });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  const clearCart = () => {
-    // ShowConsoleLogMessage('clear cart');
-    dispatch(updateCartDataLength(0));
-    dispatch(() => {
-      emptyCartInOneShot(
-        dispatch,
-        navigation,
-        userToken,
-        () => {},
-        () => {},
-        paymentErrorCallback,
-      );
-    });
-  };
+  // const clearCart = () => {
+  //   dispatch(updateCartDataLength(0));
+  //   dispatch(() => {
+  //     emptyCartInOneShot(
+  //       dispatch,
+  //       navigation,
+  //       userToken,
+  //       () => { },
+  //       () => { },
+  //       paymentErrorCallback,
+  //     );
+  //   });
+  // };
 
-  const orderFailureCallback = data => {
-    dispatch(showProgressBar(false));
-    // setOrderId('');
+  // const orderFailureCallback = data => {
+  //   dispatch(showProgressBar(false));
+  //   // setOrderId('');
 
-    setTimeout(() => {
-      ShowToastMessage(data?.message || 'Something went wrong.');
-    }, 100);
-  };
+  //   setTimeout(() => {
+  //     ShowToastMessage(data?.message || 'Something went wrong.');
+  //   }, 100);
+  // };
 
-  const paymentErrorCallback = error => {
-    ShowConsoleLogMessage('Banner call back called');
-    dispatch(showProgressBar(false));
-    // ShowToastMessage(error);
-    ShowConsoleLogMessage(error);
-  };
+  // const paymentErrorCallback = error => {
+  //   ShowConsoleLogMessage('Banner call back called');
+  //   dispatch(showProgressBar(false));
+  //   // ShowToastMessage(error);
+  //   ShowConsoleLogMessage(error);
+  // };
 
   const renderModal = () => {
     return (
@@ -373,21 +396,38 @@ const Payment = ({route}) => {
     });
   };
 
-  const onPaymentClick = (item, idx) => {
+  // const onPaymentClick = (item, idx) => {
+  //   let a = payData.map((item, index) => {
+  //     let temp = Object.assign({}, item);
+  //     if (index == idx) {
+  //       temp.selected = !temp.selected;
+  //       if (temp.selected) {
+  //         setSelectedPaymentId(item);
+  //       } else {
+  //         setSelectedPaymentId(null);
+  //       }
+  //     } else {
+  //       temp.selected = false;
+  //     }
+  //     return temp;
+  //   });
+  //   setPayData(a);
+  // };
+
+
+  const onPaymentClick = idx => {
     let a = payData.map((item, index) => {
       let temp = Object.assign({}, item);
       if (index == idx) {
         temp.selected = !temp.selected;
-        if (temp.selected) {
-          setSelectedPaymentId(item);
-        } else {
-          setSelectedPaymentId(null);
-        }
       } else {
         temp.selected = false;
       }
+      // ShowToastMessage('HI CLIXK' + temp.fav);
+
       return temp;
     });
+
     setPayData(a);
   };
   return (
@@ -414,7 +454,7 @@ const Payment = ({route}) => {
             styles.backIcon,
             {
               opacity: !show ? 1 : 0.0,
-              transform: [{scaleX: I18nManager.isRTL ? -1 : 1}],
+              transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
               marginStart: 10,
             },
           ]}
@@ -462,7 +502,7 @@ const Payment = ({route}) => {
             backgroundColor: theme?.colors?.bg_color_onBoard,
             marginTop: 5,
           }}>
-          <Text
+          {/* <Text
             style={[
               styles.prefDeliText,
               {
@@ -473,7 +513,7 @@ const Payment = ({route}) => {
               },
             ]}>
             {STRING.payment_method}
-          </Text>
+          </Text> */}
           <FlatList
             style={{
               paddingStart: 10,
@@ -493,15 +533,16 @@ const Payment = ({route}) => {
             }}
             showsVerticalScrollIndicator={false}
             data={payData}
-            renderItem={({item, index}) => (
+            renderItem={({ item, index }) => (
               <PaymentItem
                 onItemClick={() => {
-                  onPaymentClick(item, index);
+                  onPaymentClick(index);
                 }}
                 item={item}
               />
             )}
           />
+
         </View>
         <View
           style={{

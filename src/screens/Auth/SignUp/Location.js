@@ -312,7 +312,7 @@ const Location = ({ navigation }) => {
                         iconName={'chevron-back'}
                         icSize={20}
                         borderRadius={20}
-                        icColor={COLORS.black}
+                        icColor={theme?.colors?.colorPrimary}
                         style={{
                             backgroundColor: theme?.colors?.bg,
                             // marginEnd: 10,
@@ -401,12 +401,12 @@ const Location = ({ navigation }) => {
                             textSize={18}
                             text={'Enable Location'}
                             textColor={theme.colors?.text}
-                            backgroundColor={COLORS?.black}
+                            backgroundColor={theme?.colors?.colorPrimary}
                             // onPress={() => {
                             //   closeSignUpModal();
                             // }}
                             onPress={() => {
-                                navigation.navigate('MainContainer');
+                                navigation.navigate('Login');
                             }}
                             textStyle={{
                                 fontFamily: FONTS?.bold,

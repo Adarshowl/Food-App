@@ -1,43 +1,49 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
-    View,
-    Text, Image,
-    ScrollView,
-    StyleSheet,
     FlatList,
+    ImageBackground,
+    StyleSheet,
+    Text,
     TouchableOpacity,
-    ImageBackground
+    View,
+    Image
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+
 import { COLORS } from '../../constants/Colors';
+import { SIZES, STRING } from '../../constants';
+import GlobalStyle from '../../styles/GlobalStyle';
+import { useNavigation } from '@react-navigation/native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import themeContext from '../../constants/themeContext';
+import ToolBarIcon from '../../utils/ToolBarIcon';
 import { FONTS } from '../../constants/Fonts';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import Octicons from 'react-native-vector-icons/Octicons';
+import { useDispatch, useSelector } from 'react-redux';
+import VegUrbanImageLoader from '../../utils/VegUrbanImageLoader';
+import { addToFavoriteProduct } from '../../redux/actions/CartApi';
+import {
+    doSaveOfferOfflineRealm,
+    getSavedFavoriteProductString,
+    removeFromFavoriteRealm,
+} from '../../utils/RealmUtility';
+import { ShowConsoleLogMessage } from '../../utils/Utility';
+import { getHomeProduct } from '../../redux/actions/HomeApi';
+import { IMAGE_BASE_URL } from '../../network/ApiEndPoints';
 
+const HomeResturentList = () => {
+    const theme = useContext(themeContext);
+    const dispatch = useDispatch();
+    const userToken = useSelector(state => state?.state?.userToken);
+    const loginCount = useSelector(state => state?.state?.count);
 
-const RetstaurantNearBy = ({ navigation }) => {
-    // Sample restaurant details (replace with your restaurant data)
+    const [page, setPage] = useState(1); // Track the current page of data
+    const [loadingMore, setLoadingMore] = useState(false); // Track whether more data is being loaded
 
-    const restaurantMap = {
-        location: { latitude: 37.78825, longitude: -122.4324 }, // Replace with actual coordinates
-    };
+    const navigation = useNavigation();
+    const [data, setData] = useState([]);
 
-    // // Convert location object to a string for display
-    const locationString = `Latitude: ${restaurantMap.location.latitude}, Longitude: ${restaurantMap.location.longitude}`;
-
-
-    const restaurant = {
-        name: 'Behind The Woods',
-        image: 'https://t3.ftcdn.net/jpg/03/24/73/92/360_F_324739203_keeq8udvv0P2h1MLYJ0GLSlTBagoXS48.jpg',
-        about: 'Talawal Chanda, North Indore.',
-        location: 'Vijay Nagar Dewas M.P.',
-        categories: ['Category 1', 'Category 2', 'Category 3'], // Replace with actual categories
-        cuisine: 'Italian',
-        establishmentType: 'Fine Dining',
-        averageCost: '$$$',
-        features: ['Outdoor Seating', 'Live Music', 'WiFi', 'Bar'],
-        details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum feugiat massa vitae placerat.'
-    };
-
-
+    const productData = useSelector(state => state?.homeReducer?.productData);
     const tradingList = [
         {
             id: '1', name: 'S Cafe', address: 'indore mp',
@@ -59,488 +65,424 @@ const RetstaurantNearBy = ({ navigation }) => {
 
 
     ];
+    useEffect(() => {
+        // ShowConsoleLogMessage(productData?.length);
+        let is_product_save = '';
+        (async () => {
+            is_product_save = await getSavedFavoriteProductString();
+            // ShowConsoleLogMessage(is_product_save);
 
-    const renderTrading = ({ item }) => {
-        // console.log("sub categoryssdg",item)
+            // const savedProductIds = is_product_save?.split(',')?.map(id => id.trim());
+            // const savedProductIds = is_product_save?.replaceAll(',', '');
+            let a = productData?.map(item => {
+                return { ...item, fav: is_product_save?.includes(item?._id) };
+            });
+            setData(a);
+        })();
+    }, [productData]);
+
+    const renderItem = ({ item, index }) => {
         return (
-            <TouchableOpacity
-                activeOpacity={0.8}
-                style={{
-                    flex: 1,
-                    marginHorizontal: 7,
-                    marginVertical: 10,
-                    paddingStart: 5,
-                    // elevation:2,
-
-
-                    // elevation: 5,
-                    // alignItems: 'center',
-                    borderRadius: 5,
-                    // width:120,
-                    // height:150,
-                    // borderWidth:0.1
-                }}>
-                <ImageBackground
-                    style={[
-                        styles.itemImage,
-                        {
-                            // backgroundColor: theme?.colors?.colorimageback,
-                            backgroundColor: COLORS?.colorSecondary,
-
-                            justifyContent: 'center',
-                            // elevation: 5,
-                        },
-                    ]}
-                    imageStyle={{
-                        resizeMode: 'stretch',
-                        borderRadius: 10,
+            <View style={{
+            }}>
+                <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => {
+                        navigation.navigate('RestaurantDetails');
                     }}
-                    source={{
-                        uri: item?.image
-                    }}>
-                </ImageBackground>
+                    style={[
+                        styles.Wrapper,
+                        {
+                            // elevation:1,
+                            // padding:5,
+                            // borderWidth: 0.2,
+                            borderColor: COLORS?.gray
+                        },
+                    ]}>
+                    {/* <View
+          style={[
+            // styles.itemWrapper,
+            {
+              backgroundColor: COLORS?.white,
+            },
+          ]}
+
+        > */}
+                    <ImageBackground
+                        style={[
+                            styles.itemImage,
+                            {
+                                // backgroundColor: COLORS?.white,
+                                // elevation: 3,
+                            },
+                        ]}
+                    >
+                        <VegUrbanImageLoader
+                            styles={{
+                                width: '100%',
+                                height: 170,
+                                borderTopLeftRadius: 10,
+                                borderTopRightRadius: 10,
+                            }}
+                            source={item?.image}
+                        />
 
 
-                <View
-                    style={{
-                        // marginHorizontal: 8,
-                        // elevation: 10,
-                        // marginTop: 5,
-                        marginLeft: 5,
-                        borderBottomEndRadius: 5,
-                        borderBottomStartRadius: 5,
-                        borderWidth: 0.2,
-                        // elevation:5,
-                        paddingVertical: 10,
-                        paddingLeft: 5,
+                        <View style={{ position: 'absolute', top: 40, left: 0 }}>
+                            <LinearGradient
+                                colors={[theme?.colors?.colorPrimary, '#FF774F', '#FF8F6F']}
+                                style={{
+                                    padding: 3,
+                                    borderRadius: 5,
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    width: 70,
+                                    height: 30,
+                                    justifyContent: 'center',
+                                }}
+                                start={{ x: 0, y: 1 }}
+                                end={{ x: 1, y: 0 }}
+                            >
+                                <Text style={{ color: COLORS?.white, fontSize: 13 }}>RESCUED</Text>
+                            </LinearGradient>
+                        </View>
 
-                    }}>
 
-                    <Text style={{
-                        fontSize: 16,
-                        color: COLORS?.black,
-                        fontFamily: FONTS?.bold
-                    }}>
-                        {item?.name}
-                    </Text>
+                        <View style={{
+                            position: 'absolute',
+                            top: 80,
+                            left: 0,
+                            elevation: 10,
+                            flex: 1
+                        }}>
+                            <LinearGradient
+                                colors={['#54AA53', '#54AA53']}
+                                style={{
+                                    flex: 1,
+                                    padding: 3,
+                                    // borderRadius: 20,
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    elevation: 10,
+                                    width: 70,
+                                    height: 30,
+                                    borderTopRightRadius: 20,
+                                    borderBottomRightRadius: 20,
+                                    justifyContent: 'center'
 
-                    <Text style={{
-                        fontSize: 14,
-                        color: COLORS?.black,
-                        fontFamily: FONTS?.regular
+                                }}
+                                start={{ x: 0, y: 1 }}
+                                end={{ x: 1, y: 0 }}
+                            >
+                                <Text style={{ color: COLORS?.white, fontSize: 13 }}>50% off</Text>
+                            </LinearGradient>
+                        </View>
 
-                    }}>
-                        {item?.address}
-                    </Text>
-                    {/* Additional content */}
-                </View>
-            </TouchableOpacity>
+
+                        <View style={{
+                            position: 'absolute',
+                            // top: 50,
+                            left: 0,
+                            elevation: 10,
+                            bottom: 10,
+                            backgroundColor: COLORS?.white,
+                            borderRadius: 10,
+                            flexDirection: 'row',
+                            width: 60,
+                            // height: 20,                    
+                            justifyContent: 'center',
+                            paddingVertical: 2,
+                            paddingHorizontal: 3,
+                            alinItem: 'center',
+                            marginLeft: 5
+                        }}>
+                            <Octicons name="stopwatch" size={10} color={COLORS?.black}
+                                style={{
+                                    marginTop: 2,
+                                    marginRight: 2
+                                }}
+                            />
+
+                            <Text style={{ color: COLORS?.black, fontSize: 10, textAlign: 'center' }}>10 min</Text>
+                        </View>
+                    </ImageBackground>
+
+
+                    {/* </View> */}
+                    <View
+                        style={{
+                            flex: 1,
+                            // marginStart: 15,
+                            marginHorizontal: 10,
+                            marginVertical: 10
+                        }}>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alinItem: 'center',
+                            marginTop: 5,
+
+                        }}>
+                            <View>
+                                <Text
+                                    style={[
+                                        // styles.itemName,
+                                        {
+                                            color: COLORS?.black,
+                                            // marginTop: 10,
+                                            fontFamily: FONTS?.bold,
+                                            fontSize: 17
+                                        },
+                                    ]}
+                                    numberOfLines={1}>
+                                    {item?.name}
+                                </Text>
+                                <Text
+                                    style={[
+                                        styles.itemName,
+                                        {
+                                            color: COLORS?.grey,
+                                            // marginTop: 5,
+                                            fontFamily: FONTS?.regular,
+                                            fontSize: 13
+
+                                        },
+                                    ]}
+                                    numberOfLines={1}>
+                                    North India Fast Food
+                                </Text>
+                            </View>
+                            <View style={{
+                                flexDirection: 'row',
+                                alinItem: 'center',
+                                backgroundColor: 'orange',
+                                borderRadius: 15,
+                                // width:40,
+                                paddingHorizontal: 10,
+                                // // height:,
+                                height: 25,
+                                // paddingVertical:3,
+                                // paddingVertical:3,
+                                // alignSelf: 'center',
+                                justifyContent: 'center',
+                                // marginTop:3
+                            }}>
+
+                                <Text
+                                    style={[
+                                        styles.itemName,
+                                        {
+                                            color: COLORS?.white,
+                                            // marginTop: 2,
+                                            fontFamily: FONTS?.bold,
+                                            fontSize: 14,
+                                            marginLeft: 5
+                                        },
+                                    ]}
+                                    numberOfLines={1}>
+                                    4.5
+                                    {/* {item?.address} */}
+                                </Text>
+                                <AntDesign
+                                    name="star"
+                                    size={15}
+                                    color={COLORS?.white}
+                                    style={{
+                                        marginLeft: 5,
+                                        marginTop: 3
+                                    }}
+                                />
+                            </View>
+                        </View>
+
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alinItem: 'center',
+                            marginTop: 5,
+
+                        }}>
+                            <View style={{
+                                flexDirection: 'row',
+                                alignItems: 'center'
+                            }}>
+                                <Text
+                                    style={[
+                                        styles.itemName,
+                                        {
+                                            color: COLORS?.black,
+                                            // marginTop: 10,
+                                            fontFamily: FONTS?.regular,
+                                            fontSize: 12,
+                                            textDecorationLine: 'underline line-through'
+                                        },
+                                    ]}
+                                    numberOfLines={1}>
+                                    ₹200
+                                </Text>
+                                <Text
+                                    style={[
+                                        styles.itemName,
+                                        {
+                                            color: COLORS?.black,
+                                            // marginTop: 5,
+                                            fontFamily: FONTS?.semi_old,
+                                            fontSize: 18,
+                                            marginLeft: 5
+
+                                        },
+                                    ]}
+                                    numberOfLines={1}>
+                                    ₹100
+                                </Text>
+                            </View>
+                            <View style={{
+
+                            }}>
+
+                                <Text
+                                    style={[
+                                        // styles.itemName,
+                                        {
+                                            color: COLORS?.black,
+                                            // marginTop: 2,
+                                            fontFamily: FONTS?.regular,
+                                            fontSize: 14,
+                                            marginLeft: 5
+                                        },
+                                    ]}
+                                    numberOfLines={1}>
+                                    145 cal
+                                    {/* {item?.address} */}
+                                </Text>
+                            </View>
+                        </View>
+
+
+                        <View
+                            style={{
+                                flex: 1,
+                                width: '100%',
+                                borderWidth: 0.2,
+                                borderColor: COLORS?.gray,
+                                marginVertical: 5
+                            }}
+                        />
+
+                        <Text
+                            style={[
+                                styles.itemName,
+                                {
+                                    color: COLORS?.gray,
+                                    // marginTop: 2,
+                                    fontFamily: FONTS?.regular,
+                                    fontSize: 13,
+                                    marginLeft: 5
+                                },
+                            ]}
+                            numberOfLines={2}
+                        >
+                            left over food and supplies are gathered and sold for 50% off.
+                        </Text>
+
+                    </View>
+                </TouchableOpacity>
+            </View>
         );
     };
 
-    const [activeTab, setActiveTab] = useState('overview'); // State to track active tab
-    const tabs = [
-        { key: 'overview', title: 'Overview' },
-        { key: 'offers', title: 'Offers' },
-        { key: 'menu', title: 'Menu' },
-        { key: 'reviews', title: 'Reviews' },
-    ];
-
-    const renderContent = () => {
-        // Render content based on active tab
-        switch (activeTab) {
-            case 'overview':
-                return (
-                    <View>
-                        {/* Overview content */}
-                        <Text>Overview Content</Text>
-                    </View>
-                );
-            case 'offers':
-                return (
-                    <View>
-                        {/* Offers content */}
-                        <Text>Offers Content</Text>
-                    </View>
-                ); case 'menu':
-                return (
-                    <View>
-                        {/* Menu content */}
-                        <Text>Menu Content</Text>
-                    </View>
-                );
-            case 'reviews':
-                return (
-                    <View>
-                        {/* Reviews content */}
-                        <Text>Reviews Content</Text>
-                    </View>
-                );
-            default:
-                return null;
-        }
-    };
-
     return (
-        <ScrollView style={styles.container}>
-            {/* Header Section */}
-            <View
-            //   style={styles.header}
-            >
-                <Image
-                    source=
-                    {{
-                        uri: restaurant.image
-                    }}
-                    style={styles.restaurantImage}
-                // resizeMode="cover" 
-                />
+        <View
+            style={[
+                // GlobalStyle.mainContainerBgColor,
+                {
+                    backgroundColor: COLORS?.bg_color,
+                    // borderRadius: 5,
+                },
+            ]}>
+            <FlatList
+                style={{
+                    // flex: 1,
+                    marginHorizontal: 8,
 
-            </View>
-            <View style={styles.section}>
-                {/* <View style={styles.contactPlaceholder}> */}
-                <View
-                    style={[styles.restaurantInfo, {
-                        // elevation:10
-                    }]}
-
-                >
-                    <View style={styles.tabContainer}>
-                        {tabs.map((tab) => (
-                            <TouchableOpacity
-                                key={tab.key}
-                                style={[
-                                    styles.tabButton,
-                                    { backgroundColor: activeTab === tab.key ? '#f0f0f0' : '#fff' },
-                                ]}
-                                onPress={() => setActiveTab(tab.key)}
-                            >
-                                <Text>{tab.title}</Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-
-
-                    <ScrollView>
-                        <View style={styles.contentContainer}>
-                            <View
-                            // style={styles.restaurantInfo}
-                            >
-                                <Text style={styles.restaurantName}>{restaurant.name}</Text>
-                                {/* <Text style={styles.restaurantAddress}>{restaurant?.address}</Text> */}
-                                <Text style={styles.restaurantAbout}>{restaurant.about}</Text>
-                            </View>
-
-                            {/* {renderContent()} */}
-                        </View>
-                    </ScrollView>
-                </View>
-            </View>
-            {/* <View style={{
-                alignItems: 'center',
-                borderRadius: 10,
-                borderWidth: 0.2,
-                marginHorizontal: 20,
-                padding: 10,
-                elevation: 2,
-                borderColor: COLORS?.white,
-                marginTop: -70,
-                backgroundColor: COLORS?.white
-            }}>
-                <Text style={styles.restaurantName}>{restaurant.name}</Text>
-                <Text style={styles.restaurantAbout}>{restaurant.about}</Text>
-            </View> */}
-            {/* Locate Section */}
-
-            <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={() => {
-                    navigation.navigate('RestaurantDetail')
                 }}
-                style={styles.section}>
-                {/* <Text style={styles.sectionTitle}>Reserve a Table</Text> */}
-                {/* Placeholder for contact information */}
-                <View style={styles.contactPlaceholder}>
-                    <Text>Reserve a Table</Text>
-                </View>
-            </TouchableOpacity>
-
-
-            <View style={styles.section}>
-                <View style={styles.contactPlaceholder}>
-
-                    <Text style={styles.sectionTitle}>About</Text>
-                    <View style={styles.aboutItem}>
-                        <Text style={styles.aboutItemTitle}>Cuisine:</Text>
-                        <Text style={styles.aboutItemText}>{restaurant.cuisine}</Text>
-                    </View>
-                    <View style={styles.aboutItem}>
-                        <Text style={styles.aboutItemTitle}>Establishment Type:</Text>
-                        <Text style={styles.aboutItemText}>{restaurant.establishmentType}
-                        </Text>
-                    </View>
-                    <View style={styles.aboutItem}>
-                        <Text style={styles.aboutItemTitle}>Average Cost:</Text>
-                        <Text style={styles.aboutItemText}>{restaurant.averageCost}</Text>
-                    </View>
-                    <View style={styles.aboutItem}>
-                        <Text style={styles.aboutItemTitle}>Features & Facilities:</Text>
-                        <Text style={styles.aboutItemText}>{restaurant.features.join(', ')}</Text>
-                    </View>
-                    <View style={styles.aboutItem}>
-                        <Text style={styles.aboutItemTitle}>Details:</Text>
-                        <Text style={styles.aboutItemText}>{restaurant.details}</Text>
-                    </View>
-                </View>
-            </View>
-
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Location</Text>
-
-                <View style={{
-                    borderRadius: 10
-                }}>
-
-                    <MapView
-                        provider={PROVIDER_GOOGLE}
-                        style={{
-                            height: 200,
-                            width: '100%',
-                            justifyContent: 'flex-end',
-                            alignItems: 'center',
-                            bodrderRadius: 10
-                        }}
-                        region={{
-                            latitude: 37.78825,
-                            longitude: -122.4324,
-                            latitudeDelta: 0.015,
-                            longitudeDelta: 0.0121,
-                        }}
-                    >
-
-                    </MapView>
-                </View>
-
-            </View>
-
-            {/* Contact Section */}
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Contact</Text>
-                {/* Placeholder for contact information */}
-                <View style={styles.contactPlaceholder}>
-                    <Text>123456789</Text>
-                </View>
-            </View>
-
-            {/* Related Categories */}
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>You May also Like</Text>
-                {/* <View style={styles.categoriesContainer}>
-                    {restaurant.categories.map((category, index) => (
-                        <View key={index} style={styles.category}>
-                            <Text>{category}</Text>
-                        </View>
-                    ))}
-                </View> */}
-
-                <FlatList
-                    style={{
-                        flex: 1,
-                    }}
-                    // numColumns={1}
-
-                    contentContainerStyle={{
-                        paddingLeft: 10,
-                        paddingRight: 10,
-                        paddingBottom: 5,
-                        paddingTop: 10,
-                    }}
-                    ListHeaderComponent={() => {
-                        return <View style={{}} />;
-                    }}
-                    ListEmptyComponent={() =>
-                        !showEmpty ? null : (
-                            <View
-                                style={{
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    flex: 1,
-                                }}>
-                                <Text
-                                    style={{
-                                        fontSize: 20,
-                                        marginTop: 50,
-                                        color: COLORS?.black,
-                                    }}>
-                                    No Category found !
-                                </Text>
-                            </View>
-                        )
-                    }
-                    ListHeaderComponentStyle={{
-                        paddingTop: 5,
-                    }}
-                    showsHorizontalScrollIndicator={false}
-                    horizontal={true}
-                    data={tradingList}
-                    renderItem={renderTrading}
-                // renderItem={({ item, index }) => <CategoryItem item={item} />}
-                />
-            </View>
-        </ScrollView>
+                showsVerticalScrollIndicator={false}
+                data={tradingList}
+                // extraData={category}
+                renderItem={renderItem}
+            // numColumns={2}
+            />
+        </View>
     );
 };
+export default HomeResturentList;
 
 const styles = StyleSheet.create({
-    container: {
+    itemWrapper: {
+        // flex: 1,
+        // margin: 5,
+        // marginVertical:5,
+        // marginHorizontal:5,
+        backgroundColor: COLORS.white,
+        // maxWidth: SIZES.width / 2 - 10,
+        // paddingBottom: 5,
+        padding: 5,
+        flexDirection: 'row',
+        height: 80,
+        justifyContent: 'center',
+        alinItem: 'center',
+    },
+    Wrapper: {
         flex: 1,
-        // backgroundColor: '#fff',
-    },
-    header: {
-        // padding: 20,
-        // alignItems: 'center',
-    },
-    restaurantImage: {
-        width: '100%',
-        height: 200,
-        borderRadius: 8,
-        marginBottom: 10,
-    },
-    restaurantName: {
-        fontSize: 22,
-        marginBottom: 10,
-        fontFamily: FONTS?.bold,
-        textAlign: 'center'
+
+        backgroundColor: COLORS?.white,
+        borderRadius: 10,
+        // marginHorizontal:20,
+        // borderWidth:0.2,
+        marginVertical: 5,
+        // elevation: 5
+        // borderWidth:0.2,
+        // borderColor:COLORS?.gray,
+        // elevation: 2
+
     },
     itemImage: {
-        width: 200,
-        height: 200,
-        alignItems: 'center',
-        borderRadius: 50,
-    },
-    restaurantAbout: {
-        textAlign: 'center',
-        marginBottom: 20,
-    },
-    tabButton: {
-        paddingVertical: 15,
-        paddingHorizontal: 20,
-        borderBottomWidth: 2,
-        borderBottomColor: 'transparent',
-        marginHorizontal: -3
-        // flexDirection:'row',
-        // justifyContent:'space-around'
-    },
-    tabContainer: {
-        flexDirection: 'row',
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-        backgroundColor: '#fff',
-        marginTop: -20,
-        elevation: 3,
-        borderRadius: 10,
-        marginHorizontal: 20
-    },
-    section: {
-        padding: 20,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-        backgroundColor: COLORS?.white,
-
-    },
-    sectionTitle: {
-        fontSize: 18,
-        marginBottom: 10,
-        fontFamily: FONTS?.bold,
-        color: COLORS?.black
-    },
-    mapPlaceholder: {
+        // flexGrow:1,
         width: '100%',
-        height: 200,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#f0f0f0',
-        borderRadius: 8,
-        marginBottom: 10,
+        height: 170,
+        // justifyContent: 'center',
+        // alinItem: 'center',
+        // alignSelf:'center'
     },
-    location: {
-        textAlign: 'center',
-        color: '#555',
+    itemName: {
+        // fontFamily: 'OpenSans-SemiBold',
+        fontSize: 16,
+        color: COLORS.black,
+        marginTop: 2,
+        // alignItems:'center'
+        // textAlign: 'center'
     },
-    contactPlaceholder: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: COLORS?.white,
-        borderRadius: 8,
-        padding: 20,
-        elevation: 6
+    itemPrice: {
+        fontSize: 16,
+        fontFamily: FONTS?.regular,
     },
-    categoriesContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
+    itemOriPrice: {
+        fontFamily: 'OpenSans-Regular',
+        fontSize: 11,
+        textDecorationLine: 'line-through',
+        color: COLORS.gray,
+        marginStart: 5,
     },
-    category: {
-        backgroundColor: '#f0f0f0',
-        padding: 8,
-        borderRadius: 8,
-        marginRight: 10,
-        marginBottom: 10,
-    },
-    contentContainer: {
-        paddingHorizontal: 10,
-        paddingBottom: 20,
-    },
-    restaurantInfo: {
-        // marginLeft: 5,
-        borderBottomEndRadius: 5,
-        borderBottomStartRadius: 5,
-        borderWidth: 0.2,
-        // paddingVertical: 10,
-        paddingLeft: 5,
-        elevation: 5,
-        alignItems: 'center',
-        marginHorizontal: 5,
-        marginTop: -70,
-        backgroundColor: COLORS?.white,
-        borderColor: COLORS?.gray
-
-    },
-    restaurantAddress: {
-        fontSize: 14,
-        color: COLORS?.black,
-        fontFamily: FONTS?.regular
-    },
-
-    aboutSection: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 8,
-        padding: 15,
-        marginBottom: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: COLORS?.white,
-        borderRadius: 8,
-        padding: 20,
-        elevation: 6,
-        // borderWidth:0.2,
-        marginHorizontal: 20
-    },
-    sectionTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    aboutItem: {
-        flexDirection: 'row',
-        marginBottom: 8,
-    },
-    aboutItemTitle: {
-        fontWeight: 'bold',
-        marginRight: 5,
-    }, aboutItemText: {
+    nodataText: {
         flex: 1,
+        borderRadius: 10,
+        backgroundColor: COLORS?.colorPrimary,
+        marginHorizontal: 20,
+        width: '50%',
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        marginVertical: 40,
     },
 });
-
-export default RetstaurantNearBy;

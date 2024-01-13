@@ -284,14 +284,16 @@ const styles = StyleSheet.create({
     },
     sliderImage: {
         width: SIZES.width,
-        height: 300,
-        overflow: 'hidden',
+        height: 280,
+        // overflow: 'hidden',
         // borderRadius: 20,
         // marginTop: -40
         // borderBottomEndRadius: 50,
         // borderBottomRightRadius: 50,
         // borderBottomLeftRadius: 50,
-        marginBottom: 20
+        marginBottom: 20,
+        resizeMode:'stretch',
+
     },
 
     filterButton: {

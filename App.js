@@ -65,6 +65,14 @@ import RetstaurantNearBy from './src/screens/Home/RetstaurantNearBy';
 import RestaurantDetails from './src/screens/Restaurant/RestaurantDetails';
 import BannerOfferDetails from './src/screens/Restaurant/BannerOfferDetails';
 import CartDetails from './src/screens/Restaurant/CartDetails';
+import OrderList from './src/screens/Order/OrderList';
+import CancelledOrderScreen from './src/screens/Order/CancelledOrderScreen';
+import HomeLogin from './src/screens/Auth/Login/HomeLogin';
+import Location from './src/screens/Auth/SignUp/Location';
+import TabOfferScreen from './src/screens/Flash/TabOfferScreen';
+import HomeResturentList from './src/screens/Flash/HomeResturentList';
+import TrackOrdeFoodr from './src/screens/TrackOrdeFoodr/Index';
+import PromoGetCode from './src/screens/PromoGetCode/Index'
 
 const OnBoarding = lazy(() => import('./src/screens/Auth/OnBoarding'));
 const Login = lazy(() => import('./src/screens/Auth/Login'));
@@ -138,6 +146,8 @@ const Auth = () => {
       <Stack.Screen name="Splash" component={Splash} />
       <Stack.Screen name="OnBoarding" component={OnBoarding} />
       <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="HomeLogin" component={HomeLogin} />
+
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
     </Stack.Navigator>
   );
@@ -271,9 +281,12 @@ const App = () => {
                 <Stack.Screen name="MainContainer" component={BottomTabNav} />
                 {/*<Stack.Screen name="MainContainer" component={DrawerNav} />*/}
                 <Stack.Screen name="Profile" component={Profile} />
+                <Stack.Screen name="Location" component={Location} />
+
                 <Stack.Screen name="ProductDetail" component={ProductDetail} />
                 <Stack.Screen name="Search" component={Search} />
                 <Stack.Screen name="AddressList" component={AddressList} />
+                <Stack.Screen name="OrderList" component={OrderList} />
 
                 <Stack.Screen name="Blogs" component={Blogs} />
                 <Stack.Screen name="RetstaurantNearBy" component={RetstaurantNearBy} />
@@ -281,13 +294,19 @@ const App = () => {
                 <Stack.Screen name="CartDetails" component={CartDetails} />
 
                 <Stack.Screen name="RestaurantDetails" component={RestaurantDetails} />
+              <Stack.Screen name="CancelledOrderScreen" component={CancelledOrderScreen} />
 
                 <Stack.Screen name="Order" component={Order} />
+                <Stack.Screen name="TrackOrdeFoodr" component={TrackOrdeFoodr} />
+                <Stack.Screen name="PromoGetCode" component={PromoGetCode} />
+
                 <Stack.Screen name="OrderConfirm" component={OrderConfirm} />
                 <Stack.Screen name="TrackOrder" component={TrackOrder} />
                 <Stack.Screen name="OrderDetails" component={OrderDetails} />
                 <Stack.Screen name="Carts" component={Cart} />
-              
+                <Stack.Screen name="TabOfferScreen" component={TabOfferScreen} />
+                <Stack.Screen name="HomeResturentList" component={HomeResturentList} />
+
                 <Stack.Screen name="HomeSliderDetails" component={HomeSliderDetails} />
 
                 <Stack.Screen name="ProductDetail11" component={ProductDetail11} />
@@ -311,7 +330,6 @@ const App = () => {
                   name="ChooseShipping"
                   component={ChooseShipping}
                 />
-                <Stack.Screen name="PromoCode" component={PromoCode} />
 
                 {/* <Stack.Screen name="SignupNew" component={SignupNew} /> */}
 

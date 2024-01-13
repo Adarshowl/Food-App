@@ -430,6 +430,45 @@ export async function getPrivacyPolicy(
   }
 }
 
+export async function getTermandConditions(
+  dispatch,
+  navigation,
+  successCallBack,
+  failureCallBack,
+  errorCallBack,
+) {
+  try {
+    const response = await ApiCall(
+      API_TYPE.GET,
+      null,
+      API_END_POINTS.API_GET_PRIVACY_POLICY,
+    );
+    // ShowConsoleLogMessage(JSON.stringify(response));
+    if (response?.statusCode == 500) {
+      // ShowConsoleLogMessage(' if called TokenMisMatchPopup ');
+      if (
+        response?.data?.message == 'Token Mismatch' ||
+        'Unauthorized Access'
+      ) {
+        TokenMisMatchPopup(dispatch, navigation, true);
+      } else {
+        TokenMisMatchPopup(dispatch, navigation, false);
+      }
+    } else {
+      if (response?.data?.status == true) {
+        dispatch(homeProducts(response?.data?.response));
+        successCallBack(response?.data);
+      } else {
+        dispatch(homeProducts([]));
+        failureCallBack(response?.data);
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    errorCallBack(error);
+  }
+}
+
 export async function getProductQueryByID(
   dispatch,
   navigation,

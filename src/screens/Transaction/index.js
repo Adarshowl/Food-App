@@ -5,10 +5,17 @@ import {
   Image,
   Text,
   TouchableOpacity,
+  ImageBackground,
 
 } from 'react-native';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { SIZES } from '../../constants';
+import { getUserTransactionHistory } from '../../redux/actions/CartApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
+import { showProgressBar } from '../../redux/actions';
+import { ShowConsoleLogMessage } from '../../utils/Utility';
+
 import GlobalStyle from '../../styles/GlobalStyle';
 import ToolBarIcon from '../../utils/ToolBarIcon';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -18,10 +25,11 @@ import { STRING } from '../../constants';
 import TransactionItem from './TransactionItem';
 import themeContext from '../../constants/themeContext';
 import { FONTS } from '../../constants/Fonts'
+import { useTranslation } from 'react-i18next';
+import moment from 'moment';
 
 const Transaction = ({ navigation }) => {
   const theme = useContext(themeContext);
-  const [show, setShow] = useState(false);
   const [data, setData] = useState([
     {
       id: '100',
@@ -57,6 +65,55 @@ const Transaction = ({ navigation }) => {
       time: '20-10-2023 04:56 Pm',
     },
   ]);
+  const loginCount = useSelector(state => state?.state?.count);
+  const userToken = useSelector(state => state?.state?.userToken);
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+  const [paymentHistory, setPaymentHistory] = useState([]);
+  const [showCartEmpty, setShowCartEmpty] = useState(false);
+  const { t, i18n } = useTranslation();
+  const [show, setShow] = useState(false);
+  console.log("kkkkk bpayment", paymentHistory)
+  useEffect(() => {
+    if (loginCount == 1) {
+      if (isFocused) {
+        dispatch(showProgressBar(true));
+        dispatch(() => {
+          getUserTransactionHistory(
+            dispatch,
+            navigation,
+            userToken,
+            successCallback,
+            errorCallback,
+            BannerErrorCallback,
+          );
+        });
+      }
+    }
+  }, [isFocused]);
+
+  const BannerErrorCallback = error => {
+    ShowConsoleLogMessage('Banner call back called');
+    dispatch(showProgressBar(false));
+    // ShowToastMessage(error);
+    setShowCartEmpty(true);
+
+    ShowConsoleLogMessage(error);
+  };
+
+  const errorCallback = async data => {
+    setPaymentHistory([]);
+    setShowCartEmpty(true);
+    dispatch(showProgressBar(false));
+  };
+  const successCallback = async data => {
+    // ShowConsoleLogMessage(JSON.stringify(data));
+    setPaymentHistory(data?.data);
+
+    setShowCartEmpty(data?.data?.length <= 0);
+
+    dispatch(showProgressBar(false));
+  };
 
   const renderItem = ({ item }) => {
     return (
@@ -85,23 +142,35 @@ const Transaction = ({ navigation }) => {
             }}
             style={styles.image}
           /> */}
-
-          <Image
+          <ImageBackground
             style={{
+              backgroundColor: theme?.colors?.bg,
               width: 65,
               height: 65,
+              borderRadius: 50,
               alignItems: 'center',
-              // alignSelf: 'center',
-              resizeMode: 'center',
-              // marginTop: 30,
-              borderRadius: 100,
+              justifyContent: 'center'
+
+
             }}
-            // style={styles.itemImage}
-            source={{
-              uri: 'https://cdn-icons-png.flaticon.com/128/8231/8231679.png'
-              // uri: item?.image,
-            }}
-          />
+          >
+            <Image
+              style={{
+                width: 40,
+                height: 40,
+                // alignItems: 'center',
+                // alignSelf: 'center',
+                resizeMode: 'center',
+                // marginTop: 30,
+                borderRadius: 100,
+              }}
+              // style={styles.itemImage}
+              source={{
+                uri: 'https://cdn-icons-png.flaticon.com/128/8231/8231679.png'
+                // uri: item?.image,
+              }}
+            />
+          </ImageBackground>
           <View style={styles.innnerWrapperOrder}>
             <View
               style={{
@@ -118,7 +187,7 @@ const Transaction = ({ navigation }) => {
                   },
                 ]}
                 numberOfLines={1}>
-                {item?.message}
+                {item?.message || "Big Graden salad"}
               </Text>
               <Text
                 numberOfLines={1}
@@ -128,11 +197,14 @@ const Transaction = ({ navigation }) => {
                   {
                     alignSelf: 'flex-start',
                     color: theme?.colors?.textColor,
-                    marginTop: 8,
+                    marginTop: 3,
                     fontFamily: FONTS?.regular,
+                    fontSize: 12
                   },
                 ]}>
-                jun 3 v2024 | 14:00 PM
+                {moment(item?.created_at).format('LLL')}
+
+                {/* jun 3 v2024 | 14:00 PM */}
                 {/* {item?.date} */}
               </Text>
             </View>
@@ -153,7 +225,7 @@ const Transaction = ({ navigation }) => {
                   fontSize: 14,
                   fontFamily: FONTS?.bold,
                 }}>
-                $10.30
+                ${item?.amount}
               </Text>
               <Text
                 numberOfLines={1}
@@ -163,7 +235,8 @@ const Transaction = ({ navigation }) => {
                   fontSize: 14,
                   fontFamily: FONTS?.regular,
                 }}>
-                order
+                  {item?.paymentby}
+                {/* order */}
               </Text>
             </TouchableOpacity>
           </View>
@@ -250,7 +323,7 @@ const Transaction = ({ navigation }) => {
             paddingTop: 5,
           }}
           showsVerticalScrollIndicator={false}
-          data={data}
+          data={paymentHistory}
           renderItem={renderItem}
         />
 

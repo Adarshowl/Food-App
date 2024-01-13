@@ -8,9 +8,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import GlobalStyle from '../../styles/GlobalStyle';
-import {icons, STRING} from '../../constants';
+import { icons, STRING } from '../../constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import VegUrbanCommonToolBar from '../../utils/VegUrbanCommonToolBar';
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -18,9 +18,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import CartItem from './CartItem';
 import VegUrbanCommonBtn from '../../utils/VegUrbanCommonBtn';
 import themeContext from '../../constants/themeContext';
-import {useTranslation} from 'react-i18next';
-import {FONTS} from '../../constants/Fonts';
-import {useDispatch, useSelector} from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { FONTS } from '../../constants/Fonts';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   couponItem,
   decreaseProductQtyCart,
@@ -28,18 +28,18 @@ import {
   increaseProductQtyCart,
   removeProductFromCart,
 } from '../../redux/actions/CartApi';
-import {ShowConsoleLogMessage, ShowToastMessage} from '../../utils/Utility';
-import {useIsFocused} from '@react-navigation/native';
-import {showProgressBar} from '../../redux/actions';
+import { ShowConsoleLogMessage, ShowToastMessage } from '../../utils/Utility';
+import { useIsFocused } from '@react-navigation/native';
+import { showProgressBar } from '../../redux/actions';
 import {
   doSaveProductCart,
   getSavedCartProduct,
   removeFromCartRealm,
 } from '../../utils/RealmUtility';
 import VegUrbanEditText from '../../utils/EditText/VegUrbanEditText';
-import {updateCartDataLength} from '../../redux/actions/HomeApi';
+import { updateCartDataLength } from '../../redux/actions/HomeApi';
 
-const Cart = ({navigation}) => {
+const Cart = ({ navigation }) => {
   const theme = useContext(themeContext);
   const dispatch = useDispatch();
   const loginCount = useSelector(state => state?.state?.count);
@@ -51,6 +51,16 @@ const Cart = ({navigation}) => {
 
   const [text, setText] = useState('');
   const [showSearch, setShowSearch] = useState(false);
+  const tradingList = [
+
+    {
+      id: '3', name: 'Chinese', address: 'bhawaercuaa',
+      quantity:1,
+      image: 'https://www.london-unattached.com/wp-content/uploads/2015/06/The-Trading-House-City-Bank-London-Launch-Party-1032.jpg'
+    },
+
+
+  ];
 
   useEffect(() => {
     // ShowConsoleLogMessage(userToken);
@@ -96,7 +106,7 @@ const Cart = ({navigation}) => {
                 ((parseInt(item?.product_id?.amount) *
                   parseInt(item?.product_id?.flash_offer_percentage)) /
                   100) *
-                  parseInt(item?.quantity);
+                parseInt(item?.quantity);
             } else {
               sum += parseInt(item?.amount);
             }
@@ -185,7 +195,7 @@ const Cart = ({navigation}) => {
     ShowConsoleLogMessage(error);
   };
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [count, setCount] = useState(1);
   const [show, setShow] = useState(false);
 
@@ -204,7 +214,7 @@ const Cart = ({navigation}) => {
         const itemData =
           item?.product_id?.product_name || item?.product_name
             ? item?.product_id?.product_name?.toUpperCase() ||
-              item.product_name.toUpperCase()
+            item.product_name.toUpperCase()
             : ''.toUpperCase();
         const textData = text.toUpperCase();
         return itemData.indexOf(textData) > -1;
@@ -442,7 +452,7 @@ const Cart = ({navigation}) => {
             styles.backIcon,
             {
               opacity: !show ? 1 : 0.0,
-              transform: [{scaleX: I18nManager.isRTL ? -1 : 1}],
+              transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
               marginStart: 10,
             },
           ]}
@@ -464,7 +474,7 @@ const Cart = ({navigation}) => {
           }}
         />
         {/*{loginCount == 1 ? (*/}
-        {showCartEmpty ? null : (
+        {/* {showCartEmpty ? null : (
           // <AntDesign
           //   name={'search1'}
           //   size={26}
@@ -499,7 +509,7 @@ const Cart = ({navigation}) => {
               }}
             />
           </TouchableOpacity>
-        )}
+        )} */}
         {/*) : null}*/}
       </View>
       {/*{loginCount == 1 ? (*/}
@@ -507,7 +517,58 @@ const Cart = ({navigation}) => {
         style={{
           flex: 1,
         }}>
-        {showCartEmpty ? (
+        <FlatList
+          style={{
+            paddingStart: 5,
+            paddingEnd: 5,
+          }}
+          ListHeaderComponent={() => {
+            return <View style={{}} />;
+          }}
+          ListHeaderComponentStyle={{
+            paddingTop: 5,
+          }}
+          showsVerticalScrollIndicator={false}
+          data={tradingList}
+          extraData={tradingList}
+          renderItem={({ item, index }) => (
+            <CartItem
+              fromSave={true}
+              item={item}
+              onAdd={() => {
+                onAddClick(item);
+              }}
+              onMinus={() => {
+                onMinusClick(item);
+              }}
+              onDelete={() => {
+                // ShowConsoleLogMessage('called');
+                onDeleteClick(item);
+              }}
+              onSaveLater={() => {
+                // onSaveLaterClick(item?.name);
+              }}
+            />
+          )}
+          ListEmptyComponent={() => {
+            return text ? (
+              <Text
+                style={[
+                  GlobalStyle.bothSideText,
+                  {
+                    color: theme?.colors?.white,
+                    fontSize: 18,
+                    fontFamily: FONTS?.medium,
+                    textAlign: 'center',
+                    marginBottom: 20,
+                  },
+                ]}>
+                No results found
+              </Text>
+            ) : null;
+          }}
+        />
+        {/* {showCartEmpty ? (
           <View
             style={{
               flex: 1,
@@ -595,9 +656,9 @@ const Cart = ({navigation}) => {
                 paddingTop: 5,
               }}
               showsVerticalScrollIndicator={false}
-              data={cartData}
-              extraData={cartData}
-              renderItem={({item, index}) => (
+              data={tradingList}
+              extraData={tradingList}
+              renderItem={({ item, index }) => (
                 <CartItem
                   fromSave={true}
                   item={item}
@@ -635,12 +696,12 @@ const Cart = ({navigation}) => {
               }}
             />
           </View>
-        )}
-        {cartData?.length > 0 ? (
+        )} */}
+        {tradingList?.length > 0 ? (
           <View
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
+              // flexDirection: 'row',
+              // alignItems: 'center',
               paddingVertical: 5,
               borderRadius: 5,
               paddingHorizontal: 5,
@@ -648,73 +709,80 @@ const Cart = ({navigation}) => {
               marginHorizontal: 0,
               marginTop: 10,
               // paddingVertical:10,
-              backgroundColor: theme?.colors?.bg,
+              backgroundColor: theme?.colors?.bg_color_onBoard,
               paddingRight: 20,
             }}>
             <View
               style={{
-                paddingStart: 5,
+                // paddingStart: 5,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginVertical: 20
               }}>
               <Text
                 style={{
                   fontFamily: FONTS?.medium,
-                  fontSize: 14,
+                  fontSize: 18,
                   // fontWeight:'bold',
                   color: theme?.colors?.textColor,
                   marginLeft: 20,
                 }}>
-                Total Price
+                Total
               </Text>
               <Text
                 style={{
                   fontFamily: FONTS?.bold,
 
                   fontSize: 20,
-                  color: theme?.colors?.colorPrimary,
+                  color: theme?.colors?.white,
                   marginLeft: 20,
                 }}>
                 {STRING.APP_CURRENCY}
-                {amount}
+                46.45
               </Text>
             </View>
             <View
               style={{
                 // marginRight: 50,
-                flex: 1,
+                // flex: 1,
+                marginHorizontal: 12,
+                marginBottom:15
               }}
-            />
-            <VegUrbanCommonBtn
-              height={40}
-              width={'55%'}
-              borderRadius={20}
-              textSize={16}
-              iconPosition={'right'}
-              icon={
-                <Octicons
-                  name={'arrow-right'}
-                  size={20}
-                  color={theme?.colors?.text}
-                  style={{
-                    // marginHorizontal: 20,
-                    marginStart: 15,
-                  }}
-                />
-              }
-              textColor={theme.colors?.text}
-              text={t('Check Out')}
-              backgroundColor={theme?.colors?.colorPrimary}
-              onPress={() => {
-                // ShowConsoleLogMessage('Coming soon');
-                if (loginCount == 1) {
-                  navigation.navigate('Checkout');
-                } else {
-                  navigation.navigate('Auth', {screen: 'Login'});
-                }
-              }}
-              textStyle={{
-                fontFamily: FONTS?.bold,
-              }}
-            />
+            >
+              <VegUrbanCommonBtn
+                height={50}
+                width={'100%'}
+                borderRadius={30}
+                textSize={18}
+                // iconPosition={'right'}
+                // icon={
+                //   <Octicons
+                //     name={'arrow-right'}
+                //     size={20}
+                //     color={theme?.colors?.text}
+                //     style={{
+                //       // marginHorizontal: 20,
+                //       marginStart: 15,
+                //     }}
+                //   />
+                // }
+                textColor={theme.colors?.text}
+                text={t('Go to Checkout')}
+                backgroundColor={theme?.colors?.colorPrimary}
+                onPress={() => {
+                  // ShowConsoleLogMessage('Coming soon');
+                  if (loginCount == 1) {
+                    navigation.navigate('Checkout');
+                  } else {
+                    navigation.navigate('Auth', { screen: 'Login' });
+                  }
+                }}
+                textStyle={{
+                  fontFamily: FONTS?.bold,
+                }}
+              />
+            </View>
           </View>
         ) : null}
       </View>

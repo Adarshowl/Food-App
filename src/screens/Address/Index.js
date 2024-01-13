@@ -8,28 +8,28 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
-import {icons, SIZES} from '../../constants';
-import {FONTS} from '../../constants/Fonts';
-
+import React, { useContext, useEffect, useState } from 'react';
+import { icons, SIZES } from '../../constants';
+import { FONTS } from '../../constants/Fonts';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import GlobalStyle from '../../styles/GlobalStyle';
 import VegUrbanCommonToolBar from '../../utils/VegUrbanCommonToolBar';
 import ToolBarIcon from '../../utils/ToolBarIcon';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {COLORS} from '../../constants/Colors';
+import { COLORS } from '../../constants/Colors';
 import themeContext from '../../constants/themeContext';
 import VegUrbanCommonBtn from '../../utils/VegUrbanCommonBtn';
-import {ShowConsoleLogMessage, ShowToastMessage} from '../../utils/Utility';
-import {showProgressBar} from '../../redux/actions';
-import {useDispatch, useSelector} from 'react-redux';
-import {useIsFocused} from '@react-navigation/native';
+import { ShowConsoleLogMessage, ShowToastMessage } from '../../utils/Utility';
+import { showProgressBar } from '../../redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
 import {
   getUserSavedAddress,
   removeUserAddress,
 } from '../../redux/actions/CartApi';
 
-const Address = ({navigation, route}) => {
+const Address = ({ navigation, route }) => {
   const [count, setCount] = useState(1);
   const [loading, setLoading] = useState(false);
 
@@ -39,6 +39,128 @@ const Address = ({navigation, route}) => {
 
   const [addressList, setAddressList] = useState([]);
   const [showAddressAddBtn, setShowAddressAddBtn] = useState(false);
+  const [addresses, setAddresses] = useState([
+    {
+      id: 'home',
+      label: 'Home',
+      address: '123 Main Street, Home City',
+      type: 'Home',
+      def: true,
+      selected: false,
+    },
+    {
+      id: 'office',
+      label: 'Office',
+      address: '456 Office Road, Office City',
+      type: 'Home',
+      def: true,
+      selected: false,
+
+    },
+  ]);
+
+  const onItemClick = idx => {
+    let a = addresses.map((item, index) => {
+      let temp = Object.assign({}, item);
+      if (index == idx) {
+        temp.selected = !temp.selected;
+      } else {
+        temp.selected = false;
+      }
+      return temp;
+    });
+
+    setAddresses(a);
+  };
+  const renderAddressItem = ({ item, index }) => {
+    return (
+
+      <TouchableOpacity
+        style={{
+          flex: 1,
+          padding: 10,
+          // borderBottomWidth: 1,
+          // borderBottomColor: '#ccc',
+          borderWidth: item?.selected ? 1: 0.3,
+          marginHorizontal: 3,
+          marginVertical: 8,
+          borderRadius: 10,
+          paddingHorizontal: 20,
+          paddingVertical: 15,
+          borderColor:item?.selected ? theme?.colors?.colorPrimary : theme?.colors?.gray,
+          flexDirection: 'row',
+          justifyContent: 'space-between'
+        }}
+      >
+        <View style={{
+          // flex: 1,
+          // padding: 10,
+          // // borderBottomWidth: 1,
+          // // borderBottomColor: '#ccc',
+          // borderWidth: 0.2,
+          // marginHorizontal: 3,
+          // marginVertical: 8,
+          // borderRadius: 10,
+          // paddingHorizontal: 20,
+          // paddingVertical: 15,
+          flexDirection: 'row',
+
+        }}>
+          <View
+            style={{
+              backgroundColor: '#F6DDCC',
+              width: 60,
+              height: 60,
+              borderRadius: 50,
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <MaterialIcons
+              name="location-on"
+              color={theme?.colors?.colorPrimary}
+              size={35}
+              style={{
+                alignSelf: 'center'
+              }}
+            />
+          </View>
+          <View
+            style={{
+              marginLeft: 10,
+              marginTop: 5
+            }}
+          >
+            <Text style={{
+              color: COLORS?.black,
+              fontFamily: FONTS?.bold,
+              fontSize: 18
+            }}>{item.label}</Text>
+            <Text>{item.address}</Text>
+          </View>
+
+        </View>
+        <View
+          style={{
+            alignSelf: 'center',
+            // justifyContent: 'flex-end',
+            alignItems: 'center',
+
+          }}>
+          <MaterialCommunityIcons
+            // name={'circle-outline'}
+            name={item?.selected ? 'circle-slice-8' : 'circle-outline'}
+            size={25}
+            color={theme.colors.colorPrimary}
+            // onPress={onSelect}
+            onPress={() => {
+              onItemClick(index, item);
+            }}
+          />
+        </View>
+      </TouchableOpacity>
+    )
+  };
 
   const BannerErrorCallback = error => {
     ShowConsoleLogMessage('Banner call back called');
@@ -120,7 +242,7 @@ const Address = ({navigation, route}) => {
     });
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         // activeOpacity={0.8}
@@ -255,7 +377,7 @@ const Address = ({navigation, route}) => {
                   borderRadius: 10,
                 }}
                 onPress={() => {
-                  navigation.navigate('AddressAddUpdate', {item: item});
+                  navigation.navigate('AddressAddUpdate', { item: item });
                   // ShowToastMessage('Coming soon');
                 }}
               />
@@ -303,7 +425,7 @@ const Address = ({navigation, route}) => {
           style={[
             styles.backIcon,
             {
-              transform: [{scaleX: I18nManager.isRTL ? -1 : 1}],
+              transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
               marginStart: 10,
             },
           ]}
@@ -313,7 +435,7 @@ const Address = ({navigation, route}) => {
         />
 
         <VegUrbanCommonToolBar
-          title="Address"
+          title="Deliver To"
           // title={route?.params?.item?.name + ''}
           style={{
             backgroundColor: theme.colors.bg_color_onBoard,
@@ -326,7 +448,80 @@ const Address = ({navigation, route}) => {
           }}
         />
       </View>
-      {showAddressAddBtn ? (
+      <View style={{ flex: 1, padding: 20 }}>
+        {/* <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>Address List</Text> */}
+        <FlatList
+          data={addresses}
+          keyExtractor={(item) => item.id}
+          renderItem={renderAddressItem}
+        />
+        <View
+          style={{
+            marginHorizontal: 10,
+            marginVertical: 10,
+          }}>
+          <VegUrbanCommonBtn
+            height={45}
+            width={'100%'}
+            borderRadius={20}
+            textSize={16}
+            textColor={theme?.colors?.white}
+            text={'Add New Address'}
+            backgroundColor={theme?.colors?.bg}
+            onPress={() => {
+              navigation.navigate('AddNewAddress');
+            }}
+            textStyle={{
+              fontFamily: FONTS?.bold,
+              color: theme?.colors?.white,
+            }}
+          />
+          </View>
+          <View
+          style={{
+            marginHorizontal: 10,
+            marginVertical: 10,
+          }}>
+          <VegUrbanCommonBtn
+            height={45}
+            width={'100%'}
+            borderRadius={20}
+            textSize={16}
+            textColor={theme?.colors?.text}
+            text={'Apply'}
+            backgroundColor={theme?.colors?.colorPrimary}
+            onPress={() => {
+              // navigation.navigate('AddNewAddress');
+            }}
+            textStyle={{
+              fontFamily: FONTS?.bold,
+              color: theme?.colors?.white,
+            }}
+          />
+
+
+        </View>
+        {/* <TouchableOpacity
+          style={{
+            marginTop: 20,
+            padding: 10,
+            backgroundColor: '#3498db',
+            borderRadius: 5,
+            alignItems: 'center',
+          }}
+          onPress={() => {
+            const newAddress = {
+              id: 'new-home', 
+              label: 'New Home',
+              address: '789 New Home Lane, New Home City',
+            };
+            setAddresses((prevAddresses) => [...prevAddresses, newAddress]);
+          }}
+        >
+          <Text style={{ color: '#fff', fontWeight: 'bold' }}>Add New Home Address</Text>
+        </TouchableOpacity> */}
+      </View>
+      {/* {showAddressAddBtn ? (
         <View
           style={{
             flex: 1,
@@ -405,7 +600,7 @@ const Address = ({navigation, route}) => {
             />
           </View>
         </>
-      )}
+      )} */}
     </SafeAreaView>
   );
 };

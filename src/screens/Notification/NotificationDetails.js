@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   I18nManager,
   Image,
@@ -11,37 +11,40 @@ import {
 import GlobalStyle from '../../styles/GlobalStyle';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
-import {COLORS} from '../../constants/Colors';
-import {FONTS} from '../../constants/Fonts';
+import { COLORS } from '../../constants/Colors';
+import { FONTS } from '../../constants/Fonts';
 import VegUrbanCommonToolBar from '../../utils/VegUrbanCommonToolBar';
 import themeContext from '../../constants/themeContext';
-import {updateNotificationById} from '../../redux/actions/CartApi';
-import {useDispatch, useSelector} from 'react-redux';
+import { updateNotificationById } from '../../redux/actions/CartApi';
+import { useDispatch, useSelector } from 'react-redux';
 import icons from '../../constants/icons';
 
-const NotificationDetails = ({navigation, route}) => {
+const NotificationDetails = ({ navigation, route }) => {
   const [data, setData] = useState({});
   const theme = useContext(themeContext);
 
   const dispatch = useDispatch();
   const userToken = useSelector(state => state?.state?.userToken);
+  const { notificationItem } = route.params;
+  console.log("notificationItem", notificationItem)
 
   useEffect(() => {
-    let {item} = route?.params;
+    let { item } = route?.params;
     setData(item);
     update(item?._id);
   }, []);
 
   const update = id => {
+    console.log("idddd", id)
     dispatch(() => {
       updateNotificationById(
         dispatch,
         navigation,
         userToken,
         id,
-        () => {},
-        () => {},
-        () => {},
+        () => { },
+        () => { },
+        () => { },
       );
     });
   };
@@ -70,7 +73,7 @@ const NotificationDetails = ({navigation, route}) => {
             styles.backIcon,
             {
               // opacity: !show ? 1 : 0.0,
-              transform: [{scaleX: I18nManager.isRTL ? -1 : 1}],
+              transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
               marginStart: 10,
             },
           ]}
@@ -97,11 +100,12 @@ const NotificationDetails = ({navigation, route}) => {
         }}>
         <View
           style={{
-            backgroundColor: theme?.colors?.bg_color,
+            backgroundColor: theme?.colors?.bg_color_onBoard,
 
             margin: 15,
             borderRadius: 10,
-            elevation: 10,
+
+            elevation: 3,
           }}>
           <View activeOpacity={0.9} style={styles.item}>
             {/*<Ionicons*/}
@@ -137,7 +141,7 @@ const NotificationDetails = ({navigation, route}) => {
                     color: theme?.colors?.white,
                   },
                 ]}>
-                {data?.module}
+                {notificationItem?.module}
               </Text>
             </View>
           </View>
@@ -150,9 +154,9 @@ const NotificationDetails = ({navigation, route}) => {
             }}
           />
 
-          {data?.noti_image ? (
+          {notificationItem?.noti_image ? (
             <Image
-              source={{uri: data?.noti_image}}
+              source={{ uri: notificationItem?.noti_image }}
               style={{
                 height: 300,
                 width: '95%',
@@ -163,7 +167,7 @@ const NotificationDetails = ({navigation, route}) => {
             />
           ) : null}
 
-          {data?.message ? (
+          {notificationItem?.message ? (
             <Text
               style={[
                 styles.details,
@@ -171,7 +175,7 @@ const NotificationDetails = ({navigation, route}) => {
                   color: theme?.colors?.white,
                 },
               ]}>
-              {data?.message}
+              {notificationItem?.message}
             </Text>
           ) : null}
           <Text
@@ -187,7 +191,7 @@ const NotificationDetails = ({navigation, route}) => {
               },
             ]}
             numberOfLines={2}>
-            {moment(data?.created_at).format('LLL')}
+            {moment(notificationItem?.created_at).format('LLL')}
           </Text>
         </View>
       </ScrollView>

@@ -58,7 +58,7 @@ const FlashSale = ({navigation}) => {
           }}
         /> */}
         <VegUrbanCommonToolBar
-          title="Most Popular"
+          title="Resturants"
           style={{
             backgroundColor: theme.colors.bg_color_onBoard,
             marginStart: 10,
@@ -68,7 +68,7 @@ const FlashSale = ({navigation}) => {
             fontSize: 20,
           }}
         />
-        <AntDesign
+        {/* <AntDesign
           name={'search1'}
           size={26}
           // color={COLORS.colorPrimary}
@@ -80,7 +80,7 @@ const FlashSale = ({navigation}) => {
             // ShowToastMessage('Coming Soon!');
           }}
           color={theme?.colors?.black}
-        />
+        /> */}
       </View>
       <TabOfferScreen />
 

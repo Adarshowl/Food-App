@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, Image,TouchableOpacity, View} from 'react-native';
 import React, {memo, useContext} from 'react';
 import {COLORS} from '../../constants/Colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -10,24 +10,29 @@ const PaymentItem = ({item, show, onItemClick}) => {
   const theme = useContext(themeContext);
   return (
     <TouchableOpacity
-      style={[styles.wrapper, {backgroundColor: theme?.colors?.bg}]}
+      style={[styles.wrapper, {backgroundColor: theme?.colors?.bg_color_onBoard}]}
       onPress={onItemClick}>
       <View style={styles.innerWrapper}>
-        <VegUrbanImageLoader source={item?.image} styles={styles.image} />
+      <Image
+          source={{
+            uri: item?.image,
+          }}
+          style={styles.image}
+        />
         <Text
           style={[
             styles.textName,
             {
-              color: theme?.colors?.white,
+              color: theme?.colors?.textcolor,
             },
           ]}>
-          {item?.payment_method_name || item?.payment_name}
-          {/*{item?.payment_name}*/}
+          {/* {item?.payment_method_name || item?.payment_name} */}
+          {item?.name}
         </Text>
         <MaterialCommunityIcons
           name={item?.selected ? 'circle-slice-8' : 'circle-outline'}
           size={22}
-          color={theme?.colors?.colorPrimary}
+          color={theme?.colors?.white}
         />
       </View>
     </TouchableOpacity>
@@ -40,11 +45,13 @@ const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: COLORS.bg_gray,
     marginHorizontal: 10,
-    paddingVertical: 15,
-    borderRadius: 15,
+    paddingVertical: 20,
+    borderRadius: 10,
     marginVertical: 8,
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
     alignItems: 'center',
+    // borderWidth:0.2,
+    elevation:5
   },
   text: {
     maxHeight: 35,
@@ -67,14 +74,14 @@ const styles = StyleSheet.create({
   },
   textName: {
     fontFamily: FONTS?.medium,
-    fontSize: 18,
+    fontSize: 16,
     color: COLORS.black,
     flex: 1,
-    marginStart: 10,
+    marginStart: 16,
   },
   image: {
-    height: 40,
-    width: 40,
+    height: 28,
+    width: 28,
     resizeMode: 'center',
   },
   divLine: {

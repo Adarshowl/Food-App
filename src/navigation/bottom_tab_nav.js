@@ -10,6 +10,10 @@ import Wallet from '../screens/Wallet/Index';
 import {FONTS} from '../constants/Fonts';
 import {useSelector} from 'react-redux';
 import {COLORS} from '../constants/Colors';
+import OrderList from '../screens/Order/OrderList';
+import TabOfferScreen from '../screens/Flash/TabOfferScreen';
+import FlashSale from '../screens/Flash/FlashSale';
+import Fontisto from 'react-native-vector-icons/Fontisto'
 
 const Category = lazy(() => import('../screens/Category'));
 const Favorite = lazy(() => import('../screens/Favorite'));
@@ -24,6 +28,15 @@ const BottomTabNav = () => {
   );
 
   return (
+    <View
+    style={{
+      backgroundColor: theme?.colors.bg_color_onBoard,
+      flex:1,
+      elevation:5
+
+    }}
+    >
+
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
@@ -31,17 +44,31 @@ const BottomTabNav = () => {
         tabBarStyle: {
           // backgroundColor: 'yellow',
           backgroundColor: theme?.colors.bg_color_onBoard,
-          minHeight: 60,
-          paddingTop: 15,
-          paddingBottom: 18,
+          minHeight: 68,
+          // paddingTop: 20,
+          // paddingBottom: 18,
           justifyContent: 'space-evenly',
           alignItems: 'center',
           borderTopWidth: 0,
+          // elevation:10,
+          elevation:3,
+
+          marginHorizontal:20,
+          borderRadius:10,
+          marginBottom:10,
+          paddingVertical:10,
+          marginTop:10
+
         },
-        tabBarItemStyle: {},
+        tabBarItemStyle: {
+
+        },
       }}
       // initialRouteName="Home"
-      style={{}}>
+      style={{
+        elevation:5,
+
+      }}>
       <Tab.Screen
         name="Home"
         component={Home}
@@ -99,14 +126,14 @@ const BottomTabNav = () => {
 
                 flexGrow: 1,
               }}>
-              {/*<MaterialCommunityIcons*/}
-              {/*  name="cart"*/}
-              {/*  size={25}*/}
-              {/*  color={*/}
-              {/*    focused ? theme?.colors.colorPrimary : theme?.colors.grey*/}
-              {/*  }*/}
-              {/*/>*/}
-              <Image
+              <Fontisto
+               name="shopping-basket"
+                size={25}
+            color={
+                focused ? theme?.colors.colorPrimary : theme?.colors.grey
+              }
+              />
+              {/* <Image
                 source={icons.tab_cart}
                 style={{
                   height: 25,
@@ -115,7 +142,7 @@ const BottomTabNav = () => {
                     ? theme?.colors.colorPrimary
                     : theme?.colors.grey,
                 }}
-              />
+              /> */}
               <Text
                 style={[
                   styles.text,
@@ -163,8 +190,8 @@ const BottomTabNav = () => {
       />
 
       <Tab.Screen
-        name="Order"
-        component={Order}
+        name="OrderList"
+        component={OrderList}
         options={{
           unmountOnBlur: true,
           tabBarIcon: ({focused}) => (
@@ -214,53 +241,7 @@ const BottomTabNav = () => {
         }}
       />
 
-      <Tab.Screen
-        name="Wallet"
-        component={Wallet}
-        options={{
-          unmountOnBlur: true,
-          tabBarIcon: ({focused}) => (
-            <View
-              style={{
-                alignItems: 'center',
-
-                flexGrow: 1,
-              }}>
-              {/*<Ionicons*/}
-              {/*  name={focused ? 'wallet' : 'wallet-outline'}*/}
-              {/*  size={20}*/}
-              {/*  color={*/}
-              {/*    focused ? theme?.colors.colorPrimary : theme?.colors.grey*/}
-              {/*  }*/}
-              {/*/>*/}
-              <Image
-                source={icons.tab_wallet}
-                style={{
-                  height: 25,
-                  width: 25,
-                  tintColor: focused
-                    ? theme?.colors.colorPrimary
-                    : theme?.colors.grey,
-                }}
-              />
-              <Text
-                style={[
-                  styles.text,
-                  {
-                    color: focused
-                      ? theme?.colors.colorPrimary
-                      : theme?.colors.textColor,
-                    textAlign: 'center',
-                  },
-                ]}>
-                {/*{STRING.wallet}*/}
-                {/*{STRING.transaction_history}*/}
-                {STRING.transaction_history1}
-              </Text>
-            </View>
-          ),
-        }}
-      />
+    
 
       <Tab.Screen
         name="Profile"
@@ -309,6 +290,8 @@ const BottomTabNav = () => {
         }}
       />
     </Tab.Navigator>
+    </View>
+
   );
 };
 export default BottomTabNav;

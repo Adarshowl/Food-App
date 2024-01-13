@@ -16,6 +16,8 @@ import { ShowToastMessage, validateFieldNotEmpty } from '../../../utils/Utility'
 import themeContext from '../../../constants/themeContext';
 import { useTranslation } from 'react-i18next';
 import { useRoute } from '@react-navigation/native';
+import LinearGradient from 'react-native-linear-gradient';
+
 import { FONTS } from '../../../constants/Fonts';
 import ToolBarIcon from '../../../utils/ToolBarIcon';
 
@@ -199,46 +201,48 @@ const ForgotPageNext = ({ navigation }) => {
         },
       ]}>
 
-      <View
-        style={{
-          // marginStart: 20,
-          // marginTop: 25,
-          alignItems: 'center',
-          backgroundColor: 'gray',
-          borderBottomEndRadius: 30,
-          borderBottomLeftRadius: 30,
-          flexDirection: 'row',
-          height: 150,
-
-
-        }}>
-        <ToolBarIcon
-          title={Ionicons}
-          iconName={'chevron-back'}
-          icSize={20}
-          borderRadius={20}
-          icColor={COLORS.black}
+      <View>
+        <LinearGradient
+          colors={['#FD5F30', '#FF774F', '#FF8F6F']}
           style={{
-            backgroundColor: theme?.colors?.bg_color_onBoard,
-            // marginEnd: 10,
-            borderRadius: 20,
-          }}
-          onPress={() => {
-            navigation.goBack();
-          }}
-        />
-        <Text
-          style={[
-            styles.heading,
-            {
-              marginStart: 10,
-              color: COLORS?.white,
-              alignItems: 'center'
-            },
-          ]}>
-          {!show ? t('Verification') : ' '}
-        </Text>
+            borderBottomEndRadius: 30,
+            borderBottomLeftRadius: 30,
+            flexDirection: 'row',
+            borderBottomRightRadius: 30,
 
+            height: 130,
+            alignItems: 'center',
+            // justifyContent: 'space-between',
+            paddingHorizontal: 20,
+          }}
+        >
+          <ToolBarIcon
+            title={Ionicons}
+            iconName={'chevron-back'}
+            icSize={20}
+            borderRadius={20}
+            icColor={COLORS.black}
+            style={{
+              backgroundColor: theme?.colors?.bg_color_onBoard,
+              // marginEnd: 10,
+              borderRadius: 20,
+            }}
+            onPress={() => {
+              navigation.goBack();
+            }}
+          />
+          <Text
+            style={[
+              styles.heading,
+              {
+                marginStart: 10,
+                color: COLORS?.white,
+                alignItems: 'center'
+              },
+            ]}>
+            {!show ? t('Verification') : ' '}
+          </Text>
+        </LinearGradient>
       </View>
       <ScrollView
         style={[
@@ -293,36 +297,36 @@ const ForgotPageNext = ({ navigation }) => {
                 {show ? '' : 'We sent you a verification code to'}
                 {/* {!show ? '' : `Code has been sent to ${userEmail}`} */}
               </Text>
-             <View style={{
-              flexDirection:'row'
-             }}>
-             <Text
-                numberOfLines={2}
-                style={[
-                  {
-                    color: theme?.colors?.textColor,
-                    fontFamily: FONTS.regular,
-                    fontSize: 16
+              <View style={{
+                flexDirection: 'row'
+              }}>
+                <Text
+                  numberOfLines={2}
+                  style={[
+                    {
+                      color: theme?.colors?.textColor,
+                      fontFamily: FONTS.regular,
+                      fontSize: 16
 
-                  },
-                ]}>
-                your email
-              </Text>
-              <Text
-                numberOfLines={1}
-                style={[
-                  {
-                    color: theme?.colors?.textColor,
-                    fontFamily: FONTS.bold,
-                    fontSize: 16,
-                    marginLeft:5
+                    },
+                  ]}>
+                  your email
+                </Text>
+                <Text
+                  numberOfLines={1}
+                  style={[
+                    {
+                      color: theme?.colors?.textColor,
+                      fontFamily: FONTS.bold,
+                      fontSize: 16,
+                      marginLeft: 5
 
-                  },
-                ]}>
+                    },
+                  ]}>
 
-                testing@gmail.com
-              </Text>
-             </View>
+                  testing@gmail.com
+                </Text>
+              </View>
             </View>
 
             <OtpInputs
@@ -432,19 +436,19 @@ const ForgotPageNext = ({ navigation }) => {
             justifyContent={'flex-end'}
             alignItems={'flex-end'}
             textColor={theme.colors?.btnTextColor}
-            backgroundColor={COLORS?.black}
-            // onPress={() => {
-            //   // navigation.navigate('MainContainer');
+            backgroundColor={theme?.colors?.colorPrimary}
+            onPress={() => {
+              navigation.navigate('Login');
 
-            //   if (otp.length === 4 && /^\d{4}$/.test(otp)) {
-            //     navigation.navigate('MainContainer');
-            //     // closeSignUpModal();
-            //   } else {
-            //     ShowToastMessage('Please enter a valid 4-digit OTP');
-            //   }
-            // }}
+              // if (otp.length === 4 && /^\d{4}$/.test(otp)) {
+              //   navigation.navigate('MainContainer');
+              //   // closeSignUpModal();
+              // } else {
+              //   ShowToastMessage('Please enter a valid 4-digit OTP');
+              // }
+            }}
 
-            onPress={onSubmitClick}
+            // onPress={onSubmitClick}
             textStyle={{
               fontFamily: 'OpenSans-Mulish',
               fontWeight: 'bold',

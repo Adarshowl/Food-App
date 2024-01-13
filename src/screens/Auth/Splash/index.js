@@ -40,31 +40,68 @@ const Splash = ({ navigation }) => {
   //   }, 1000);
   // }, []);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const savedImage = await getSavedAppImage();
+  //       // ShowConsoleLogMessage('success value change' + savedImage[0]?.image);
+  //       setImage(savedImage[0]?.image);
+  //     } catch (error) {
+  //       await getAppConfiguration();
+  //       await getAppCurrencyConfiguration();
+  //       await getUserFromStorage();
+  //       navigation.navigate('MainContainer');
+  //       // new change
+  //       ShowConsoleLogMessage(error);
+  //     } finally {
+  //       await getUserFromStorage();
+  //       await getAppCurrencyConfiguration();
+  //       await getAppConfiguration();
+  //       navigation.navigate('HomeLogin');
+  //     }
+  //   };
+
+  //   const timeoutId = setTimeout(fetchData, 1000);
+
+  //   return () => clearTimeout(timeoutId); // Cleanup the timer on unmount
+  // }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const savedImage = await getSavedAppImage();
-        // ShowConsoleLogMessage('success value change' + savedImage[0]?.image);
         setImage(savedImage[0]?.image);
+        // Show the first image (newlogo)
+        setTimeout(() => {
+          navigation.navigate('HomeLogin');
+        }, 2000); // Adjust the delay time as needed
       } catch (error) {
         await getAppConfiguration();
         await getAppCurrencyConfiguration();
         await getUserFromStorage();
-        navigation.replace('MainContainer');
+        navigation.navigate('MainContainer');
         // new change
         ShowConsoleLogMessage(error);
       } finally {
         await getUserFromStorage();
         await getAppCurrencyConfiguration();
         await getAppConfiguration();
-        navigation.replace('Login');
       }
     };
-
+  
     const timeoutId = setTimeout(fetchData, 1000);
-
+  
     return () => clearTimeout(timeoutId); // Cleanup the timer on unmount
   }, []);
+  
+
+  // useEffect(() => {
+  //   setTimeout(async () => {
+  //     await getAppConfiguration();
+  //     await getAppCurrencyConfiguration();
+  //     await getUserFromStorage();
+  //   }, 2000);
+  // }, []);
 
   // useEffect(() => {
   //   // ShowConsoleLogMessage('value change');
@@ -87,8 +124,8 @@ const Splash = ({ navigation }) => {
         ShowConsoleLogMessage(
           JSON.stringify(AppColors.dark.colors.colorPrimary),
         );
-        images.app_logo = response?.data?.data?.app_default_image;
-        doSaveAppImage('1', response?.data?.data?.app_logo);
+        // images.app_logo = response?.data?.data?.app_default_image;
+        // doSaveAppImage('1', response?.data?.data?.app_logo);
       } else {
         // dispatch(changeAppColor('#FF6600'));
       }
@@ -116,6 +153,26 @@ const Splash = ({ navigation }) => {
   };
 
   const dispatch = useDispatch();
+  // const getUserFromStorage = async () => {
+  //   try {
+  //     await AsyncStorage.getItem('userData', (error, value) => {
+  //       if (error) {
+  //       } else {
+  //         if (value !== null) {
+  //           console.log('vallllllll', JSON.parse(value)?.response);
+  //           // dispatch(fetchUserData(JSON.parse(value)))
+  //           dispatch(fetchUserData(JSON.parse(value)?.response));
+  //           dispatch(fetchUserToken(JSON.parse(value)?.jwtoken));
+  //           navigation.replace('MainContainer');
+  //         } else {
+  //           navigation.replace('HomeLogin');
+  //         }
+  //       }
+  //     });
+  //   } catch (err) {
+  //     console.log('ERROR IN GETTING USER FROM STORAGE');
+  //   }
+  // };
   const getUserFromStorage = async () => {
     try {
       // await AsyncStorage.getItem(STRING.app_cur, (error, value) => {
@@ -156,16 +213,24 @@ const Splash = ({ navigation }) => {
 
   return (
     <View style={[styles.background]}>
-      {image ? (
+      <Image
+        style={styles.image}
+        source={images.newlogo}
+      />
+         <Image
+        style={styles.image}
+        source={images.splash}
+      />
+      {/* {image ? (
         <Image
           style={styles.image}
-          source={image ? { uri: image } : images.newlogo}
+          source={image ? { uri: image } : images.splash}
         />
       ) : // <FastImage
         //   style={styles.image}
         //   source={image ? {uri: image} : images.newlogo}
         // />
-        null}
+        null} */}
     </View>
   );
 };
@@ -176,7 +241,7 @@ const styles = StyleSheet.create({
   image: {
     width: SIZES.width,
     height: SIZES.height,
-    resizeMode: 'cover',
+    resizeMode: 'stretch'
   },
   background: {
     backgroundColor: COLORS.white,

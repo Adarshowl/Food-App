@@ -15,6 +15,7 @@ import { FONTS } from '../../../constants/Fonts';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { COLORS } from '../../../constants/Colors';
 import Octicons from 'react-native-vector-icons/Octicons';
+import LinearGradient from 'react-native-linear-gradient';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -221,45 +222,45 @@ const SignUp = ({ navigation }) => {
         }}
       /> */}
         {/* <Image source={images.app_logo} style={styles.app_logo} /> */}
-        <View
-          style={{
-            // marginStart: 20,
-            // marginTop: 25,
-            // justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'gray',
-            borderBottomEndRadius: 30,
-            borderBottomLeftRadius: 30,
-            flexDirection: 'row',
-            height: 130,
-
-          }}>
-          <ToolBarIcon
-            title={Ionicons}
-            iconName={'chevron-back'}
-            icSize={20}
-            borderRadius={20}
-            icColor={COLORS.black}
+        <View>
+          <LinearGradient
+            colors={['#FD5F30', '#FF774F', '#FF8F6F']}
             style={{
-              backgroundColor: theme?.colors?.bg_color_onBoard,
-              // marginEnd: 10,
-              borderRadius: 20,
+              borderBottomEndRadius: 30,
+              borderBottomLeftRadius: 30,
+              borderBottomRightRadius:30,
+              flexDirection: 'row',
+              height: 130,
+              alignItems: 'center',
+              // justifyContent: 'space-between',
+              paddingHorizontal: 20,
             }}
-            onPress={() => {
-              navigation.goBack();
-            }}
-          />
-          <Text
-            style={[
-              styles.heading,
-              {
-                marginStart: 10,
-                color: COLORS?.white,
-              },
-            ]}>
-            {!show ? t('Sign Up') : ' '}
-          </Text>
-
+          >
+            <ToolBarIcon
+              title={Ionicons}
+              iconName={'chevron-back'}
+              icSize={20}
+              borderRadius={20}
+              icColor={theme?.colors?.colorPrimary}
+              style={{
+                borderRadius: 20,
+              }}
+              onPress={() => {
+                navigation.goBack();
+              }}
+            />
+            <Text
+              style={[
+                styles.heading,
+                {
+                  marginStart: 10,
+                  color: COLORS?.white,
+                },
+              ]}
+            >
+              {!show ? t('Sign Up') : ' '}
+            </Text>
+          </LinearGradient>
         </View>
         <View
           style={[
@@ -479,7 +480,7 @@ const SignUp = ({ navigation }) => {
               textSize={18}
               text={'Sign Up'}
               textColor={theme.colors?.text}
-              backgroundColor={COLORS?.black}
+              backgroundColor={theme?.colors?.colorPrimary}
               // onPress={() => {
               //   closeSignUpModal();
               // }}

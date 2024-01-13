@@ -15,6 +15,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { COLORS } from '../../constants/Colors';
 import VegUrbanCommonToolBar from '../../utils/VegUrbanCommonToolBar';
 import { SIZES, STRING } from '../../constants';
+import moment from 'moment';
 
 import themeContext from '../../constants/themeContext';
 import { FONTS } from '../../constants/Fonts';
@@ -28,7 +29,9 @@ import SwipeDelete from './SwipeDelete';
 const Notification = ({ navigation }) => {
   const [show, setShow] = useState(false);
   const [notificationList, setNotificationList] = useState([]);
+  const [oldNotification, setOldNotification] = useState([]);
 
+  console.log("list data ", notificationList)
   const dispatch = useDispatch();
   const loginCount = useSelector(state => state?.state?.count);
   const userToken = useSelector(state => state?.state?.userToken);
@@ -134,12 +137,16 @@ const Notification = ({ navigation }) => {
   const addressSuccessCallback = async data => {
     // ShowConsoleLogMessage(JSON.stringify(data?.response));
     dispatch(showProgressBar(false));
-    setNotificationList(data?.data);
+    setNotificationList(data?.latest_data);
+    setOldNotification(data?.old_data);
+
   };
 
   const addressErrorCallback = async data => {
     dispatch(showProgressBar(false));
     setNotificationList([]);
+    setOldNotification([]);
+
     // setTimeout(() => {
     //   ShowToastMessage(data?.message || 'Something went wrong.');
     // }, 100);
@@ -260,99 +267,240 @@ const Notification = ({ navigation }) => {
           );
         }}
       /> */}
-     <FlatList
-        data={staticNotifications}
+      {notificationList && notificationList.length > 0 && (
+
+        <Text
+          style={{
+            fontFamily: FONTS?.bold,
+            color: COLORS?.black,
+            fontSize: 17,
+            marginLeft: 20,
+            marginVertical: 10
+          }}
+        >
+          New
+        </Text>
+      )}
+      <FlatList
+        data={notificationList}
+        style={{
+          marginTop: 0
+        }}
         keyExtractor={(item) => item.id.toString()}
+        // ListEmptyComponent={() => {
+        //   return (
+        //     <Text
+        //       numberOfLines={1}
+        //       ellipsizeMode="tail"
+        //       style={[
+        //         styles.headingtext,
+        //         {
+        //           color: theme?.colors?.white,
+        //           flexGrow: 1,
+        //           textAlign: 'center',
+        //           alignSelf: 'center',
+        //           marginTop: SIZES.width / 2,
+        //           fontFamily: FONTS.regular,
+        //         },
+        //       ]}>
+        //       No notifications found!
+        //     </Text>
+        //   );
+        // }}
         renderItem={({ item }) => (
-          <View style={styles.notificationCategory}>
-            <Text style={[styles.categoryTitle, {
-              color: theme?.colors?.textColor
-            }]}>{item.title}</Text>
-            <FlatList
-              data={item.notifications}
-              keyExtractor={(notification) => notification.id.toString()}
-              renderItem={({ item: notification }) => (
-                <View
-                // style={styles.notificationItem}
-                >
-                  <TouchableOpacity
-                    // activeOpacity={0.9}
-                    style={[
-                      styles.wrapper,
-                      {
-                        backgroundColor: theme?.colors?.bg,
-                        // flex:1
-                      },
-                    ]}
-                    onPress={() => { }}>
-                   {/* <Image
-                      source={{
-                        uri: notification?.image
-                      }}
-                      style={styles?.imagestyle}
-                    />  */}
-                   <ImageBackground
+          <View
+            style={{
+              flexGrow: 1
+            }}
+          >
+            <TouchableOpacity
+              // activeOpacity={0.9}
+              style={[
+                styles.wrapper,
+                {
+                  // backgroundColor: theme?.colors?.bg,
+                  marginHorizontal: 10
+                  // flex:1
+                },
+              ]}
+              onPress={() => {
+                navigation.navigate('NotificationDetails',item)
+              }}>
+              {/* <Image
+                source={{
+                  uri: notification?.image
+                }}
+                style={styles?.imagestyle}
+              />  */}
+              <ImageBackground
 
-                      style={[styles.imagestyle, {
-                        // backgroundColor:"#F2F4F4",
-                        backgroundColor: theme?.colors?.gray,
-                        alignItems: 'center',
-                        // alignSelf: 'center',
-                        justifyContent: 'center'
-                      }]}
-                    >
-                      <Image
-                        style={{
-                          width: 25,
-                          height: 25,
-                          borderRadius: 50,
+                style={[styles.imagestyle, {
+                  // backgroundColor:"#F2F4F4",
+                  backgroundColor: theme?.colors?.gray,
+                  alignItems: 'center',
+                  // alignSelf: 'center',
+                  justifyContent: 'center'
+                }]}
+              >
+                <Image
+                  style={{
+                    width: 25,
+                    height: 25,
+                    borderRadius: 50,
 
-                          alignSelf: 'center',
-                          margin: 8
-                          // resizeMode:'contain',
-                          // borderRadius: 10,
-                          // marginTop: 30
-                        }}
-                        // style={styles.itemImage}
-                        source={{
-                          uri: notification?.image
-                        }}
-                      />
-                    </ImageBackground>
-                    <View style={{
-                      marginStart: 8,
-                      flex: 1,
-                      marginVertical: 5,
-                      marginLeft: 15
-                    }}>
-                      <Text
-                        numberOfLines={1}
-                        ellipsizeMode='tail'
+                    alignSelf: 'center',
+                    margin: 8
+                    // resizeMode:'contain',
+                    // borderRadius: 10,
+                    // marginTop: 30
+                  }}
+                  // style={styles.itemImage}
+                  source={{
+                    uri: item?.image || "https://cdn-icons-png.flaticon.com/128/11222/11222376.png"
+                  }}
+                />
+              </ImageBackground>
+              <View style={{
+                marginStart: 8,
+                flex: 1,
+                marginVertical: 5,
+                marginLeft: 15
+              }}>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode='tail'
 
-                        style={[
-                          styles.headingtext,
-                          {
-                            // marginTop: show ? 5 : 0,
-                            color: theme?.colors?.white,
-                          },
-                        ]}>
-                        {notification?.message}
-                      </Text>
-                      <Text
-                        numberOfLines={1}
-                        ellipsizeMode='tail'
-                        style={[styles.descText, {
-                          color: theme?.colors?.textColor
-                        }]}>
-                        {notification?.title}</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              )}
-            />
+                  style={[
+                    styles.headingtext,
+                    {
+                      // marginTop: show ? 5 : 0,
+                      color: theme?.colors?.white,
+                      fontSize: 17
+                    },
+                  ]}>
+                  {item?.message}
+                </Text>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode='tail'
+                  style={[styles.descText, {
+                    color: theme?.colors?.textColor,
+                    fontFamily: FONTS?.regular,
+                    fontSize: 13
+                  }]}>
+                  {moment(item?.created_at).format('LLL')}
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
         )}
-      /> 
+      />
+
+      {oldNotification && oldNotification.length > 0 && (
+        <Text
+          style={{
+            fontFamily: FONTS?.bold,
+            color: COLORS?.black,
+            fontSize: 17,
+            marginLeft: 20,
+            marginVertical: 10
+          }}
+        >
+          Old
+        </Text>
+      )}
+      <FlatList
+        data={oldNotification}
+        style={{
+          flexGrow: -20
+        }}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View
+          // style={styles.notificationItem}
+          >
+            <TouchableOpacity
+              // activeOpacity={0.9}
+              style={[
+                styles.wrapper,
+                {
+                  // backgroundColor: theme?.colors?.bg,
+                  marginHorizontal: 10
+                  // flex:1
+                },
+              ]}
+              onPress={() => {
+                navigation.navigate('NotificationDetails', { notificationItem: item });
+              }}>
+              {/* <Image
+                source={{
+                  uri: notification?.image
+                }}
+                style={styles?.imagestyle}
+              />  */}
+              <ImageBackground
+
+                style={[styles.imagestyle, {
+                  // backgroundColor:"#F2F4F4",
+                  backgroundColor: theme?.colors?.gray,
+                  alignItems: 'center',
+                  // alignSelf: 'center',
+                  justifyContent: 'center'
+                }]}
+              >
+                <Image
+                  style={{
+                    width: 25,
+                    height: 25,
+                    borderRadius: 50,
+
+                    alignSelf: 'center',
+                    margin: 8
+                    // resizeMode:'contain',
+                    // borderRadius: 10,
+                    // marginTop: 30
+                  }}
+                  // style={styles.itemImage}
+                  source={{
+                    uri: item?.image || "https://cdn-icons-png.flaticon.com/128/11222/11222376.png"
+                  }}
+                />
+              </ImageBackground>
+              <View style={{
+                marginStart: 8,
+                flex: 1,
+                marginVertical: 5,
+                marginLeft: 15
+              }}>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode='tail'
+
+                  style={[
+                    styles.headingtext,
+                    {
+                      // marginTop: show ? 5 : 0,
+                      color: theme?.colors?.white,
+                      fontSize: 17
+                    },
+                  ]}>
+                  {item?.message}
+                </Text>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode='tail'
+                  style={[styles.descText, {
+                    color: theme?.colors?.textColor,
+                    fontFamily: FONTS?.regular,
+                    fontSize: 13
+                  }]}>
+                  {moment(item?.created_at).format('LLL')}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        )}
+      />
 
       {/*<FlatList*/}
       {/*  data={notificationList}*/}
@@ -425,17 +573,18 @@ const styles = StyleSheet.create({
   },
   notificationItem: {
     // backgroundColor:COLORS?.black,
-    padding: 10,
-    marginBottom: 5,
-    marginHorizontal: 10,
-    marginVertical: 5,
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-    elevation: 1,
+    // padding: 5,
+    // // marginBottom: 5,
+    // marginHorizontal: 10,
+    // marginVertical: 5,
+    // paddingVertical: 20,
+    // paddingHorizontal: 10,
+    // elevation: 1,
+    flex: 1
   },
   wrapper: {
-    elevation: 5,
-
+    // elevation: 5,
+    flex: 1,
     // backgroundColor: COLORS.white,
     marginHorizontal: 10,
     marginVertical: 5,

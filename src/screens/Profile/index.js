@@ -24,6 +24,11 @@ import ApiCall from '../../network/ApiCall';
 import { API_END_POINTS } from '../../network/ApiEndPoints';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
+  clearRealm,
+  doSaveImage,
+  getSavedImage,
+} from '../../utils/RealmUtility';
+import {
   loginUserSuccess,
   updateLoginCount,
   userTokenSuccess,
@@ -31,8 +36,7 @@ import {
 import React, { useContext, useState, useEffect } from 'react';
 import ImagePicker from 'react-native-image-crop-picker';
 import icons from '../../constants/icons';
-import {updateCartDataLength} from '../../redux/actions/HomeApi';
-import {clearRealm, getSavedImage} from '../../utils/RealmUtility';
+import { updateCartDataLength } from '../../redux/actions/HomeApi';
 
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import GlobalStyle from '../../styles/GlobalStyle';
@@ -85,7 +89,7 @@ const Profile = ({ navigation, route }) => {
   const userData = useSelector((state) => state.state?.userData);
   const appPrimaryColor = useSelector((state) => state.state?.appPrimaryColor);
 
-  console.log("token", userToken)
+  console.log("token", userData)
 
   const isLoading = useSelector((state) => state.loading);
   if (isLoading) {
@@ -99,7 +103,41 @@ const Profile = ({ navigation, route }) => {
   const [userData111, setUserData] = useState({});
   // console.log("userdata profile", userData)
 
- 
+  useEffect(() => {
+    // setUserName(userData?.name + '');
+
+    getUserFromStorage();
+  }, [userData]);
+
+  const [image, setImage] = useState(null);
+
+  const getUserFromStorage = async () => {
+    // try {
+    //   await AsyncStorage.getItem(USER_IMAGE, async (error, value) => {
+    //     if (error) {
+    //     } else {
+    //       if (value !== null) {
+    //         setImage(value);
+    //       } else {
+    //         setImage('');
+    //         // navigation.replace('Login');
+    //       }
+    //     }
+    //   });
+    // } catch (err) {
+    //   console.log('ERROR IN GETTING USER FROM STORAGE');
+    // }
+    getSavedImage()
+      .then(res => {
+        // ShowToastMessage('called');
+        // ShowConsoleLogMessage(res[0]?.image);
+        setImage(res[0]?.image);
+      })
+      .catch(error => {
+        ShowConsoleLogMessage(error);
+      })
+      .finally(() => { });
+  };
 
   // useEffect(() => {
   //   getUserProfile();
@@ -156,7 +194,7 @@ const Profile = ({ navigation, route }) => {
   //   }
   // };
 
- 
+
   const showLogoutModal = () => {
     setLogoutModalVisible(true);
   };
@@ -171,31 +209,12 @@ const Profile = ({ navigation, route }) => {
   // }, [userData])
 
 
-  useEffect(() => {
-    setTimeout(async () => {
-      await getUserFromStorage();
-    }, 0);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(async () => {
+  //     await getUserFromStorage();
+  //   }, 0);
+  // }, []);
 
-  const getUserFromStorage = async () => {
-    try {
-      await AsyncStorage.getItem('userData', (error, value) => {
-        // console.log(value, '------------------');
-        if (error) {
-        } else {
-          if (value !== null) {
-            let tmp = JSON.parse(value)
-            // setUserData(tmp);
-            // ShowConsoleLogMessage("data for te", (fetchUserData(JSON.parse(value))))
-            dispatch(fetchUserData(tmp))
-          } else {
-          }
-        }
-      });
-    } catch (err) {
-      console.log('ERROR IN GETTING USER FROM STORAGE' + err);
-    }
-  };
 
 
   // const handleLogoutConfirm = () => {
@@ -306,163 +325,6 @@ const Profile = ({ navigation, route }) => {
     setShowConfirm(!showConfirm);
   };
 
-  const renderChangePasswordModal = () => {
-    return (
-      <Modal
-        transparent={true}
-        animationType={'slide'}
-        visible={showConfirm}
-        onRequestClose={() => {
-          closeConfirmModal();
-        }}>
-        <View style={styles.modalBackground}>
-          <View
-            style={[
-              styles.activityIndicatorWrapper,
-              {
-                backgroundColor: theme.colors.bg_color_onBoard,
-              },
-            ]}>
-            <Ionicons
-              name="close"
-              color={theme.colors.colorPrimary}
-              size={25}
-              style={[
-                styles.backIcon,
-                {
-                  alignSelf: 'flex-end',
-                  marginTop: 20,
-                  marginBottom: 5,
-                  marginEnd: 15,
-                },
-              ]}
-              onPress={() => {
-                closeConfirmModal();
-              }}
-            />
-            <Text
-              style={[
-                {
-                  color: theme.colors.textColor,
-
-                  fontSize: 18,
-                  fontFamily: 'OpenSans-Regular',
-                  textAlign: 'center',
-                  marginTop: 10,
-                  marginBottom: 10,
-                },
-              ]}>
-              {STRING.change_password}
-            </Text>
-
-            <VegUrbanFloatEditText
-              label={STRING.old_pass}
-              style={{
-                marginTop: 5,
-              }}
-              value={oldPass}
-              secureTextEntry={oldPassShow}
-              keyBoardType="default"
-              onChangeText={value => {
-                setOldPass(value);
-              }}
-              error={''}
-              icon={
-                <FontAwesome
-                  name={oldPassShow ? 'eye-slash' : 'eye'}
-                  size={18}
-                  style={{
-                    marginEnd: 5,
-                  }}
-                  color={COLORS.grey}
-                  onPress={() => setOldPassShow(!oldPassShow)}
-                />
-              }
-              iconPosition={'right'}
-            />
-
-            <VegUrbanFloatEditText
-              label={STRING.new_pass}
-              style={{
-                marginTop: 5,
-              }}
-              value={newPass}
-              keyBoardType="default"
-              onChangeText={value => {
-                setNewPass(value);
-              }}
-              secureTextEntry={newPassShow}
-              error={''}
-              icon={
-                <FontAwesome
-                  name={newPassShow ? 'eye-slash' : 'eye'}
-                  size={18}
-                  style={{
-                    marginEnd: 5,
-                  }}
-                  color={COLORS.grey}
-                  onPress={() => setNewPassShow(!newPassShow)}
-                />
-              }
-              iconPosition={'right'}
-            />
-            <VegUrbanFloatEditText
-              label={STRING.confirm_new_pass}
-              style={{
-                marginTop: 5,
-              }}
-              value={conPass}
-              keyBoardType="default"
-              onChangeText={value => {
-                setConPass(value);
-              }}
-              secureTextEntry={conPassShow}
-              error={''}
-              icon={
-                <FontAwesome
-                  name={conPassShow ? 'eye-slash' : 'eye'}
-                  size={18}
-                  style={{
-                    marginEnd: 5,
-                  }}
-                  color={COLORS.grey}
-                  onPress={() => setConPassShow(!conPassShow)}
-                />
-              }
-              iconPosition={'right'}
-            />
-
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                paddingBottom: 10,
-              }}>
-              <VegUrbanCommonBtn
-                height={55}
-                width={'100%'}
-                borderRadius={2}
-                textSize={17}
-                marginTop={17}
-                textColor={theme.colors.btnTextColor}
-                text={STRING.change_password}
-                backgroundColor={theme.colors.colorPrimary}
-                onPress={() => {
-                  closeConfirmModal();
-                }}
-                textStyle={{
-                  fontFamily: 'OpenSans-Medium',
-                }}
-              />
-            </View>
-          </View>
-        </View>
-      </Modal>
-    );
-  };
-
-
 
   return (
     <SafeAreaView
@@ -522,7 +384,7 @@ const Profile = ({ navigation, route }) => {
       </View>
       {loading ? (
 
-        <VegUrbanProgressBarr loading={loading} />
+        <VegUrbanProgressBar loading={loading} />
 
         // <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         //   <Text>Loading...</Text>
@@ -549,7 +411,8 @@ const Profile = ({ navigation, route }) => {
             }>
               <Image
                 source={{
-                  uri: userData?.image || userData?.response?.image || 'https://img.freepik.com/premium-vector/people-ribbon-logo-modern-leadership-logo-human-charity-logo_327835-2463.jpg'
+                  uri: userData?.image || image
+                    || 'https://img.freepik.com/premium-vector/people-ribbon-logo-modern-leadership-logo-human-charity-logo_327835-2463.jpg'
                 }}
                 style={{
                   width: 60,
@@ -579,8 +442,8 @@ const Profile = ({ navigation, route }) => {
                     },
                   ]}>
 
-                  {userData?.name || userData?.response?.name}
-                  {/* Andrew Ainsley */}
+                  {/* {userData?.name || userData?.response?.name} */}
+                  Andrew Ainsley
                   {/* {STRING.is_login} */}
                 </Text>
                 <Text
@@ -597,8 +460,8 @@ const Profile = ({ navigation, route }) => {
                     },
                   ]}
                 >
-                  {/* testing_demo@gmail.com */}
-                  {userData?.email || userData?.response?.email}
+                  testing_demo@gmail.com
+                  {/* {userData?.email || userData?.response?.email} */}
                 </Text>
               </View>
 
@@ -615,7 +478,7 @@ const Profile = ({ navigation, route }) => {
                   title={Feather}
                   iconName={'edit-3'}
                   icSize={25}
-                  icColor={COLORS?.black}
+                  icColor={theme?.colors?.colorPrimary}
                   style={{
                     marginEnd: 10,
                     backgroundColor: theme?.colors?.toolbar_icon_bg,
@@ -662,8 +525,8 @@ const Profile = ({ navigation, route }) => {
               title="Special Offers & Promo"
               // title={STRING.notifications}
               onPress={() => {
-                ShowToastMessage('Cooming Soon')
-                // navigation.navigate('SignupNew');
+                // ShowToastMessage('Cooming Soon')
+                navigation.navigate('PromoGetCode');
               }}
               icon={
                 <AntDesign
@@ -763,7 +626,7 @@ const Profile = ({ navigation, route }) => {
               onPress={() => {
                 // ShowToastMessage('Coming soon!');
                 navigation.navigate('PasswordConform');
-            
+
               }}
               icon={
                 <AntDesign

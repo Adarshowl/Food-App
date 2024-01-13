@@ -118,7 +118,7 @@ const AddressList = ({navigation, route}) => {
             <AddressItem
               item={item}
               onSelect={() => {
-                onItemClick(index);
+                onItemClick(index,item);
               }}
             />
           );

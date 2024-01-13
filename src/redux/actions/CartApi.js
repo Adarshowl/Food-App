@@ -886,7 +886,8 @@ export async function getUserNotificationList(
         'x-access-token': apiToken,
       },
     );
-    ShowConsoleLogMessage(JSON.stringify("notification",response?.data));
+    console.log("notiiiiii >>>>",response?.data?.latest_data)
+    ShowConsoleLogMessage(JSON.stringify("notification",response));
     if (response?.statusCode == 500) {
       // ShowConsoleLogMessage(' if called TokenMisMatchPopup ');
       if (

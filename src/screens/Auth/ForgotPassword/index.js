@@ -14,6 +14,7 @@ import {
 import Octicons from 'react-native-vector-icons/Octicons';
 import Snackbar from 'react-native-snackbar';
 import { FONTS } from '../../../constants/Fonts';
+import LinearGradient from 'react-native-linear-gradient';
 
 import { STRING, images } from '../../../constants';
 import { COLORS } from '../../../constants/Colors';
@@ -44,7 +45,7 @@ const ForgotPassword = ({ navigation }) => {
   const [mobileNumber, setMobileNumber] = useState('');
 
   const [show, setShow] = useState(false);
- 
+
   const isEmailValid = (email) => {
     // Regular expression for email validation
     const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -53,13 +54,13 @@ const ForgotPassword = ({ navigation }) => {
 
   const handleButtonPress = () => {
     if (isEmailValid(email)) {
-      navigation.navigate('ForgotPageNext' ,{ userEmail: email })
+      navigation.navigate('ForgotPageNext', { userEmail: email })
       // Email is valid, proceed to the next step or action
       // For example, navigate to 'ForgotPageNext'
     } else {
       Snackbar.show({
         text: 'Invalid Email',
-        duration: Snackbar.LENGTH_LONG, 
+        duration: Snackbar.LENGTH_LONG,
       });
     }
   };
@@ -73,19 +74,21 @@ const ForgotPassword = ({ navigation }) => {
           
         },
       ]}>
-          <View
+          <View>
+        <LinearGradient
+          colors={['#FD5F30', '#FF774F', '#FF8F6F']}
           style={{
-            // marginStart: 20,
-            // marginTop: 25,
-            alignItems: 'center',
-            backgroundColor: 'gray',
             borderBottomEndRadius: 30,
             borderBottomLeftRadius: 30,
             flexDirection: 'row',
-            height: 150,
+            borderBottomRightRadius: 30,
 
-
-          }}>
+            height: 130,
+            alignItems: 'center',
+            // justifyContent: 'space-between',
+            paddingHorizontal: 20,
+          }}
+        >
           <ToolBarIcon
             title={Ionicons}
             iconName={'chevron-back'}
@@ -113,7 +116,9 @@ const ForgotPassword = ({ navigation }) => {
             {!show ? t('Forgot Password') : ' '}
           </Text>
 
+        </LinearGradient>
         </View>
+
       <ScrollView
       
       style={[
@@ -195,7 +200,7 @@ const ForgotPassword = ({ navigation }) => {
               text={"Next"}
               // text={email ? t('verify_otp') : t('get_otp')}
               textColor={theme.colors?.btnTextColor}
-              backgroundColor={COLORS?.black}
+              backgroundColor={theme?.colors?.colorPrimary}
               onPress={() => {
                 // handleButtonPress()
                 navigation.navigate('ForgotPageNext');
@@ -209,7 +214,7 @@ const ForgotPassword = ({ navigation }) => {
             </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 
@@ -223,13 +228,13 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     alignSelf: 'flex-start',
   },
-  head:{
+  head: {
     // marginTop: 15,
     paddingVertical: 5,
     textAlign: 'center',
     fontSize: 22,
     color: COLORS.black,
-    marginLeft:18
+    marginLeft: 18
   },
   heading: {
     fontFamily: FONTS?.bold,
@@ -243,7 +248,7 @@ const styles = StyleSheet.create({
     width: '70%',
     marginTop: 30,
     marginBottom: 20,
-    borderRadius:15
+    borderRadius: 15
 
   },
   forgot_text: {

@@ -1,7 +1,7 @@
-import {StyleSheet} from 'react-native';
-import {COLORS} from '../constants/Colors';
-import {SIZES} from '../constants/themes';
-import {FONTS} from '../constants/Fonts';
+import { StyleSheet } from 'react-native';
+import { COLORS } from '../constants/Colors';
+import { SIZES } from '../constants/themes';
+import { FONTS } from '../constants/Fonts';
 
 export default StyleSheet.create({
   mainContainer: {
@@ -315,8 +315,8 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   toolbarLastIconBg: {
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
     marginStart: 15,
     marginEnd: 10,
     borderRadius: 5,

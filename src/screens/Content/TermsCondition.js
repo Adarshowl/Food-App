@@ -7,10 +7,43 @@ import {COLORS} from '../../constants/Colors';
 import VegUrbanCommonToolBar from '../../utils/VegUrbanCommonToolBar';
 import themeContext from '../../constants/themeContext';
 import {useTranslation} from 'react-i18next';
+import {getPrivacyPolicy} from '../../redux/actions/HomeApi';
+
 
 const TermsCondition = ({navigation}) => {
   const theme = useContext(themeContext);
   const {t} = useTranslation();
+
+  const [show, setShow] = useState('');
+  const [privacyPolicy, setPrivacyPolicy] = useState('');
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(showProgressBar(true));
+    dispatch(() =>
+      getPrivacyPolicy(
+        dispatch,
+        navigation,
+        successCallback,
+        failureCallback,
+        errorCallback,
+      ),
+    );
+  }, []);
+
+  const successCallback = data => {
+    dispatch(showProgressBar(false));
+    setPrivacyPolicy(data?.response?.privacy_policy);
+  };
+  const failureCallback = data => {
+    dispatch(showProgressBar(false));
+    setPrivacyPolicy(data?.response?.privacy_policy);
+  };
+  const errorCallback = error => {
+    dispatch(showProgressBar(false));
+    ShowToastMessage(error);
+    ShowConsoleLogMessage(error);
+  };
 
   return (
     <SafeAreaView

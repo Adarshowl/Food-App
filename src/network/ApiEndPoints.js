@@ -50,10 +50,20 @@ export const API_END_POINTS = {
   // Privacy Policy / Terms and Conditions
   // https://www.halalicious.com.au/backend/api/privacyAndTerms/detail
   API_GET_PRIVACY_POLICY: `${BASE_URL}privacyAndTerms/detail`,
+  API_GET_TermandCondition: `${BASE_URL}privacyAndTerms/detail`,
+  // https://www.halalicious.com.au/backend/api/privacyAndTerms/detail
   // Fcm Token
   API_FCM_DETAIL: `${BASE_URL}fcmToken/detail`,
   API_FCM_TOKEN_UPDATE: `${BASE_URL}fcmToken/update_fcm_token`,
   API_FCM_TOKEN_DELETE: `${BASE_URL}fcmToken/delete_fcm_token`,
+
+
+  API_USER_ORDER_LIST: `${BASE_URL}order/order_list`,
+  API_USER_ORDER_BY_ID: `${BASE_URL}order/show/`, // APPEND ORDER ID IN LAST
+
+  // payment history
+  API_USER_TRANSACTION_HISTORY: `${BASE_URL}user/payment/payment-history-list`,
+  API_USER_TRANSACTION_HISTORY_DETAIL_BY_ID: `${BASE_URL}user/payment/payment-history/show/`, // APPEND  ID IN LAST
 
   // variant
   API_GET_VARIANT_ADDONS_BY_ID: `${BASE_URL}food_app/user/app/frontend/active_menu_variants_by_menu_item_id/`, // // append PRODUCT id

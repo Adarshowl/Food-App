@@ -140,7 +140,7 @@ const light = {
     heart: '#000000',
     hearttext: '#ffffff',
     // colorPrimary: '#1DA907',
-    colorPrimary: 'black',
+    colorPrimary: '#FD5727',
     // colorPrimary: 'black',
     primaryBtnColor: '#6CC51D',
     cat_head: '#eeeeee',

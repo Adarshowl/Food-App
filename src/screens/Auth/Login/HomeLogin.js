@@ -15,7 +15,7 @@ import { FONTS } from '../../../constants/Fonts';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { COLORS } from '../../../constants/Colors';
 import Octicons from 'react-native-vector-icons/Octicons';
-import {images} from '../../../constants/images'
+import images from '../../../constants/images';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import GlobalStyle from '../../../styles/GlobalStyle';
@@ -289,31 +289,36 @@ const HomeLogin = ({ navigation }) => {
           // ShowToastMessage('Coming Soon!');
         }}
       /> */}
-      <View style={{
-        marginHorizontal:20
-      }}>
-      <Image source={{
-            uri:'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0a/9a/68/49/caper-s-roof-top-fine.jpg?w=600&h=400&s=1'
-        }} style={styles.app_logo} />
-      </View>
-        
+        <View style={{
+          marginHorizontal: 20
+        }}>
+          <Image
+            source={images.LogoHome}
+
+            // source={{
+            //       // uri:'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0a/9a/68/49/caper-s-roof-top-fine.jpg?w=600&h=400&s=1'
+            //   }}
+            style={styles.app_logo} />
+        </View>
+
+
         <View
           style={[
             GlobalStyle.loginModalBg,
             {
               backgroundColor: theme.colors?.bg_color_onBoard,
               marginTop: 10,
-              marginHorizontal:10
+              marginHorizontal: 10
             },
           ]}>
 
           {/* </View> */}
 
-       
 
-        
 
-        
+
+
+
           <View
             style={{
               // justifyContent:'center',
@@ -330,7 +335,7 @@ const HomeLogin = ({ navigation }) => {
               textSize={18}
               text={'Sign In'}
               textColor={theme.colors?.text}
-              backgroundColor={COLORS?.black}
+              backgroundColor={theme?.colors?.colorPrimary}
               // onPress={() => {
               //   closeSignUpModal();
               // }}
@@ -341,7 +346,7 @@ const HomeLogin = ({ navigation }) => {
                 fontFamily: FONTS?.bold,
               }}
             />
-            
+
           </View>
 
           <View
@@ -350,17 +355,17 @@ const HomeLogin = ({ navigation }) => {
               // alignSelf:'center',
               alignItems: 'center',
               marginVertical: 10,
-              
+
               // textAlign:'center'
             }}>
-              <VegUrbanCommonBtn
+            <VegUrbanCommonBtn
               height={55}
               width={'100%'}
               borderRadius={30}
               textSize={18}
               text={'Sign Up'}
               textColor={theme.colors?.text}
-              backgroundColor={COLORS?.black}
+              backgroundColor={theme?.colors?.colorPrimary}
               // onPress={() => {
               //   closeSignUpModal();
               // }}
@@ -374,7 +379,7 @@ const HomeLogin = ({ navigation }) => {
               }}
             />
           </View>
-         
+
           <View style={styles.container}>
             <View style={styles.line} />
             <Text
@@ -472,7 +477,7 @@ const HomeLogin = ({ navigation }) => {
               />
             </TouchableOpacity>
           </View>
-         
+
         </View>
       </ScrollView>
     </SafeAreaView >
@@ -520,9 +525,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '100%',
     marginTop: 30,
-   
+
     borderRadius: 20,
- 
+
   },
 
   resendWrapper: {

@@ -1,50 +1,48 @@
-import React, { useContext, useEffect, useState } from 'react';
 import {
+  Alert,
   FlatList,
-  ImageBackground,
+  SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
-  Image
+  ImageBackground,
+  Image,
+  TouchableOpacity
 } from 'react-native';
-import { COLORS } from '../../constants/Colors';
-import LinearGradient from 'react-native-linear-gradient';
+import React, { useContext, useEffect, useState } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { SIZES, STRING } from '../../constants';
-import Entypo from 'react-native-vector-icons/Entypo'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import GlobalStyle from '../../styles/GlobalStyle';
-import { useNavigation } from '@react-navigation/native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import themeContext from '../../constants/themeContext';
-import ToolBarIcon from '../../utils/ToolBarIcon';
-import { FONTS } from '../../constants/Fonts';
-import Octicons from 'react-native-vector-icons/Octicons';
-import { useDispatch, useSelector } from 'react-redux';
+import { ShowToastMessage } from '../../utils/Utility';
+import { SIZES, STRING } from '../../constants';
 import VegUrbanImageLoader from '../../utils/VegUrbanImageLoader';
-import { addToFavoriteProduct } from '../../redux/actions/CartApi';
-import {
-  doSaveOfferOfflineRealm,
-  getSavedFavoriteProductString,
-  removeFromFavoriteRealm,
-} from '../../utils/RealmUtility';
-import { ShowConsoleLogMessage } from '../../utils/Utility';
-import { getHomeProduct } from '../../redux/actions/HomeApi';
-import { IMAGE_BASE_URL } from '../../network/ApiEndPoints';
 
-const TabOfferScreen = () => {
+import ApiCall from '../../network/ApiCall';
+import { API_END_POINTS } from '../../network/ApiEndPoints';
+import { CommonActions } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { COLORS } from '../../constants/Colors';
+import themeContext from '../../constants/themeContext';
+import { useTranslation } from 'react-i18next';
+import { FONTS } from '../../constants/Fonts';
+import { useDispatch, useSelector } from 'react-redux';
+import VegUrbanCommonBtn from '../../utils/VegUrbanCommonBtn';
+
+const CancelledOrderList = ({navigation}) => {
+  const [amount, setAmount] = useState(100);
+
   const theme = useContext(themeContext);
+  const {t} = useTranslation();
+  const [count, setCount] = useState(1);
+  const [show, setShow] = useState(false);
+  const [showEmpty, setShowEmpty] = useState(false);
+
+  const userToken = useSelector(state => state.state?.userToken);
+  const userData = useSelector(state => state.state?.userData);
   const dispatch = useDispatch();
-  const userToken = useSelector(state => state?.state?.userToken);
-  const loginCount = useSelector(state => state?.state?.count);
-
-  const [page, setPage] = useState(1); // Track the current page of data
-  const [loadingMore, setLoadingMore] = useState(false); // Track whether more data is being loaded
-
-  const navigation = useNavigation();
-  const [data, setData] = useState([]);
-
-  const productData = useSelector(state => state?.homeReducer?.productData);
   const tradingList = [
     {
       id: '1', name: 'S Cafe', address: 'indore mp',
@@ -67,28 +65,86 @@ const TabOfferScreen = () => {
 
   ];
   useEffect(() => {
-    // ShowConsoleLogMessage(productData?.length);
-    let is_product_save = '';
-    (async () => {
-      is_product_save = await getSavedFavoriteProductString();
-      // ShowConsoleLogMessage(is_product_save);
+    getRejectedList();
+  }, []);
 
-      // const savedProductIds = is_product_save?.split(',')?.map(id => id.trim());
-      // const savedProductIds = is_product_save?.replaceAll(',', '');
-      let a = productData?.map(item => {
-        return { ...item, fav: is_product_save?.includes(item?._id) };
-      });
-      setData(a);
-    })();
-  }, [productData]);
+  const [RejectedList, setRejectedList] = useState([]);
+
+  const [loading, setLoading] = useState('');
+  console.log('RefundList', RejectedList);
+
+  const getRejectedList = () => {
+    setLoading(true);
+    try {
+      // console.log("response axios >>> ", JSON.stringify(API_END_POINTS.Refund_Rejected_List));
+
+      ApiCall('get', null, API_END_POINTS.Refund_Rejected_List, {
+        'Content-Type': 'application/json',
+        'x-access-token': userToken || userData?.jwtoken,
+      })
+        .then(response => {
+          // console.log("Response data: ", JSON.stringify(response));
+
+          if (response?.statusCode === 200) {
+            // console.log("Response data: ", JSON.stringify(response.data));
+            setRejectedList(response?.data?.response);
+            if (response.data?.length !== 0) {
+              setShowEmpty(true);
+            }
+          } else if (response?.statusCode === 500) {
+            // if (response.data?.message === "Token Mismatch") {
+            //   Alert.alert(
+            //     'Session Expired',
+            //     'Your session has expired due to a security issue. Please log in again to continue using the application.',
+            //     [
+            //       {
+            //         text: 'OK',
+            //         onPress: () => {
+            //           clearUserToken();
+            //         },
+            //       },
+            //     ]
+            //   );
+            // }
+          } else {
+            setShowEmpty(true);
+          }
+        })
+        .catch(error => {
+          setShowEmpty(true);
+          console.log('error axios -> ', error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } catch (error) {
+      ShowToastMessage(`You selected : ${error.message}`);
+      setLoading(false);
+    }
+  };
+
+  const clearUserToken = async () => {
+    try {
+      await AsyncStorage.clear();
+      // await AsyncStorage.removeItem('userToken');
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{name: 'Auth'}],
+        }),
+      );
+    } catch (error) {
+      console.error('Error clearing userToken:', error);
+    }
+  };
 
   const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => {
-          navigation.navigate('BannerOfferDetails');
-        }}
+        // onPress={() => {
+        //   navigation.navigate('RestaurantDetails');
+        // }}
         style={[
           styles.Wrapper,
           {
@@ -145,44 +201,7 @@ const TabOfferScreen = () => {
             // style={styles.itemImage}
             source={item?.image}
           />
-          <View style={{
-            position: 'absolute',
-            //  top: 40, 
-            //  left: 0,
-            bottom: 20,
-            alignSelf: 'center'
-          }}>
-            <LinearGradient
-              colors={[COLORS?.white, 'white']}
-              style={{
-                padding: 3,
-                borderRadius: 12,
-                flexDirection: 'row',
-                alignItems: 'center',
-                width: 90,
-                height: 30,
-                justifyContent: 'center',
-              }}
-              start={{ x: 0, y: 1 }}
-              end={{ x: 1, y: 0 }}
-            >
-              <AntDesign
-                name="star"
-                size={15}
-                color={COLORS?.black}
-                style={{
-                  // marginLeft: 5,
-                  // marginTop: 3
-                }}
-              />
-              <Text style={{
-                color: COLORS?.black,
-                fontSize: 12,
-                fontFamily: FONTS?.bold,
-                marginLeft:3
-              }}>Best Seller</Text>
-            </LinearGradient>
-          </View>
+
         </ImageBackground>
 
         {/* </View> */}
@@ -190,7 +209,7 @@ const TabOfferScreen = () => {
           style={{
             flex: 1,
             marginStart: 15,
-            marginTop:2
+            marginTop: 2
           }}>
           <Text
             style={[
@@ -210,7 +229,7 @@ const TabOfferScreen = () => {
               // styles.itemName,
               {
                 color: COLORS?.grey,
-                marginTop: 5,
+                marginTop: 2,
                 fontFamily: FONTS?.regular,
                 fontSize: 15
 
@@ -221,148 +240,209 @@ const TabOfferScreen = () => {
           </Text>
           <View style={{
             flexDirection: 'row',
-            marginVertical: 8,
-            alinItem: 'center'
-          }}>
-           <MaterialCommunityIcons
-           name="motorbike"
-           color={COLORS?.black}
-           size={20}
-           />
-            <Text
-              style={[
-                // styles.itemName,
-                {
-                  color: COLORS?.black,
-                  // marginTop: 2,
-                  fontFamily: FONTS?.semi_old,
-                  fontSize: 16,
-                  marginLeft: 5
-                },
-              ]}
-              numberOfLines={1}>
-                Rp 10.000
-              {/* {item?.address} */}
-            </Text>
-          </View>
-
-          <View style={{
-            flexDirection: 'row',
-            marginVertical: 3,
-            alinItem: 'center'
-          }}>
-           <MaterialCommunityIcons
-           name="clock"
-           color={COLORS?.gray}
-           size={18}
-           />
-            <Text
-              style={[
-                // styles.itemName,
-                {
-                  color: COLORS?.black,
-                  // marginTop: 2,
-                  fontFamily: FONTS?.regular,
-                  fontSize: 14,
-                  marginLeft: 5
-                },
-              ]}
-              numberOfLines={1}>
-                12 min {`\u25CF 25 km`}
-              {/* {item?.address} */}
-            </Text>
-          </View>
-
-          <View style={{
-            flexDirection: 'row',
-            marginVertical: 3,
-            alinItem: 'center'
-          }}>
-           <Entypo
-           name="star"
-           color={COLORS?.gray}
-           size={18}
-           />
-            <Text
-              style={[
-                // styles.itemName,
-                {
-                  color: COLORS?.black,
-                  // marginTop: 2,
-                  fontFamily: FONTS?.regular,
-                  fontSize: 14,
-                  marginLeft: 5
-                },
-              ]}
-              numberOfLines={1}>
-                4.9 {`\u25CF 100`} + ratings
-              {/* {item?.address} */}
-            </Text>
-          </View>
-         
-          {/* <View style={{
-            flexDirection: 'row',
-            marginVertical: 3,
+            justifyContent: 'space-between',
             alinItem: 'center',
-            backgroundColor: '#D1D1EC',
-            borderRadius: 10,
-            width: '70%',
-            paddingVertical: 3,
-            justifyContent: 'center',
-            marginTop: 3
+            marginEnd: 15,
+            marginTop:4
           }}>
-            <Image
-              source={{
-                uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDC1HCaAjRTm_8GGvGAiGuyUJDxKOTJ7Tdwg&usqp=CAU'
+            <View style={{
+              flexDirection: 'row',
+              alinItem: 'center'
+            }}>
+              <AntDesign
+                name="calendar"
+                color={COLORS?.black}
+                size={16}
+              />
+              <Text
+                style={[
+                  // styles.itemName,
+                  {
+                    color: COLORS?.black,
+                    // marginTop: 2,
+                    fontFamily: FONTS?.regular,
+                    fontSize: 13,
+                    marginLeft: 5
+                  },
+                ]}
+                numberOfLines={1}>
+                04/01/23
+                {/* {item?.address} */}
+              </Text>
+            </View>
+            <View style={{
+              flexDirection: 'row',
+              // marginVertical: 8,
+              alinItem: 'center'
+            }}>
+              <FontAwesome
+                name="location-arrow"
+                color={COLORS?.black}
+                size={20}
+              />
+              <Text
+                style={[
+                  // styles.itemName,
+                  {
+                    color: COLORS?.black,
+                    // marginTop: 2,
+                    fontFamily: FONTS?.regular,
+                    fontSize: 13,
+                    marginLeft: 5
+                  },
+                ]}
+                numberOfLines={1}>
+                on the way
+                {/* {item?.address} */}
+              </Text>
+            </View>
+          </View>
+
+
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alinItem: 'center',
+            marginEnd: 15,
+            marginTop:4
+
+          }}>
+            <View style={{
+              flexDirection: 'row',
+              alinItem: 'center'
+            }}>
+              <MaterialIcons
+                name="payment"
+                color={COLORS?.black}
+                size={18}
+              />
+              <Text
+                style={[
+                  // styles.itemName,
+                  {
+                    color: COLORS?.black,
+                    // marginTop: 2,
+                    fontFamily: FONTS?.regular,
+                    fontSize: 13,
+                    marginLeft: 5
+                  },
+                ]}
+                numberOfLines={1}>
+                Pending
+                {/* {item?.address} */}
+              </Text>
+            </View>
+            <View style={{
+              // marginVertical: 8,
+            }}>
+              {/* <FontAwesome
+                name="location-arrow"
+                color={COLORS?.black}
+                size={20}
+              /> */}
+              <Text
+                style={[
+                  // styles.itemName,
+                  {
+                    color: COLORS?.black,
+                    // marginTop: 2,
+                    fontFamily: FONTS?.regular,
+                    fontSize: 13,
+                    marginLeft: 5
+                  },
+                ]}
+                numberOfLines={1}>
+                $10,00 (3 item)
+                {/* {item?.address} */}
+              </Text>
+            </View>
+          </View>
+          <View style={{
+            flexDirection:'row',
+            justifyContent:'space-around',
+            marginTop:6
+
+
+          }}>
+            <VegUrbanCommonBtn
+              height={35}
+              width={'100%'}
+              borderRadius={20}
+              textSize={11}
+              textColor={theme.colors?.white}
+              text={t('Canceled')}
+              backgroundColor={theme?.colors?.bg}
+              onPress={() => {
+                // ShowConsoleLogMessage('Coming soon');
+
               }}
-              style={{
-                width: 20,
-                height: 20,
-                borderRadius: 20
+              textStyle={{
+                fontFamily: FONTS?.bold,
               }}
             />
-            <Text
-              style={[
-                {
-                  color: 'blue',
-                  fontFamily: FONTS?.bold,
-                  fontSize: 14,
-                  marginLeft: 5
-                },
-              ]}
-              numberOfLines={1}>
-              Free Delivery
-            </Text>
-          </View> */}
+            
+          </View>
+
         </View>
       </TouchableOpacity>
     );
   };
-
   return (
-    <View
+    <SafeAreaView
       style={[
         GlobalStyle.mainContainerBgColor,
         {
-          backgroundColor: theme.colors.bg_color_onBoard,
-          borderRadius: 5,
+          backgroundColor: theme?.colors?.bg_color_onBoard,
+          flex: 1,
         },
       ]}>
-      <FlatList
-        style={{
-          flex: 1,
-          marginHorizontal: 8,
-        }}
-        showsVerticalScrollIndicator={false}
-        data={tradingList}
-        // extraData={category}
-        renderItem={renderItem}
-      // numColumns={2}
-      />
-    </View>
+      {/* <SellerEProgressBar loading={loading} /> */}
+
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={true}
+        showsHorizontalScrollIndicator={true}>
+        <View
+          style={
+            {
+              // flez: 1,
+            }
+          }>
+          <FlatList
+            style={{
+              paddingStart: 5,
+              paddingEnd: 5,
+            }}
+            ListHeaderComponent={() => {
+              return <View style={{}} />;
+            }}
+            ListEmptyComponent={() =>
+              !showEmpty ? null : (
+                <View
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flex: 1,
+                  }}>
+                  <Text style={{fontSize: 20, marginTop: 50}}>
+                    No data found !
+                  </Text>
+                </View>
+              )
+            }
+            ListHeaderComponentStyle={{
+              paddingTop: 5,
+            }}
+            showsVerticalScrollIndicator={false}
+            data={tradingList}
+            renderItem={renderItem}
+            // renderItem={({item, index}) => <RefundRequestList item={item} />}
+          />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
-export default TabOfferScreen;
 
 const styles = StyleSheet.create({
   itemWrapper: {
@@ -440,3 +520,4 @@ const styles = StyleSheet.create({
     marginVertical: 40,
   },
 });
+export default CancelledOrderList;

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   FlatList,
   I18nManager,
@@ -9,22 +9,75 @@ import {
   View,
 } from 'react-native';
 import GlobalStyle from '../../styles/GlobalStyle';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import VegUrbanImageLoader from '../../utils/VegUrbanImageLoader';
-import {FONTS} from '../../constants/Fonts';
+import { FONTS } from '../../constants/Fonts';
 import themeContext from '../../constants/themeContext';
-import {COLORS} from '../../constants/Colors';
+import { COLORS } from '../../constants/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import VegUrbanCommonToolBar from '../../utils/VegUrbanCommonToolBar';
-import {getItemCategory} from '../../redux/actions/HomeApi';
-import {ShowConsoleLogMessage, ShowToastMessage} from '../../utils/Utility';
-import {showProgressBar} from '../../redux/actions';
-import {IMAGE_BASE_URL} from '../../network/ApiEndPoints';
+import { getItemCategory } from '../../redux/actions/HomeApi';
+import { ShowConsoleLogMessage, ShowToastMessage } from '../../utils/Utility';
+import { showProgressBar } from '../../redux/actions';
+import { IMAGE_BASE_URL } from '../../network/ApiEndPoints';
+import ToolBarIcon from '../../utils/ToolBarIcon';
 
-const AllCategories = ({navigation}) => {
+const AllCategories = ({ navigation }) => {
   const [categoryData, setCategoryData] = useState([]);
   const dispatch = useDispatch();
+  const tradingList = [
+    {
+      id: '1', name: 'Chicken', address: 'indore mp',
+      image: 'https://cdn-icons-png.flaticon.com/128/1046/1046751.png'
+    },
+    {
+      id: '2', name: 'Burger', address: 'dewas mp',
+      image: 'https://cdn-icons-png.flaticon.com/128/877/877951.png'
+    },
+    {
+      id: '3', name: 'Pizza', address: 'vijay nagar ',
+      image: 'https://cdn-icons-png.flaticon.com/128/3595/3595455.png'
+    },
 
+    {
+      id: '3', name: 'Salad', address: 'bhawaercuaa',
+      image: 'https://cdn-icons-png.flaticon.com/128/3280/3280034.png'
+    },
+    {
+      id: '3', name: 'Bakery', address: 'bhawaercuaa',
+      image: 'https://cdn-icons-png.flaticon.com/128/1772/1772872.png'
+    },
+    {
+      id: '3', name: 'Noodles', address: 'bhawaercuaa',
+      image: 'https://cdn-icons-png.flaticon.com/128/7534/7534440.png'
+    },
+    {
+      id: '3', name: 'Drink', address: 'bhawaercuaa',
+      image: 'https://cdn-icons-png.flaticon.com/128/2738/2738730.png'
+    },
+    {
+      id: '3', name: 'Sushi', address: 'bhawaercuaa',
+      image: 'https://cdn-icons-png.flaticon.com/128/4931/4931887.png'
+    },
+    {
+      id: '3', name: 'Vegetable', address: 'bhawaercuaa',
+      image: 'https://cdn-icons-png.flaticon.com/128/2153/2153786.png'
+    },
+    {
+      id: '3', name: 'Cookies', address: 'bhawaercuaa',
+      image: 'https://cdn-icons-png.flaticon.com/128/3428/3428950.png'
+    },
+    {
+      id: '3', name: 'Ice Cream', address: 'bhawaercuaa',
+      image: 'https://cdn-icons-png.flaticon.com/128/4774/4774389.png'
+    },
+    {
+      id: '3', name: 'Taco', address: 'bhawaercuaa',
+      image: 'https://cdn-icons-png.flaticon.com/128/8688/8688563.png'
+    },
+
+
+  ];
   const theme = useContext(themeContext);
   // console.log(categoryData.length);
 
@@ -63,57 +116,53 @@ const AllCategories = ({navigation}) => {
     ShowConsoleLogMessage(error);
   };
 
-  const renderCtegory = ({item}) => {
+  const renderCtegory = ({ item }) => {
     // console.log(item[0]?.image);
     return (
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('CategoryHome', {item: item});
+          navigation.navigate('CategoryHome', { item: item });
         }}
         style={{
           flexGrow: 1,
 
-          marginVertical: 8,
-          flexDirection: 'row',
+          marginVertical: 18,
+          // flexDirection: 'row',
           alignItems: 'center',
           // backgroundColor: 'red',
         }}>
-        <View
-          style={[
-            styles.itemImage,
-            {
-              backgroundColor: theme?.colors?.colorimageback,
-              // alignItems: 'center',
-              justifyContent: 'center',
-            },
-          ]}>
-          {/*{item?.image != undefined || null ? (*/}
 
-          <VegUrbanImageLoader
-            source={IMAGE_BASE_URL + item?.image}
-            styles={[
-              {
-                width: 45,
-                borderRadius: 5,
-                height: 45,
-              },
-            ]}
-          />
-          {/*) : null}*/}
-        </View>
+        {/*{item?.image != undefined || null ? (*/}
+
+        <VegUrbanImageLoader
+          source={item?.image}
+          styles={[
+            styles.itemImage,
+
+            {
+              // width: 45,
+              // borderRadius: 5,
+              // height: 45,
+            },
+          ]}
+        />
+
         <View style={{}}>
           <Text
+            numberOfLines={1}
             style={[
               styles.itemName,
               {
                 color: theme.colors.white,
-                fontFamily: FONTS?.regular,
+                fontFamily: FONTS?.semi_old,
                 marginTop: 0,
-                marginStart: 15,
+                // marginStart: 15,
+                maxWidth: '80%',
+                marginTop: 10
               },
             ]}
-            numberOfLines={1}>
-            {item?.category_name}
+          >
+            {item?.name}
             {/*{item?.name}*/}
           </Text>
         </View>
@@ -136,21 +185,19 @@ const AllCategories = ({navigation}) => {
             backgroundColor: theme.colors.bg_color_onBoard,
           },
         ]}>
-        <Ionicons
-          name="ios-arrow-back"
-          // color={COLORS.black}
-          color={theme.colors.textColor}
-          size={25}
-          style={[
-            styles.backIcon,
-            {
-              transform: [{scaleX: I18nManager.isRTL ? -1 : 1}],
-              marginStart: 10,
-            },
-          ]}
+        <ToolBarIcon
+          title={Ionicons}
+          iconName={'chevron-back'}
+          icSize={20}
+          borderRadius={20}
+          icColor={theme?.colors?.white}
+          style={{
+            backgroundColor: theme?.colors?.bg,
+            // marginEnd: 10,
+            borderRadius: 20,
+          }}
           onPress={() => {
             navigation.goBack();
-            // ShowToastMessage('Coming Soon!');
           }}
         />
         {/* <ToolBarIcon
@@ -167,7 +214,7 @@ const AllCategories = ({navigation}) => {
           }}
         /> */}
         <VegUrbanCommonToolBar
-          title="Categories"
+          title="Category"
           style={{
             backgroundColor: theme.colors.bg_color_onBoard,
             marginStart: 10,
@@ -180,16 +227,16 @@ const AllCategories = ({navigation}) => {
         />
       </View>
       <FlatList
-        // numColumns={4}
+        numColumns={4}
         contentContainerStyle={{
           padding: 10,
           paddingHorizontal: 20,
         }}
-        data={categoryData}
+        data={tradingList}
         renderItem={renderCtegory}
-        ItemSeparatorComponent={() => {
-          return <View style={styles.divLine} />;
-        }}
+      // ItemSeparatorComponent={() => {
+      //   return <View style={styles.divLine} />;
+      // }}
       />
     </SafeAreaView>
   );
@@ -199,13 +246,13 @@ export default AllCategories;
 
 const styles = StyleSheet.create({
   itemName: {
-    fontSize: 15,
+    fontSize: 14.5,
     color: COLORS.black,
     textAlign: 'center',
   },
   itemImage: {
-    width: 65,
-    height: 65,
+    width: 55,
+    height: 55,
     alignItems: 'center',
     borderRadius: 50,
   },

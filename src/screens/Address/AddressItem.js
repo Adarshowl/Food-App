@@ -1,13 +1,13 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {memo, useContext} from 'react';
-import {COLORS} from '../../constants/Colors';
-import {useNavigation} from '@react-navigation/native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { memo, useContext } from 'react';
+import { COLORS } from '../../constants/Colors';
+import { useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import GlobalStyle from '../../styles/GlobalStyle';
 import themeContext from '../../constants/themeContext';
 
-const AddressItem = ({item, show, onSelect}) => {
+const AddressItem = ({ item, show, onSelect }) => {
   const theme = useContext(themeContext);
   const navigation = useNavigation();
 

@@ -15,6 +15,7 @@ import { FONTS } from '../../../constants/Fonts';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { COLORS } from '../../../constants/Colors';
 import Octicons from 'react-native-vector-icons/Octicons';
+import LinearGradient from 'react-native-linear-gradient';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -107,8 +108,8 @@ const Login = ({ navigation }) => {
     return emailRegex.test(email);
   };
 
-  
-  
+
+
   const getBorderColor = () => {
     if (error) {
       return COLORS.red;
@@ -159,7 +160,7 @@ const Login = ({ navigation }) => {
   const handleButtonPress = () => {
     if (validateFieldNotEmpty(phone)) {
       ShowToastMessage('Please enter phone');
-    } 
+    }
     // else if (!validateEmail(email)) {
     //   ShowToastMessage('Please enter valid email');
     // } 
@@ -211,15 +212,15 @@ const Login = ({ navigation }) => {
             navigation,
             token,
             res,
-            () => {},
-            () => {},
-            () => {},
+            () => { },
+            () => { },
+            () => { },
           );
         } else {
         }
       })
-      .catch(() => {})
-      .finally(() => {});
+      .catch(() => { })
+      .finally(() => { });
   };
   const getFavoriteFromLocal = async token => {
     getSavedFavoriteProduct()
@@ -230,15 +231,15 @@ const Login = ({ navigation }) => {
             navigation,
             token,
             res,
-            () => {},
-            () => {},
-            () => {},
+            () => { },
+            () => { },
+            () => { },
           );
         } else {
         }
       })
-      .catch(() => {})
-      .finally(() => {});
+      .catch(() => { })
+      .finally(() => { });
   };
 
   const userLoginFail = async data => {
@@ -281,45 +282,46 @@ const Login = ({ navigation }) => {
         }}
       /> */}
         {/* <Image source={images.app_logo} style={styles.app_logo} /> */}
-        <View
-          style={{
-            // marginStart: 20,
-            // marginTop: 25,
-            // justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'gray',
-            borderBottomEndRadius: 30,
-            borderBottomLeftRadius: 30,
-            flexDirection: 'row',
-            height: 130,
-
-          }}>
-          <ToolBarIcon
-            title={Ionicons}
-            iconName={'chevron-back'}
-            icSize={20}
-            borderRadius={20}
-            icColor={COLORS.black}
+        <View>
+          <LinearGradient
+            colors={['#FD5F30', '#FF774F', '#FF8F6F']}
             style={{
-              backgroundColor: theme?.colors?.bg_color_onBoard,
-              // marginEnd: 10,
-              borderRadius: 20,
-            }}
-            onPress={() => {
-              navigation.goBack();
-            }}
-          />
-          <Text
-            style={[
-              styles.heading,
-              {
-                marginStart: 10,
-                color: COLORS?.white,
-              },
-            ]}>
-            {!show ? t('Sign In') : ' '}
-          </Text>
+              borderBottomEndRadius: 30,
+              borderBottomLeftRadius: 30,
+              flexDirection: 'row',
+              borderBottomRightRadius:30,
 
+              height: 130,
+              alignItems: 'center',
+              // justifyContent: 'space-between',
+              paddingHorizontal: 20,
+            }}
+          >
+            <ToolBarIcon
+              title={Ionicons}
+              iconName={'chevron-back'}
+              icSize={20}
+              borderRadius={20}
+              icColor={theme?.colors?.colorPrimary}
+              style={{
+                borderRadius: 20,
+              }}
+              onPress={() => {
+                navigation.goBack();
+              }}
+            />
+            <Text
+              style={[
+                styles.heading,
+                {
+                  marginStart: 10,
+                  color: COLORS?.white,
+                },
+              ]}
+            >
+              {!show ? t('Sign In') : ' '}
+            </Text>
+          </LinearGradient>
         </View>
         <View
           style={[
@@ -327,7 +329,7 @@ const Login = ({ navigation }) => {
             {
               backgroundColor: theme.colors?.bg_color_onBoard,
               marginTop: '20%',
-              marginHorizontal:10
+              marginHorizontal: 10
             },
           ]}>
 
@@ -449,62 +451,62 @@ const Login = ({ navigation }) => {
           </View>
 
 
-         <View style={{
-          flexDirection:'row',
-          justifyContent:'space-between',
-          alignItems:'center'
-         }}>
-         <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => setAddressDefault(!addressDefault)}
-            style={[
-              {
-                flex: 1,
-                marginHorizontal: 15,
-                marginVertical: 15,
-                marginBottom: 25,
-                alignSelf: 'center',
-              },
-              GlobalStyle.flexRowAlignCenter,
-            ]}
-          >
-            <MaterialCommunityIcons
-              name={addressDefault ? 'checkbox-marked' : 'checkbox-blank-outline'}
-              size={22}
-              color={COLORS?.gray}
-            />
-
-            <Text
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => setAddressDefault(!addressDefault)}
               style={[
-                GlobalStyle.addUpSelectionText,
                 {
-                  color: theme.colors.textColor,
-                  fontFamily: FONTS?.regular,
-                  marginLeft: 18,
-                  fontSize:14
+                  flex: 1,
+                  marginHorizontal: 15,
+                  marginVertical: 15,
+                  marginBottom: 25,
+                  alignSelf: 'center',
                 },
+                GlobalStyle.flexRowAlignCenter,
               ]}
             >
-              {t('Remember')}
+              <MaterialCommunityIcons
+                name={addressDefault ? 'checkbox-marked' : 'checkbox-blank-outline'}
+                size={22}
+                color={COLORS?.gray}
+              />
+
+              <Text
+                style={[
+                  GlobalStyle.addUpSelectionText,
+                  {
+                    color: theme.colors.textColor,
+                    fontFamily: FONTS?.regular,
+                    marginLeft: 18,
+                    fontSize: 14
+                  },
+                ]}
+              >
+                {t('Remember')}
+              </Text>
+            </TouchableOpacity>
+
+            <Text
+              onPress={() => navigation.navigate('ForgotPassword')}
+              style={[
+                styles.forgot_text,
+                {
+                  // color: theme.colors?.textColor,
+                  textAlign: 'right',
+                  color: COLORS?.black,
+                  fontFamily: FONTS?.regular,
+                  textDecorationLine: 'underline'
+                },
+              ]}>
+              {t('forgot_text')}
             </Text>
-          </TouchableOpacity>
 
-          <Text
-            onPress={() => navigation.navigate('ForgotPassword')}
-            style={[
-              styles.forgot_text,
-              {
-                // color: theme.colors?.textColor,
-                textAlign: 'right',
-                color: COLORS?.black,
-                fontFamily:FONTS?.regular,
-                textDecorationLine:'underline'
-              },
-            ]}>
-            {t('forgot_text')}
-          </Text>
-
-         </View>
+          </View>
           <View
             style={{
               // justifyContent:'center',
@@ -520,14 +522,14 @@ const Login = ({ navigation }) => {
               textSize={18}
               text={'Sign In'}
               textColor={theme.colors?.text}
-              backgroundColor={COLORS?.black}
+              backgroundColor={theme?.colors?.colorPrimary}
               // onPress={() => {
               //   closeSignUpModal();
               // }}
               onPress={() => {
-                handleButtonPress();
+                // handleButtonPress();
 
-                // navigation.navigate('MainContainer');
+                navigation.navigate('MainContainer');
 
               }}
               textStyle={{
@@ -535,7 +537,7 @@ const Login = ({ navigation }) => {
               }}
             />
           </View>
-         
+
           <View style={styles.container}>
             <View style={styles.line} />
             <Text
@@ -633,7 +635,7 @@ const Login = ({ navigation }) => {
               />
             </TouchableOpacity>
           </View>
-         
+
         </View>
       </ScrollView>
     </SafeAreaView >

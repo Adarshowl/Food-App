@@ -1,6 +1,6 @@
 export const bg_no_item_cactus = require('../assets/images/bg_no_item_cactus.png');
-export const splash = require('../assets/images/splashv.jpeg');
-// export const app_logo = require('../assets/images/img.png');
+export const splash = require('../assets/images/splash_food22.jpg');
+export const LogoHome = require('../assets/images/homelogo.jpg');
 export const app_logo = require('../assets/images/newlogo.jpg');
 export const intro_a = require('..//assets/images/intro/vendor1.png');
 export const intro_b = require('../assets/images/intro/vendor2.png');
@@ -10,9 +10,10 @@ export const filter = require('../assets/images/filter.png');
 export const address = require('../assets/images/address.jpg');
 export const promo = require('../assets/images/promo1.jpg');
 export const forgot = require('../assets/images/forgot.jpg');
-export const newlogo = require('../assets/images/newlogo.jpg');
+export const newlogo = require('../assets/images/splash_food.jpg');
 
 export default {
+  LogoHome,
   bg_no_item_cactus,
   splash,
   newlogo,
