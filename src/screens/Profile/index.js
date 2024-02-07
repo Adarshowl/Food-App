@@ -13,6 +13,8 @@ import {
   View,
   ActivityIndicator
 } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
+
 import { Switch } from 'react-native-elements';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import { FONTS } from '../../constants/Fonts';
@@ -103,41 +105,15 @@ const Profile = ({ navigation, route }) => {
   const [userData111, setUserData] = useState({});
   // console.log("userdata profile", userData)
 
-  useEffect(() => {
-    // setUserName(userData?.name + '');
+  // useEffect(() => {
+  //   // setUserName(userData?.name + '');
 
-    getUserFromStorage();
-  }, [userData]);
+  //   getUserFromStorage();
+  // }, [userData]);
 
   const [image, setImage] = useState(null);
 
-  const getUserFromStorage = async () => {
-    // try {
-    //   await AsyncStorage.getItem(USER_IMAGE, async (error, value) => {
-    //     if (error) {
-    //     } else {
-    //       if (value !== null) {
-    //         setImage(value);
-    //       } else {
-    //         setImage('');
-    //         // navigation.replace('Login');
-    //       }
-    //     }
-    //   });
-    // } catch (err) {
-    //   console.log('ERROR IN GETTING USER FROM STORAGE');
-    // }
-    getSavedImage()
-      .then(res => {
-        // ShowToastMessage('called');
-        // ShowConsoleLogMessage(res[0]?.image);
-        setImage(res[0]?.image);
-      })
-      .catch(error => {
-        ShowConsoleLogMessage(error);
-      })
-      .finally(() => { });
-  };
+
 
   // useEffect(() => {
   //   getUserProfile();
@@ -325,6 +301,41 @@ const Profile = ({ navigation, route }) => {
     setShowConfirm(!showConfirm);
   };
 
+  useEffect(() => {
+    getUserFromStorage();
+  }, [isFocused]);
+  const getUserFromStorage = async () => {
+    try {
+      await AsyncStorage.getItem(STRING.app_theme, (error, value) => {
+        if (error) {
+        } else {
+          if (value !== null) {
+            if (value == 'true') {
+              setLightMode(true);
+            } else {
+              setLightMode(false);
+            }
+          } else {
+          }
+        }
+      });
+    } catch (err) {
+      // console.log('ERROR IN GETTING USER FROM STORAGE', err);
+    }
+    getSavedImage()
+      .then(res => {
+        // ShowToastMessage('called');
+        // ShowConsoleLogMessage(res[0]?.image);
+        setImage(res[0]?.image);
+      })
+      .catch(error => {
+        ShowConsoleLogMessage(error);
+      })
+      .finally(() => { });
+  };
+  const isFocused = useIsFocused();
+
+
 
   return (
     <SafeAreaView
@@ -340,9 +351,10 @@ const Profile = ({ navigation, route }) => {
           GlobalStyle.commonToolbarBG,
           {
             backgroundColor: theme?.colors?.bg_color_onBoard,
+            elevation: 0
           },
         ]}>
-        <Ionicons
+        {/* <Ionicons
           name="ios-arrow-back"
           // color={COLORS.black}
           color={theme.colors.textColor}
@@ -359,7 +371,7 @@ const Profile = ({ navigation, route }) => {
             navigation.goBack();
             // ShowToastMessage('Coming Soon!');
           }}
-        />
+        /> */}
 
         <VegUrbanCommonToolBar
           title={'Profile'}
@@ -412,12 +424,12 @@ const Profile = ({ navigation, route }) => {
               <Image
                 source={{
                   uri: userData?.image || image
-                    || 'https://img.freepik.com/premium-vector/people-ribbon-logo-modern-leadership-logo-human-charity-logo_327835-2463.jpg'
+                    || "https://cdn-icons-png.flaticon.com/128/560/560277.png"
                 }}
                 style={{
-                  width: 60,
-                  height: 60,
-                  borderRadius: 20
+                  width: 50,
+                  height: 50,
+                  borderRadius: 100
                 }}
               />
 
@@ -442,8 +454,8 @@ const Profile = ({ navigation, route }) => {
                     },
                   ]}>
 
-                  {/* {userData?.name || userData?.response?.name} */}
-                  Andrew Ainsley
+                  {userData?.name || userData?.response?.name}
+                  {/* Andrew Ainsley */}
                   {/* {STRING.is_login} */}
                 </Text>
                 <Text
@@ -452,7 +464,7 @@ const Profile = ({ navigation, route }) => {
                   style={[
                     GlobalStyle.bothSideText,
                     {
-                      color: theme?.colors?.textColor,
+                      color: theme?.colors?.grey,
                       fontSize: 14,
                       fontFamily: FONTS?.medium,
                       // maxWidth: '80%'
@@ -460,8 +472,9 @@ const Profile = ({ navigation, route }) => {
                     },
                   ]}
                 >
-                  testing_demo@gmail.com
-                  {/* {userData?.email || userData?.response?.email} */}
+                  {/* +1 452 251 562 155 */}
+                  {/* testing_demo@gmail.com */}
+                  {userData?.email || userData?.response?.email}
                 </Text>
               </View>
 
@@ -471,7 +484,7 @@ const Profile = ({ navigation, route }) => {
                   // backgroundColor:'yellow',
                   alignSelf: 'flex-start',
                   alignItems: 'flex-end',
-                  marginTop: 10
+                  // marginTop: 10
                 }}
               >
                 <ToolBarIcon
@@ -480,8 +493,11 @@ const Profile = ({ navigation, route }) => {
                   icSize={25}
                   icColor={theme?.colors?.colorPrimary}
                   style={{
-                    marginEnd: 10,
-                    backgroundColor: theme?.colors?.toolbar_icon_bg,
+                    marginEnd: 5,
+                    backgroundColor: theme?.colors?.bg,
+                    borderRadius: 50,
+                    width: 50,
+                    height: 50
                   }}
                   onPress={() => {
                     navigation.navigate('SignupNew');
@@ -495,7 +511,7 @@ const Profile = ({ navigation, route }) => {
           <View
             style={[styles?.divLine, {
               marginTop: 15,
-              borderColor: theme?.colors?.textColor
+              borderColor: theme?.colors?.gray
 
             }]}
           />
@@ -556,7 +572,7 @@ const Profile = ({ navigation, route }) => {
                 marginTop: 15,
                 marginHorizontal: -20,
                 marginBottom: 15,
-                borderColor: theme?.colors?.textColor
+                borderColor: theme?.colors?.gray
               }]}
             />
             <ItemView

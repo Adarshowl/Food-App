@@ -8,8 +8,13 @@ import {
     Button,
     ImageBackground,
     ScrollView,
-    RadioButton
+    RadioButton,
+    TextInput,
+    I18nManager
 } from 'react-native';
+import images from '../../constants/images';
+import LinearGradient from 'react-native-linear-gradient';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import React, { useContext, useEffect, useState } from 'react';
 import Entypo from 'react-native-vector-icons/Entypo'
@@ -24,10 +29,12 @@ import { useTranslation } from 'react-i18next';
 import themeContext from '../../constants/themeContext';
 import { FONTS } from '../../constants/Fonts';
 import FlashSale from '../Flash/FlashSale';
+import ToolBarIcon from '../../utils/ToolBarIcon';
 
 const BannerOfferDetails = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const offers = [/* Your array of offers */];
+    const theme = useContext(themeContext);
 
     const renderItem = ({ item }) => {
         return (
@@ -69,15 +76,139 @@ const BannerOfferDetails = () => {
     return (
         <View style={styles.container}>
             <ImageBackground
-                source={{
-                    // uri: item?.image,
-                    uri: 'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/restaurant-offer-post-design-template-849b9069fd618342e2592dd9992ee7b5_screen.jpg?ts=1591366091'
-                }}
+                source={images.banner}
+                // source={{
+                //     // uri: item?.image,
+                //     uri: 'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/restaurant-offer-post-design-template-849b9069fd618342e2592dd9992ee7b5_screen.jpg?ts=1591366091'
+                // }}
                 // resizeMode={'stretch'}
                 style={[styles.sliderImage]}
-            />
+            >
+
+                <View style={{ position: 'absolute', top: 40, left: 0 }}>
+                    <View
+                        style={[
+                            // GlobalStyle.commonToolbarBG,
+                            {
+                                // backgroundColor: theme.colors.bg_color_onBoard,
+                                elevation: 0,
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                flex: 1
+                            },
+                        ]}>
+                        <ToolBarIcon
+                            title={Ionicons}
+                            iconName={'chevron-back'}
+                            icSize={20}
+                            icColor={COLORS.black}
+                            borderRadius={20}
+                            style={{
+                                marginEnd: 10,
+                                backgroundColor: theme.colors.bg_color_onBoard,
+                                borderRadius: 20
+                            }}
+                            onPress={() => {
+                                navigation.goBack();
+                            }}
+                        />
+
+                        <View
+                            style={{
+                                borderWidth: 0.2,
+                                borderRadius: 10,
+                                paddingHorizontal: 10,
+                                paddingVertical: 5,
+                                borderColor: COLORS?.white,
+                                flexDirection: 'row',
+                                alinItem: 'center',
+                                justifyContent: 'center',
+                                marginTop: 6,
+                                backgroundColor: theme?.colors?.bg_color_onBoard,
+                                right: 0,
+                                left: 150
+                            }}
+                        >
+                            <Ionicons
+                                name='location-sharp'
+                                color={theme?.colors?.textColor}
+                                size={20}
+                            />
+                            <Text
+                                style={{
+                                    fontSize: 13,
+                                    color: theme?.colors?.textColor,
+                                    fontFamily: FONTS?.regular,
+                                    marginLeft: 5
+                                }}
+                            >
+                                Dewas mp plot no 3
+                            </Text>
+                        </View>
 
 
+                    </View>
+
+                </View>
+
+
+                <View style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: 0,
+                    bottom: 10,
+                    flex: 1,
+                    // borderRadius: 20,
+                    width: '70%',
+                    marginLeft: 15
+
+                }}>
+
+                    <Text style={{ color: COLORS?.white, fontSize: 20, fontFamily: FONTS?.bold }}>Near Me</Text>
+                    <Text style={{ color: COLORS?.white, fontSize: 13, fontFamily: FONTS?.regular }}>
+                        Choose From Nearby Restaurants
+                        with Deliciousness Awatating
+                    </Text>
+
+                </View>
+
+            </ImageBackground>
+
+            <TouchableOpacity
+                onPress={() => {
+                    navigation.navigate('Search');
+                }}
+                style={[
+                    styles.inputWrapper,
+                    {
+                        backgroundColor: theme?.colors?.bg_color_onBoard,
+                        marginTop: -50
+                        // borderWidth: 0.5,
+                        // borderColor: theme?.colors?.grey,
+                    },
+                ]}>
+                {/*<AntDesign name={'search1'} size={20} color={theme?.colors?.grey} />*/}
+                <Image
+                    source={icons.search}
+                    style={{
+                        height: 18,
+                        tintColor: theme?.colors?.white,
+                        width: 18,
+                    }}
+                />
+                <TextInput
+                    editable={false}
+                    style={[
+                        styles.input,
+                        {
+                            color: theme?.colors?.white,
+                            textAlign: I18nManager.isRTL ? 'right' : 'left',
+                        },
+                    ]}
+                    placeholder={'Search'}
+                    placeholderTextColor={theme?.colors?.gray}
+                />
+            </TouchableOpacity>
             {/* <TouchableOpacity onPress={openModal} style={styles.filterButton}>
                 <Text style={styles.filterButtonText}>Filter</Text>
             </TouchableOpacity>
@@ -88,28 +219,31 @@ const BannerOfferDetails = () => {
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
 
                     <TouchableOpacity
-                        style={styles?.filterOption}
+                        style={[styles?.filterOption, {
+                            backgroundColor: theme?.colors?.bg
+                        }]}
                         onPress={handleFilterClick}
                     >
-                        <Text style={styles.filterText}>Filter</Text>
+                        {/* <Text style={styles.filterText}>Filter</Text> */}
                         <Image
                             source={{
-                                uri: 'https://cdn-icons-png.flaticon.com/128/7854/7854748.png'
+                                uri: "https://cdn-icons-png.flaticon.com/128/7094/7094575.png"
                             }}
                             style={{
-                                width: 17,
-                                height: 17,
+                                width: 27,
+                                height: 27,
                                 marginLeft: 8
                             }}
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles?.filterOption}
-
+                        style={[styles?.filterOption, {
+                            backgroundColor: theme?.colors?.bg
+                        }]}
                     // onPress={handleSortClick('Sort')}
                     >
 
-                        <Text style={styles.filterText}>Sort</Text>
+                        <Text style={styles.filterText}>Cuisines</Text>
                         <MaterialIcons
                             name="keyboard-arrow-down"
                             size={22}
@@ -120,65 +254,39 @@ const BannerOfferDetails = () => {
                         />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles?.filterOption}
-
+                        style={[styles?.filterOption, {
+                            backgroundColor: theme?.colors?.bg
+                        }]}
                     // onPress={handleVegNonVegClick('Veg/Non-Veg')}
                     >
-                        <Text style={styles.filterText}>Veg/Non-Veg</Text>
-                        <MaterialIcons
+                        <Text style={styles.filterText}>Promo</Text>
+                        {/* <MaterialIcons
                             name="keyboard-arrow-down"
                             size={22}
                             color={COLORS?.black}
                             style={{
                                 marginLeft: 8
                             }}
-                        />
+                        /> */}
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles?.filterOption}
-
+                        style={[styles?.filterOption, {
+                            backgroundColor: theme?.colors?.bg
+                        }]}
                     // onPress={handleRatingClick('Rating')}
                     >
-                        <Text style={styles.filterText}>Rating</Text>
-                        <MaterialIcons
+                        <Text style={styles.filterText}>Rated4.5+</Text>
+                        {/* <MaterialIcons
                             name="keyboard-arrow-down"
                             size={22}
                             color={COLORS?.black}
                             style={{
                                 marginLeft: 8
                             }}
-                        />
+                        /> */}
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles?.filterOption}
 
-                    // onPress={handleDeliveryTimeClick('Delivery Time')}
-                    >
-                        <Text style={styles.filterText}>Delivery Time</Text>
-                        <MaterialIcons
-                            name="keyboard-arrow-down"
-                            size={22}
-                            color={COLORS?.black}
-                            style={{
-                                marginLeft: 8
-                            }}
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles?.filterOption}
 
-                    // onPress={handleCostForTwoClick('Cost for Two')}
-                    >
-                        <Text style={styles.filterText}>Cost for Two</Text>
-                        <MaterialIcons
-                            name="keyboard-arrow-down"
-                            size={22}
-                            color={COLORS?.black}
-                            style={{
-                                marginLeft: 8
-                            }}
-                        />
-                    </TouchableOpacity>
                 </ScrollView>
             </View>
 
@@ -282,6 +390,25 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
     },
+    inputWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        // backgroundColor: COLORS.black,
+        // paddingHorizontal: 5,
+        marginHorizontal: 20,
+        borderRadius: 25,
+        paddingHorizontal: 20,
+        height: 55,
+        elevation: 5
+        // borderWidth:0.1
+    },
+    input: {
+        flex: 1,
+        fontSize: 14,
+        fontFamily: 'OpenSans-Regular',
+        paddingStart: 5,
+        marginStart: 5,
+    },
     sliderImage: {
         width: SIZES.width,
         height: 280,
@@ -292,7 +419,7 @@ const styles = StyleSheet.create({
         // borderBottomRightRadius: 50,
         // borderBottomLeftRadius: 50,
         marginBottom: 20,
-        resizeMode:'stretch',
+        resizeMode: 'stretch',
 
     },
 
@@ -351,7 +478,7 @@ const styles = StyleSheet.create({
     filterOption: {
         paddingHorizontal: 15,
         paddingVertical: 8,
-        borderWidth: 0.5,
+        // borderWidth: 0.5,
         borderColor: COLORS?.gray,
         borderRadius: 20,
         marginHorizontal: 5,

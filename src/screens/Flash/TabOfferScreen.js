@@ -87,7 +87,7 @@ const TabOfferScreen = () => {
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => {
-          navigation.navigate('BannerOfferDetails');
+          navigation.navigate('OfferDetails');
         }}
         style={[
           styles.Wrapper,
@@ -159,8 +159,8 @@ const TabOfferScreen = () => {
                 borderRadius: 12,
                 flexDirection: 'row',
                 alignItems: 'center',
-                width: 90,
-                height: 30,
+                width: 98,
+                height: 25,
                 justifyContent: 'center',
               }}
               start={{ x: 0, y: 1 }}
@@ -169,7 +169,7 @@ const TabOfferScreen = () => {
               <AntDesign
                 name="star"
                 size={15}
-                color={COLORS?.black}
+                color={'orange'}
                 style={{
                   // marginLeft: 5,
                   // marginTop: 3
@@ -226,7 +226,7 @@ const TabOfferScreen = () => {
           }}>
            <MaterialCommunityIcons
            name="motorbike"
-           color={COLORS?.black}
+           color={theme?.colors?.colorPrimary}
            size={20}
            />
             <Text
@@ -253,7 +253,7 @@ const TabOfferScreen = () => {
           }}>
            <MaterialCommunityIcons
            name="clock"
-           color={COLORS?.gray}
+           color={COLORS?.light_green}
            size={18}
            />
             <Text
@@ -280,7 +280,7 @@ const TabOfferScreen = () => {
           }}>
            <Entypo
            name="star"
-           color={COLORS?.gray}
+           color={'orange'}
            size={18}
            />
             <Text

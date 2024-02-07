@@ -12,7 +12,7 @@ export const API_END_POINTS = {
   API_APP_CURRENCY_SETTING: `${BASE_URL}currency/get-admin-currency`,
   // USER Profile Section
   // https://www.halalicious.com.au/backend/api/appauth/app_userlogin
-  API_LOGIN: `${BASE_URL}appauth/app_userlogin`,
+  API_LOGIN: `${BASE_URL}appauth/app_login`,
   API_SIGN_UP: `${BASE_URL}appauth/app_signup`,
   API_SIGN_UP_TEST: {
     url: `${BASE_URL}appauth/app_signup`,

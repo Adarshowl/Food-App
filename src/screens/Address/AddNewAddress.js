@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
 import {
   I18nManager,
   Image,
@@ -8,11 +8,15 @@ import {
   Text,
   TouchableOpacity,
   View,
+  TextInput
 } from 'react-native';
-import {FONTS} from '../../constants/Fonts';
+import { FONTS } from '../../constants/Fonts';
 import VegUrbanCommonToolBar from '../../utils/VegUrbanCommonToolBar';
-import {images} from '../../constants';
-import {COLORS} from '../../constants/Colors';
+import { icons, SIZES } from '../../constants';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+
+import { images } from '../../constants';
+import { COLORS } from '../../constants/Colors';
 import GlobalStyle from '../../styles/GlobalStyle';
 import VegUrbanEditText from '../../utils/EditText/VegUrbanEditText';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -24,17 +28,17 @@ import {
   validateFieldNotEmpty,
 } from '../../utils/Utility';
 import themeContext from '../../constants/themeContext';
-import {useTranslation} from 'react-i18next';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useDispatch, useSelector} from 'react-redux';
-import {addUserAddress} from '../../redux/actions/CartApi';
-import {showProgressBar} from '../../redux/actions';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { addUserAddress } from '../../redux/actions/CartApi';
+import { showProgressBar } from '../../redux/actions';
+import ToolBarIcon from '../../utils/ToolBarIcon';
 
-const AddNewAddress = ({navigation}) => {
+const AddNewAddress = ({ navigation }) => {
   const theme = useContext(themeContext);
   const [addressDefault, setAddressDefault] = useState(false);
 
-  const {t, i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [name, setName] = useState('');
   const [mobile, setMobile] = useState('');
@@ -110,37 +114,32 @@ const AddNewAddress = ({navigation}) => {
         style={[
           GlobalStyle.commonToolbarBG,
           {
-            backgroundColor: theme.colors.bg_color_onBoard,
+            backgroundColor: theme?.colors?.bg_color_onBoard,
           },
         ]}>
-        <Ionicons
-          name="ios-arrow-back"
-          color={theme.colors.textColor}
-          size={25}
-          style={[
-            styles.backIcon,
-            {
-              transform: [{scaleX: I18nManager.isRTL ? -1 : 1}],
-              marginStart: 18,
-              marginTop: 10,
-            },
-          ]}
+        <ToolBarIcon
+          title={Ionicons}
+          iconName={'chevron-back'}
+          icSize={20}
+          icColor={COLORS.black}
+          borderRadius={20}
+          style={{
+            marginEnd: 10,
+            backgroundColor: theme.colors.bg_color_onBoard,
+            borderRadius: 20
+          }}
           onPress={() => {
             navigation.goBack();
           }}
+
         />
-
         <VegUrbanCommonToolBar
-          title="Add New Address"
-          // title={route?.params?.item?.name + ''}
-
+          title="New Address"
           style={{
             backgroundColor: theme.colors.bg_color_onBoard,
-            marginStart: 20,
           }}
           textStyle={{
             color: theme.colors.textColor,
-            fontSize: 20,
           }}
         />
       </View>
@@ -152,147 +151,138 @@ const AddNewAddress = ({navigation}) => {
             flex: 1,
           },
         ]}>
-        <Image source={images.address} style={styles.app_logo} />
-        <View
+
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Search');
+          }}
           style={[
-            GlobalStyle.loginModalBg,
+            styles.inputWrapper,
             {
-              backgroundColor: theme.colors?.bg_color_onBoard,
+              backgroundColor: theme?.colors?.bg_color_onBoard,
+              // marginTop: 20
+              // borderWidth: 0.5,
+              // borderColor: theme?.colors?.grey,
             },
           ]}>
-          <Text
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            style={[
-              styles.head,
-              {
-                color: theme?.colors?.colorPrimary,
-                marginTop: 10,
-                textAlign: 'center',
-              },
-            ]}>
-            Address Detail
-          </Text>
-          <View style={styles.divLine} />
-
-          <View
+          {/*<AntDesign name={'search1'} size={20} color={theme?.colors?.grey} />*/}
+          <Image
+            source={icons.search}
             style={{
-              marginTop: 10,
+              height: 18,
+              tintColor: theme?.colors?.white,
+              width: 18,
+            }}
+          />
+          <TextInput
+            editable={false}
+            style={[
+              styles.input,
+              {
+                color: theme?.colors?.white,
+                textAlign: I18nManager.isRTL ? 'right' : 'left',
+              },
+            ]}
+            placeholder={'Search a place..'}
+            placeholderTextColor={theme?.colors?.gray}
+          />
+        </TouchableOpacity>
+        <ScrollView>
+          <View style={{ flex: 1, }}>
+            {/* Location Map (Assuming you have a map component to display location) */}
+            <View style={{
+              borderRadius: 10
             }}>
-            <VegUrbanEditText
-              placeholder="Enter your name"
-              label="Name"
-              iconPosition={'left'}
-              style={{
-                color: theme?.colors?.white,
-                fontFamily: FONTS?.regular,
-              }}
-              lableStyle={{
-                fontFamily: FONTS?.regular,
-              }}
-              textStyle={{}}
-              value={name}
-              keyBoardType={'default'}
-              maxLength={100}
-              onChangeText={v => setName(v)}
-            />
 
-            <VegUrbanEditText
-              placeholder="Enter email address"
-              label="Email Address"
-              iconPosition={'left'}
-              style={{
-                color: theme?.colors?.white,
-                fontFamily: FONTS?.regular,
-              }}
-              lableStyle={{
-                fontFamily: FONTS?.regular,
-              }}
-              textStyle={{}}
-              value={email}
-              keyBoardType={'email-address'}
-              maxLength={100}
-              onChangeText={v => setEmail(v)}
-            />
+              <MapView
+                provider={PROVIDER_GOOGLE}
+                style={{
+                  height: 450,
+                  width: '100%',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                  bodrderRadius: 10
+                }}
+                region={{
+                  latitude: 37.78825,
+                  longitude: -122.4324,
+                  latitudeDelta: 0.015,
+                  longitudeDelta: 0.0121,
+                }}
+              >
 
-            <VegUrbanEditText
-              placeholder="Enter mobile number"
-              label="Mobile Number"
-              iconPosition={'left'}
-              style={{
-                color: theme?.colors?.white,
-                fontFamily: FONTS?.regular,
-              }}
-              lableStyle={{
-                fontFamily: FONTS?.regular,
-              }}
-              textStyle={{}}
-              value={mobile}
-              keyBoardType={'number-pad'}
-              maxLength={10}
-              onChangeText={v => setMobile(v)}
-            />
-            <VegUrbanEditText
-              placeholder="Address Detail"
-              label="Address Detail"
-              style={{
-                color: theme?.colors?.white,
-                fontFamily: FONTS?.regular,
-              }}
-              value={addressDetail}
-              maxLength={100}
-              onChangeText={v => setAddressDetail(v)}
-              textStyle={{}}
-              multiline={true}
-              keyBoardType={'default'}
-            />
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => {
-                setAddressDefault(!addressDefault);
-              }}
-              style={[
-                {
+              </MapView>
+            </View>
+            {/* Order Details */}
+            <View style={{
+
+            }}>
+              <View style={{
+                flex: 1,
+                // borderTopLeftRadius: 20,
+                // borderTopRightRadius: 20,
+              }}>
+                <View style={{
+                  marginTop: 20,
                   flex: 1,
-                  marginVertical: 15,
-                  marginBottom: 25,
-                },
-                GlobalStyle.flexRowAlignCenter,
-              ]}>
-              <MaterialCommunityIcons
-                name={
-                  addressDefault ? 'checkbox-marked' : 'checkbox-blank-outline'
-                }
-                size={22}
-                color={theme.colors.colorPrimary}
-              />
-              <Text
-                style={[
-                  GlobalStyle.addUpSelectionText,
-                  {
-                    color: theme.colors.textColor,
-                    fontFamily: FONTS?.medium,
-                    // marginBottom:10,
-                    marginLeft: 18,
-                  },
-                ]}>
-                {t('Make this as the default address')}
-              </Text>
-            </TouchableOpacity>
+                  marginHorizontal: 20,
+                }}>
+                  <View
+                    style={{
+                      width: '40%',
+                      height: 6,
+                      backgroundColor: theme?.colors?.white,
+                      justifyContent: 'center',
+                      alignSelf: 'center',
+                      marginBottom: 20,
+                      borderRadius: 10
+                    }}
+                  />
+
+                  <View style={{
+                    backgroundColor: theme?.colors?.bg,
+                    borderRadius: 10,
+                    // marginHorizontal:20,
+                    alignItems: 'center',
+                    paddingHorizontal: 20,
+                    flexDirection: 'row',
+                    paddingVertical: 15,
+                    marginVertical: 20
+                  }}>
+                    <Ionicons
+                      name="location"
+                      size={25}
+                      color={theme?.colors?.colorPrimary}
+                    />
+                    <Text
+                      style={{
+                        fontSize: 17,
+                        color: theme?.colors?.textColor,
+                        fontFamily: FONTS?.regular,
+                        marginLeft: 15
+                      }}
+                    >NYC,5TH Avenue 128</Text>
+                  </View>
+
+                </View>
+              </View>
+            </View>
           </View>
-        </View>
+        </ScrollView>
+        {/* <Image source={images.address} style={styles.app_logo} /> */}
+
         <View
           style={{
             marginHorizontal: 10,
             marginVertical: 10,
           }}>
           <VegUrbanCommonBtn
-            height={45}
+            height={55}
             width={'100%'}
             borderRadius={20}
-            textSize={16}
+            textSize={14}
             textColor={theme?.colors?.text}
-            text={'Add '}
+            text={'Save Address '}
             backgroundColor={theme?.colors?.colorPrimary}
             onPress={() => {
               handleSubmit();
@@ -433,5 +423,27 @@ const styles = StyleSheet.create({
     height: 55,
     fontFamily: 'Quicksand-Regular',
     textAlign: I18nManager.isRTL ? 'right' : 'left',
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    // backgroundColor: COLORS.black,
+    // paddingHorizontal: 5,
+    marginHorizontal: 20,
+    borderRadius: 25,
+    paddingHorizontal: 20,
+    marginTop: 5,
+    height: 45,
+    elevation: 3,
+    width: '85%',
+    marginBottom: 20
+    // borderWidth:0.1
+  },
+  input: {
+    flex: 1,
+    fontSize: 14,
+    fontFamily: 'OpenSans-Regular',
+    paddingStart: 5,
+    marginStart: 5,
   },
 });

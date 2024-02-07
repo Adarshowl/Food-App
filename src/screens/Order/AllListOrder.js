@@ -208,9 +208,9 @@ const AllListOrder = ({ navigation }) => {
     return (
       <TouchableOpacity
         activeOpacity={0.8}
-        // onPress={() => {
-        //   navigation.navigate('RestaurantDetails');
-        // }}
+        onPress={() => {
+          navigation.navigate('OrderDetails');
+        }}
         style={[
           styles.Wrapper,
           {
@@ -317,7 +317,7 @@ const AllListOrder = ({ navigation }) => {
             }}>
               <AntDesign
                 name="calendar"
-                color={COLORS?.black}
+                color={theme?.colors?.colorPrimary}
                 size={16}
               />
               <Text
@@ -343,7 +343,7 @@ const AllListOrder = ({ navigation }) => {
             }}>
               <FontAwesome
                 name="location-arrow"
-                color={COLORS?.black}
+                color={theme?.colors?.colorPrimary}
                 size={20}
               />
               <Text
@@ -379,7 +379,7 @@ const AllListOrder = ({ navigation }) => {
             }}>
               <MaterialIcons
                 name="payment"
-                color={COLORS?.black}
+                color={theme?.colors?.colorPrimary}
                 size={18}
               />
               <Text
@@ -425,28 +425,35 @@ const AllListOrder = ({ navigation }) => {
           </View>
           <View style={{
             flexDirection:'row',
-            justifyContent:'space-around'
+            justifyContent:'space-around',
+            marginTop:5
 
           }}>
             <VegUrbanCommonBtn
-              height={35}
+              height={30}
               width={'47%'}
               borderRadius={20}
               textSize={11}
-              textColor={theme.colors?.white}
+              textColor={theme.colors?.colorPrimary}
               text={t('Cancel Order')}
-              backgroundColor={theme?.colors?.bg}
+              borderWidth={1}
+              borderColor={theme?.colors?.colorPrimary}
+              backgroundColor={theme?.colors?.bg_color_onBoard}
               onPress={() => {
                 navigation.navigate('CancelledOrderScreen')
                 // ShowConsoleLogMessage('Coming soon');
 
+              }}
+              style={{
+                borderColor:theme?.colors?.colorPrimary,
+                borderWidth:1
               }}
               textStyle={{
                 fontFamily: FONTS?.bold,
               }}
             />
              <VegUrbanCommonBtn
-              height={35}
+              height={30}
               width={'47%'}
               borderRadius={20}
               textSize={11}

@@ -116,9 +116,9 @@ const Login = ({ navigation }) => {
     }
 
     if (focused) {
-      return COLORS?.black;
+      return theme?.colors?.colorPrimary;
     } else {
-      return COLORS.bg_color;
+      return theme?.colors?.grey;
     }
   };
   const getBgColor = () => {
@@ -157,18 +157,20 @@ const Login = ({ navigation }) => {
     setShow(!show);
   };
 
+  const [email, setEmail] = useState('');
+
+
   const handleButtonPress = () => {
-    if (validateFieldNotEmpty(phone)) {
-      ShowToastMessage('Please enter phone');
-    }
-    // else if (!validateEmail(email)) {
-    //   ShowToastMessage('Please enter valid email');
-    // } 
-    else if (validateFieldNotEmpty(password)) {
+
+    if (validateFieldNotEmpty(email)) {
+      ShowToastMessage('Please enter email');
+    } else if (!validateEmail(email)) {
+      ShowToastMessage('Please enter valid email');
+    } else if (validateFieldNotEmpty(password)) {
       ShowToastMessage('Please enter password');
     } else {
       const data = {
-        phone: phone,
+        email: email,
         password: password,
       };
       dispatch(showProgressBar(true));
@@ -283,7 +285,7 @@ const Login = ({ navigation }) => {
       /> */}
         {/* <Image source={images.app_logo} style={styles.app_logo} /> */}
         <View>
-          <LinearGradient
+          {/* <LinearGradient
             colors={['#FD5F30', '#FF774F', '#FF8F6F']}
             style={{
               borderBottomEndRadius: 30,
@@ -321,25 +323,65 @@ const Login = ({ navigation }) => {
             >
               {!show ? t('Sign In') : ' '}
             </Text>
-          </LinearGradient>
+          </LinearGradient> */}
+          <View
+            style={{
+              borderBottomEndRadius: 30,
+              borderBottomLeftRadius: 30,
+              flexDirection: 'row',
+              borderBottomRightRadius: 30,
+
+              height: 130,
+              alignItems: 'center',
+            }}
+          >
+            <ToolBarIcon
+              title={Ionicons}
+              iconName={'chevron-back'}
+              icSize={20}
+              borderRadius={20}
+              borderWidth={0.2}
+              icColor={theme?.colors?.textColor}
+              style={{
+                borderRadius: 20,
+              }}
+              onPress={() => {
+                navigation.goBack();
+              }}
+            />
+
+          </View>
         </View>
         <View
           style={[
             GlobalStyle.loginModalBg,
             {
               backgroundColor: theme.colors?.bg_color_onBoard,
-              marginTop: '20%',
+              marginTop: '10%',
               marginHorizontal: 10
             },
           ]}>
 
           {/* </View> */}
 
+          <Text
+            style={[
+              styles.heading,
+              {
+                marginStart: 10,
+                color: theme?.colors?.textColor,
+                marginBottom: 20
+              },
+            ]}
+          >
+            {!show ? t('Sign In') : ' '}
+          </Text>
+
           <VegUrbanEditText
-            placeholder="Phone"
+            placeholder="Email"
             // label={STRING.email}
             iconPosition={'left'}
-            value={phone}
+            value={email}
             style={{
               color: theme?.colors?.textColor,
               // color: isEmailValid ? theme?.colors?.white : 'red', // Red color for invalid email
@@ -360,9 +402,9 @@ const Login = ({ navigation }) => {
               //   }}
               // />
             }
-            keyBoardType={'number-pad'}
+            // keyBoardType={'number-pad'}
             onChangeText={v => {
-              setPhone(v);
+              setEmail(v);
               // setIsEmailValid(validateEmail(v)); // Update isEmailValid based on email validity
             }}
           />
@@ -395,7 +437,7 @@ const Login = ({ navigation }) => {
                 backgroundColor: getBgColor(),
                 borderWidth: getBorderWidth(),
 
-                borderRadius: 25,
+                borderRadius: 30,
                 // elevation: getElevation(),
               },
             ]}>
@@ -473,7 +515,7 @@ const Login = ({ navigation }) => {
               <MaterialCommunityIcons
                 name={addressDefault ? 'checkbox-marked' : 'checkbox-blank-outline'}
                 size={22}
-                color={COLORS?.gray}
+                color={theme?.colors?.colorPrimary}
               />
 
               <Text
@@ -487,7 +529,7 @@ const Login = ({ navigation }) => {
                   },
                 ]}
               >
-                {t('Remember')}
+                {t('Remember me')}
               </Text>
             </TouchableOpacity>
 
@@ -519,7 +561,7 @@ const Login = ({ navigation }) => {
               height={55}
               width={'100%'}
               borderRadius={30}
-              textSize={18}
+              textSize={16}
               text={'Sign In'}
               textColor={theme.colors?.text}
               backgroundColor={theme?.colors?.colorPrimary}
@@ -527,13 +569,13 @@ const Login = ({ navigation }) => {
               //   closeSignUpModal();
               // }}
               onPress={() => {
-                // handleButtonPress();
+                handleButtonPress();
 
-                navigation.navigate('MainContainer');
+                // navigation.navigate('MainContainer');
 
               }}
               textStyle={{
-                fontFamily: FONTS?.bold,
+                fontFamily: FONTS?.semi_old,
               }}
             />
           </View>
@@ -653,7 +695,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontFamily: FONTS?.bold,
-    fontSize: 27,
+    fontSize: 23,
   },
   heading11: {
     fontFamily: FONTS?.regular,

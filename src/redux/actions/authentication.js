@@ -24,6 +24,7 @@ export async function loginUser(
       data,
       API_END_POINTS.API_LOGIN,
     );
+    
     ShowConsoleLogMessage(JSON.stringify(response));
 
     // if (response.statusCode === 200) {
@@ -50,7 +51,7 @@ export async function loginUser(
           navigation,
           response?.data?.jwtoken,
           async data => {
-            ShowConsoleLogMessage(data?.response?._id + ' get profile ');
+            // ShowConsoleLogMessage(data?.response?._id + ' get profile ');
             // await AsyncStorage.setItem(USER_IMAGE, data?.response?.image);
 
             doSaveImage(data?.response?._id, data?.response?.image);

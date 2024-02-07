@@ -87,7 +87,7 @@ const ForgotPageNext = ({ navigation }) => {
     }
 
     if (focused) {
-      return COLORS?.black;
+      return theme?.colors?.colorPrimary;
     } else {
       return COLORS.gray;
     }
@@ -202,18 +202,17 @@ const ForgotPageNext = ({ navigation }) => {
       ]}>
 
       <View>
-        <LinearGradient
-          colors={['#FD5F30', '#FF774F', '#FF8F6F']}
+        <View
           style={{
             borderBottomEndRadius: 30,
             borderBottomLeftRadius: 30,
             flexDirection: 'row',
             borderBottomRightRadius: 30,
 
-            height: 130,
+            height: 50,
+            marginTop: 30,
             alignItems: 'center',
             // justifyContent: 'space-between',
-            paddingHorizontal: 20,
           }}
         >
           <ToolBarIcon
@@ -221,28 +220,17 @@ const ForgotPageNext = ({ navigation }) => {
             iconName={'chevron-back'}
             icSize={20}
             borderRadius={20}
-            icColor={COLORS.black}
+            borderWidth={0.2}
+            icColor={theme?.colors?.textColor}
             style={{
-              backgroundColor: theme?.colors?.bg_color_onBoard,
-              // marginEnd: 10,
               borderRadius: 20,
             }}
             onPress={() => {
               navigation.goBack();
             }}
           />
-          <Text
-            style={[
-              styles.heading,
-              {
-                marginStart: 10,
-                color: COLORS?.white,
-                alignItems: 'center'
-              },
-            ]}>
-            {!show ? t('Verification') : ' '}
-          </Text>
-        </LinearGradient>
+
+        </View>
       </View>
       <ScrollView
         style={[
@@ -275,13 +263,26 @@ const ForgotPageNext = ({ navigation }) => {
           ]}>
           <View
             style={{
-              marginTop: '20%',
-              alignItems: 'center',
+              marginTop: '10%',
+              // alignItems: 'center',
             }}>
+            <Text
+              style={[
+                styles.heading,
+                {
+                  // marginStart: 10,
+                  color: theme?.colors?.textColor,
+                  marginBottom: 20
+                },
+              ]}
+            >
+              {!show ? t('Verification') : ' '}
+            </Text>
+
             <View
               style={{
                 // flexDirection: 'row',
-                alignItems: 'center',
+                // alignItems: 'center',
                 marginBottom: 20
               }}>
               <Text
@@ -290,7 +291,7 @@ const ForgotPageNext = ({ navigation }) => {
                   {
                     color: theme?.colors?.textColor,
                     fontFamily: FONTS.regular,
-                    fontSize: 16
+                    fontSize: 14
 
                   },
                 ]}>
@@ -298,7 +299,8 @@ const ForgotPageNext = ({ navigation }) => {
                 {/* {!show ? '' : `Code has been sent to ${userEmail}`} */}
               </Text>
               <View style={{
-                flexDirection: 'row'
+                flexDirection: 'row',
+                marginBottom: 20
               }}>
                 <Text
                   numberOfLines={2}
@@ -323,7 +325,6 @@ const ForgotPageNext = ({ navigation }) => {
 
                     },
                   ]}>
-
                   testing@gmail.com
                 </Text>
               </View>
@@ -338,12 +339,12 @@ const ForgotPageNext = ({ navigation }) => {
               inputContainerStyles={{
                 // borderWidth: 0.5,
                 borderColor: focused ? COLORS.gray : COLORS.bg_color,
-                marginHorizontal: 3,
+                marginHorizontal: 10,
                 height: 60,
                 width: '20%',
                 justifyContent: 'center',
                 alignItems: 'center',
-                borderRadius: 12,
+                borderRadius: 8,
                 borderColor: getBorderColor(),
 
                 backgroundColor: getBgColor(),
@@ -425,13 +426,14 @@ const ForgotPageNext = ({ navigation }) => {
           </Text>
          </TouchableOpacity> */}
           </View>
-          <VegUrbanCommonBtn
+          {/* <VegUrbanCommonBtn
             height={55}
             width={'100%'}
             borderRadius={30}
-            textSize={18}
+            textSize={16}
             fontWeight={'bold'}
-            marginTop={'70%'}
+            marginTop={40}
+            // marginTop={'70%'}
             text={t('Next')}
             justifyContent={'flex-end'}
             alignItems={'flex-end'}
@@ -450,17 +452,56 @@ const ForgotPageNext = ({ navigation }) => {
 
             // onPress={onSubmitClick}
             textStyle={{
-              fontFamily: 'OpenSans-Mulish',
-              fontWeight: 'bold',
-              fontFamily: 'OpenSans-Medium',
+              fontFamily: FONTS?.semi_old
+
               // textAlign:'center',
               // alinItem:'center'
             }}
-          />
+          /> */}
         </View>
 
         {/* {renderSignUpModal()} */}
       </ScrollView>
+      <View style={{
+        flex: 1,
+        marginHorizontal: 20
+      }}>
+        <VegUrbanCommonBtn
+          height={55}
+          width={'100%'}
+          borderRadius={30}
+          textSize={16}
+          fontWeight={'bold'}
+          // marginHorizontal={20}
+          // marginTop={'70%'}
+          text={t('Next')}
+          justifyContent={'flex-end'}
+          alignItems={'flex-end'}
+          textColor={theme.colors?.btnTextColor}
+          backgroundColor={theme?.colors?.colorPrimary}
+          onPress={() => {
+            navigation.navigate('Login');
+
+            // if (otp.length === 4 && /^\d{4}$/.test(otp)) {
+            //   navigation.navigate('MainContainer');
+            //   // closeSignUpModal();
+            // } else {
+            //   ShowToastMessage('Please enter a valid 4-digit OTP');
+            // }
+          }}
+          style={{
+            flex: 1,
+            marginHorizontal: 20
+          }}
+          // onPress={onSubmitClick}
+          textStyle={{
+            fontFamily: FONTS?.semi_old
+
+            // textAlign:'center',
+            // alinItem:'center'
+          }}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -513,7 +554,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontFamily: FONTS?.bold,
-    fontSize: 25,
+    fontSize: 23,
 
   },
   app_logo: {

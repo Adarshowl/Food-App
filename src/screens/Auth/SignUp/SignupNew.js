@@ -16,7 +16,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-// import Fontisto from 'react-native-vector-icons/Fontisto'
+import Feather from 'react-native-vector-icons/Feather'
 import { SIZES, STRING } from '../../../constants';
 import ImagePicker from 'react-native-image-crop-picker';
 import icons from '../../../constants/icons';
@@ -66,6 +66,7 @@ import {
 import { updateCartDataLength } from '../../../redux/actions/HomeApi';
 import { EventRegister } from 'react-native-event-listeners';
 import VegUrbanCommonToolBar from '../../../utils/VegUrbanCommonToolBar';
+import ToolBarIcon from '../../../utils/ToolBarIcon';
 
 const SignupNew = ({ navigation }) => {
   const theme = useContext(themeContext);
@@ -107,7 +108,7 @@ const SignupNew = ({ navigation }) => {
       ShowConsoleLogMessage('Image picker error => ' + JSON.stringify(error));
     }
   };
- 
+
 
   const openImagePicker = () => {
     try {
@@ -162,10 +163,11 @@ const SignupNew = ({ navigation }) => {
   }, []);
   // const [userData, setUserData] = useState({});
 
-  
 
+  console.log('usewr', userData)
   useEffect(() => {
     setUserName(userData?.name + '');
+    setPhone(userData?.phone + " ")
 
     getUserFromStorage();
   }, [userData]);
@@ -214,6 +216,7 @@ const SignupNew = ({ navigation }) => {
           userToken,
           username,
           image,
+
           successCallback,
           errorCallback,
           BannerErrorCallback,
@@ -265,7 +268,7 @@ const SignupNew = ({ navigation }) => {
           navigation.goBack();
         },
         data => {
-          // navigation.goBack();
+          navigation.goBack();
           ShowConsoleLogMessage(data);
           ShowToastMessage(data?.message);
         },
@@ -319,6 +322,7 @@ const SignupNew = ({ navigation }) => {
   const [name, setName] = useState('');
 
   const [username, setUserName] = useState('');
+  const [phone, setPhone] = useState('');
 
   const [code, setCode] = useState('');
   // const [focused, setFocused] = useState(false);
@@ -381,9 +385,9 @@ const SignupNew = ({ navigation }) => {
 
   const error = '';
 
-  
 
-  
+
+
   const closeSignUpModal = () => {
     setShow(!show);
   };
@@ -410,7 +414,7 @@ const SignupNew = ({ navigation }) => {
   const handleRememberMeToggle = () => {
     setRememberMe(!rememberMe);
   };
- 
+
   const renderCameraModal = () => {
     return (
       <Modal
@@ -856,22 +860,23 @@ const SignupNew = ({ navigation }) => {
           GlobalStyle.commonToolbarBG,
           {
             backgroundColor: theme.colors.bg_color_onBoard,
+            elevation: 0,
+            marginTop: 10
           },
         ]}>
-        <Ionicons
-          name="ios-arrow-back"
-          // color={COLORS.black}
-          color={theme.colors.textColor}
-          size={25}
-          style={[
-            styles.backIcon,
-            {
-              transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
-            },
-          ]}
+        <ToolBarIcon
+          title={Ionicons}
+          iconName={'chevron-back'}
+          icSize={20}
+          icColor={COLORS.black}
+          borderRadius={20}
+          style={{
+            marginEnd: 10,
+            backgroundColor: theme.colors.bg_color_onBoard,
+            borderRadius: 20
+          }}
           onPress={() => {
             navigation.goBack();
-            // ShowToastMessage('Coming Soon!');
           }}
         />
         {/* <ToolBarIcon
@@ -888,7 +893,7 @@ const SignupNew = ({ navigation }) => {
           }}
         /> */}
         <VegUrbanCommonToolBar
-          title={'Manage Account'}
+          title={'Edit Profile'}
           style={{
             backgroundColor: theme.colors.bg_color_onBoard,
           }}
@@ -946,54 +951,77 @@ const SignupNew = ({ navigation }) => {
               />
             </ImageBackground>
           ) : (
-            <ImageBackground
-              style={{
-                height: 100,
-                width: 100,
-                borderRadius: 100,
-                justifyContent: 'center',
-                alignSelf: 'center',
-                alignItems: 'center',
-                borderWidth: 0.2,
-                borderColor: COLORS?.gray,
-                // backgroundColor: theme?.colors?.bg
+            <TouchableOpacity
+              onPress={() => {
+                setShowCameraModal(true);
               }}
-            // source={icons.profile_placeholder}
             >
-              <Image
-                // source={icons.img_place}
-                source={{
-                  uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHL03nqSptOCTMXb8ym6QffVTfjk2C14HS-w&usqp=CAU',
-                }}
+
+              <ImageBackground
                 style={{
                   height: 100,
                   width: 100,
                   borderRadius: 100,
+                  justifyContent: 'center',
                   alignSelf: 'center',
-                  // backgroundColor:COLORS?.bg
+                  alignItems: 'center',
+                  borderWidth: 0.2,
+                  borderColor: COLORS?.gray,
+                  // backgroundColor: theme?.colors?.bg
                 }}
-              />
-            </ImageBackground>
+              // source={icons.profile_placeholder}
+              >
+                <Image
+                  // source={icons.img_place}
+                  source={{
+                    uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHL03nqSptOCTMXb8ym6QffVTfjk2C14HS-w&usqp=CAU',
+                  }}
+                  style={{
+                    height: 100,
+                    width: 100,
+                    borderRadius: 100,
+                    alignSelf: 'center',
+                    // backgroundColor:COLORS?.bg
+                  }}
+                />
+              </ImageBackground>
+            </TouchableOpacity>
           )}
 
           <TouchableOpacity
             style={{
               position: 'absolute',
-              bottom: 10,
-              right: 5,
+              bottom: 2,
+              right: 2,
               padding: -6,
               borderRadius: 50,
             }}
             onPress={() => {
               setShowCameraModal(true);
             }}>
-            <Image
+            <ToolBarIcon
+              title={Feather}
+              iconName={'edit-3'}
+              icSize={18}
+              icColor={theme?.colors?.bg}
+              style={{
+                // marginEnd: 5,
+                backgroundColor: theme?.colors?.colorPrimary,
+                borderRadius: 10,
+                width: 30,
+                height: 30
+              }}
+              onPress={() => {
+                navigation.navigate('SignupNew');
+              }}
+            />
+            {/* <Image
               source={icons.imagePicker}
               style={{
                 height: 25,
                 width: 25,
               }}
-            />
+            /> */}
           </TouchableOpacity>
         </View>
 
@@ -1002,8 +1030,8 @@ const SignupNew = ({ navigation }) => {
             marginHorizontal: 16,
           }}>
           <VegUrbanFloatEditText
-            placeholder="Full Name"
-            // label={STRING.email}
+            placeholder="Enter Full Name"
+            label="UserName"
             iconPosition={'left'}
             value={username}
             style={{
@@ -1015,8 +1043,8 @@ const SignupNew = ({ navigation }) => {
           />
 
           <VegUrbanFloatEditText
-            placeholder="Email address"
-            // label={STRING.email}
+            placeholder="Enter Email address"
+            label={STRING.email}
             iconPosition={'left'}
             value={userData?.email}
             style={{
@@ -1027,15 +1055,20 @@ const SignupNew = ({ navigation }) => {
             keyBoardType={'email-address'}
           />
           <VegUrbanFloatEditText
-            placeholder="Phone Number"
+            label="Phone Number"
+
+            placeholder="Enter Phone Number"
             iconPosition={'left'}
-            value={userData?.phone + ''}
+            maxLength={10}
+            value={phone}
             style={{
               color: theme?.colors?.textColor,
               fontFamily: FONTS?.regular,
             }}
-            editable={false}
-            keyBoardType={'email-address'}
+            // editable={false}
+            keyBoardType={'nam-pad'}
+            onChangeText={v => setPhone(v)}
+
           />
         </View>
       </ScrollView>
@@ -1083,14 +1116,15 @@ const SignupNew = ({ navigation }) => {
           // alignSelf:'center',
           alignItems: 'center',
           marginVertical: 5,
+          marginBottom: 10
           // textAlign:'center'
         }}>
         <VegUrbanCommonBtn
           height={45}
           width={'90%'}
           borderRadius={20}
-          textSize={18}
-          text={'Update'}
+          textSize={17}
+          text={'Save Changes'}
           textColor={theme.colors?.text}
           backgroundColor={theme.colors?.colorPrimary}
           onPress={() => {
@@ -1099,11 +1133,11 @@ const SignupNew = ({ navigation }) => {
             // navigation.goBack('Profile');
           }}
           textStyle={{
-            fontFamily: FONTS?.bold,
+            fontFamily: FONTS?.semi_old,
           }}
         />
 
-        <VegUrbanCommonBtn
+        {/* <VegUrbanCommonBtn
           height={45}
           width={'90%'}
           borderRadius={20}
@@ -1136,7 +1170,7 @@ const SignupNew = ({ navigation }) => {
           textStyle={{
             fontFamily: FONTS?.bold,
           }}
-        />
+        /> */}
       </View>
     </SafeAreaView>
   );

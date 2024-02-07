@@ -1,6 +1,6 @@
-import React, {useContext} from 'react';
-import {Animated, StyleSheet, TextInput, View} from 'react-native';
-import {COLORS} from '../../constants/Colors';
+import React, { useContext } from 'react';
+import { Animated, StyleSheet, TextInput, View } from 'react-native';
+import { COLORS } from '../../constants/Colors';
 import styles from './styles';
 import themeContext from '../../constants/themeContext';
 
@@ -70,8 +70,8 @@ const VegUrbanFloatEditText = ({
       color: focused
         ? theme.colors?.colorPrimary
         : value
-        ? theme.colors?.white
-        : theme.colors?.gray,
+          ? theme.colors?.white
+          : theme.colors?.gray,
       fontFamily: 'OpenSans-SemiBold',
     };
   };
@@ -79,11 +79,11 @@ const VegUrbanFloatEditText = ({
   return (
     <View
       style={[
-        {backgroundColor: getBgColor()},
-        {borderColor: getBorderColor()},
+        { backgroundColor: getBgColor() },
+        { borderColor: getBorderColor() },
         {
           width: boxWidth || '97%',
-          height: 55,
+          height: 65,
           marginVertical: 5,
           alignSelf: 'center',
           borderBottomWidth: 1.5,
@@ -94,7 +94,8 @@ const VegUrbanFloatEditText = ({
           Styles.titleStyles,
           returnAnimatedTitleStyles(),
           {
-            left: iconPosition == 'left' ? 31 : 3,
+            marginBottom:20
+            // left: iconPosition == 'left' ? 31 : 3,
           },
         ]}>
         {label}
@@ -106,6 +107,7 @@ const VegUrbanFloatEditText = ({
             alignItems: icon ? 'center' : 'baseline',
             // alignItems:'center',
             flexDirection: getFlexDirection(),
+            marginTop:15
           },
         ]}>
         <View>
@@ -180,8 +182,9 @@ const Styles = StyleSheet.create({
     fontFamily: 'OpenSans-SemiBold',
 
     marginStart: 5,
-    marginTop: 5,
+    marginTop: 10,
     fontSize: 16,
     color: COLORS.gray,
+    // marginBottom: 15
   },
 });

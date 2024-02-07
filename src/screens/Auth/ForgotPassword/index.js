@@ -71,12 +71,12 @@ const ForgotPassword = ({ navigation }) => {
         GlobalStyle.mainContainer,
         {
           backgroundColor: theme?.colors?.bg_color_onBoard,
-          
+
         },
       ]}>
-          <View>
-        <LinearGradient
-          colors={['#FD5F30', '#FF774F', '#FF8F6F']}
+      <View>
+
+        <View
           style={{
             borderBottomEndRadius: 30,
             borderBottomLeftRadius: 30,
@@ -85,8 +85,6 @@ const ForgotPassword = ({ navigation }) => {
 
             height: 130,
             alignItems: 'center',
-            // justifyContent: 'space-between',
-            paddingHorizontal: 20,
           }}
         >
           <ToolBarIcon
@@ -94,52 +92,40 @@ const ForgotPassword = ({ navigation }) => {
             iconName={'chevron-back'}
             icSize={20}
             borderRadius={20}
-            icColor={COLORS.black}
+            borderWidth={0.2}
+            icColor={theme?.colors?.textColor}
             style={{
-              backgroundColor: theme?.colors?.bg_color_onBoard,
-              // marginEnd: 10,
               borderRadius: 20,
             }}
             onPress={() => {
               navigation.goBack();
             }}
           />
-          <Text
-            style={[
-              styles.heading,
-              {
-                marginStart: 10,
-                color: COLORS?.white,
-                alignItems:'center'
-              },
-            ]}>
-            {!show ? t('Forgot Password') : ' '}
-          </Text>
 
-        </LinearGradient>
         </View>
+      </View>
 
       <ScrollView
-      
-      style={[
-        GlobalStyle.loginModalBg,
-        {
-          backgroundColor: theme.colors?.bg_color_onBoard,
-        },
-      ]}
+
+        style={[
+          GlobalStyle.loginModalBg,
+          {
+            backgroundColor: theme.colors?.bg_color_onBoard,
+          },
+        ]}
       >
-       
+
         <View
           style={[
             GlobalStyle.loginModalBg,
             {
-              
-              marginHorizontal:-10,
+
+              marginHorizontal: -10,
               backgroundColor: theme.colors?.bg_color_onBoard,
 
             },
           ]}>
-        
+
           {/* <Image
             source={images.forgot} 
             // source={{
@@ -158,41 +144,55 @@ const ForgotPassword = ({ navigation }) => {
 
           </Text> */}
           <View
-          style={{
-            flex:1,
-            justifyContent:'center',
-           marginTop:100,
-           marginHorizontal:10
-        
-          }}
-          >
-          <VegUrbanEditText
-            placeholder="Enter Your Email"
-            // label={STRING.email}
-            iconPosition={'left'}
             style={{
-              color: theme?.colors?.white
+              flex: 1,
+              justifyContent: 'center',
+              marginTop: 100,
+              marginHorizontal: 10
 
             }}
-            value={email}
-            icon={
-              <Fontisto name={"email"} size={20}
-              color={theme?.colors?.grey}
-                style={{
+          >
 
-                  // marginHorizontal: 15,
+            <Text
+              style={[
+                styles.heading,
+                {
+                  marginStart: 10,
+                  color: theme?.colors?.textColor,
+                  marginBottom: 20
+                },
+              ]}
+            >
+              {!show ? t('Forgot Password') : ' '}
+            </Text>
+            <VegUrbanEditText
+              placeholder="Enter Email"
+              // label={STRING.email}
+              iconPosition={'left'}
+              borderRadius={40}
+              borderWidth={0.2}
+              style={{
+                // color: theme?.colors?.textColor,
+              }}
+              value={email}
+              icon={
+                <Fontisto name={"email"} size={20}
+                  color={theme?.colors?.gray}
+                  style={{
 
-                }} />
-            }
-            keyBoardType={'email-address'}
-            onChangeText={v => setEmail(v)}
-          />
-        
-          <VegUrbanCommonBtn
+                    // marginHorizontal: 15,
+
+                  }} />
+              }
+              keyBoardType={'email-address'}
+              onChangeText={v => setEmail(v)}
+            />
+
+            <VegUrbanCommonBtn
               height={45}
               width={'100%'}
               borderRadius={20}
-              textSize={18}
+              textSize={16}
               fontWeight={'bold'}
               marginTop={20}
               // marginTop={'80%'}
@@ -207,11 +207,11 @@ const ForgotPassword = ({ navigation }) => {
               }}
 
               textStyle={{
-                fontFamily:FONTS?.bold
+                fontFamily: FONTS?.semi_old
 
               }}
             />
-            </View>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView >
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontFamily: FONTS?.bold,
-    fontSize: 25,
+    fontSize: 22,
 
   },
   app_logo: {

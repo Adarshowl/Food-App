@@ -25,6 +25,7 @@ import { showProgressBar } from '../../redux/actions';
 import { useIsFocused } from '@react-navigation/native';
 import { getUserNotificationList } from '../../redux/actions/CartApi';
 import SwipeDelete from './SwipeDelete';
+import ToolBarIcon from '../../utils/ToolBarIcon';
 
 const Notification = ({ navigation }) => {
   const [show, setShow] = useState(false);
@@ -35,98 +36,156 @@ const Notification = ({ navigation }) => {
   const dispatch = useDispatch();
   const loginCount = useSelector(state => state?.state?.count);
   const userToken = useSelector(state => state?.state?.userToken);
+  const oldNotifi = [
 
-  const staticNotifications = [
     {
-      id: 1,
-      title: 'New',
-      notifications: [
-        {
-          id: 101,
-          message: '30% Special Discount.',
-          timestamp: '2023-10-01T09:00:00',
-          title: "Special promotion only valis today",
+      id: 201,
+      message: 'New Services Available!',
+      timestamp: '2023-09-30T17:30:00',
+      title: "Now you can track orders in real",
 
-          image: "https://cdn-icons-png.flaticon.com/128/3012/3012373.png"
-        },
-        {
-          id: 201,
-          message: 'Credit Card Connected!',
-          timestamp: '2023-09-30T17:30:00',
-          title: "Credit Card has been linked!",
-          image: "https://cdn-icons-png.flaticon.com/128/147/147258.png"
+      image: "https://cdn-icons-png.flaticon.com/128/11222/11222376.png"
 
-        },
-
-        // Add more notifications for "Today"
-      ],
     },
     {
-      id: 2,
-      title: 'Old',
-      notifications: [
-        {
-          id: 201,
-          message: 'New Services Available!',
-          timestamp: '2023-09-30T17:30:00',
-          title: "Now you can track orders in real",
+      id: 202,
+      message: '30% sepcial Discount!',
+      timestamp: '2023-09-30T20:15:00',
+      title: "Special promotion",
 
-          image: "https://cdn-icons-png.flaticon.com/128/11222/11222376.png"
+      image: "https://icon-library.com/images/location-icon-vector/location-icon-vector-28.jpg"
 
-        },
-        {
-          id: 202,
-          message: '30% sepcial Discount!',
-          timestamp: '2023-09-30T20:15:00',
-          title: "Special promotion",
-
-          image: "https://icon-library.com/images/location-icon-vector/location-icon-vector-28.jpg"
-
-        },
-        {
-          id: 201,
-          message: 'Credit Card Connected!',
-          timestamp: '2023-09-30T17:30:00',
-          title: "Credit Card has been linked!",
-          image: "https://cdn-icons-png.flaticon.com/128/147/147258.png"
-
-        },
-        {
-          id: 202,
-          message: 'Account Steup Successful',
-          timestamp: '2023-09-30T20:15:00',
-          title: "Your account has been creadited",
-
-          image: "https://cdn-icons-png.flaticon.com/128/2102/2102633.png"
-
-        },
-      ],
     },
-    // {
-    //   id: 2,
-    //   title: 'December 22, 2024',
-    //   notifications: [
-    //     {
-    //       id: 201,
-    //       message: 'Credit Card Connected!',
-    //       timestamp: '2023-09-30T17:30:00',
-    //       title: "Credit Card has been linked!",
-    //       image: "https://cdn-icons-png.flaticon.com/128/147/147258.png"
+    {
+      id: 201,
+      message: 'Credit Card Connected!',
+      timestamp: '2023-09-30T17:30:00',
+      title: "Credit Card has been linked!",
+      image: "https://cdn-icons-png.flaticon.com/128/147/147258.png"
 
-    //     },
-    //     {
-    //       id: 202,
-    //       message: 'Account Steup Successful',
-    //       timestamp: '2023-09-30T20:15:00',
-    //       title: "Your account has been creadited",
+    },
+    {
+      id: 202,
+      message: 'Account Steup Successful',
+      timestamp: '2023-09-30T20:15:00',
+      title: "Your account has been creadited",
 
-    //       image: "https://cdn-icons-png.flaticon.com/128/2102/2102633.png"
+      image: "https://cdn-icons-png.flaticon.com/128/2102/2102633.png"
 
-    //     },
-    //     // Add more notifications for "Yesterday"
-    //   ],
-    // },
+    },
+
+  ]
+  const NewNotifications = [
+
+    {
+      id: 101,
+      message: '30% Special Discount.',
+      timestamp: '2023-10-01T09:00:00',
+      title: "Special promotion only valis today",
+
+      image: "https://cdn-icons-png.flaticon.com/128/3012/3012373.png"
+    },
+    {
+      id: 201,
+      message: 'Credit Card Connected!',
+      timestamp: '2023-09-30T17:30:00',
+      title: "Credit Card has been linked!",
+      image: "https://cdn-icons-png.flaticon.com/128/147/147258.png"
+
+    },
   ];
+
+  // const staticNotifications = [
+  //   {
+  //     id: 1,
+  //     title: 'New',
+  //     notifications: [
+  //       {
+  //         id: 101,
+  //         message: '30% Special Discount.',
+  //         timestamp: '2023-10-01T09:00:00',
+  //         title: "Special promotion only valis today",
+
+  //         image: "https://cdn-icons-png.flaticon.com/128/3012/3012373.png"
+  //       },
+  //       {
+  //         id: 201,
+  //         message: 'Credit Card Connected!',
+  //         timestamp: '2023-09-30T17:30:00',
+  //         title: "Credit Card has been linked!",
+  //         image: "https://cdn-icons-png.flaticon.com/128/147/147258.png"
+
+  //       },
+
+  //       // Add more notifications for "Today"
+  //     ],
+  //   },
+  //   {
+  //     id: 2,
+  //     title: 'Old',
+  //     notifications: [
+  //       {
+  //         id: 201,
+  //         message: 'New Services Available!',
+  //         timestamp: '2023-09-30T17:30:00',
+  //         title: "Now you can track orders in real",
+
+  //         image: "https://cdn-icons-png.flaticon.com/128/11222/11222376.png"
+
+  //       },
+  //       {
+  //         id: 202,
+  //         message: '30% sepcial Discount!',
+  //         timestamp: '2023-09-30T20:15:00',
+  //         title: "Special promotion",
+
+  //         image: "https://icon-library.com/images/location-icon-vector/location-icon-vector-28.jpg"
+
+  //       },
+  //       {
+  //         id: 201,
+  //         message: 'Credit Card Connected!',
+  //         timestamp: '2023-09-30T17:30:00',
+  //         title: "Credit Card has been linked!",
+  //         image: "https://cdn-icons-png.flaticon.com/128/147/147258.png"
+
+  //       },
+  //       {
+  //         id: 202,
+  //         message: 'Account Steup Successful',
+  //         timestamp: '2023-09-30T20:15:00',
+  //         title: "Your account has been creadited",
+
+  //         image: "https://cdn-icons-png.flaticon.com/128/2102/2102633.png"
+
+  //       },
+  //     ],
+  //   },
+  //   // {
+  //   //   id: 2,
+  //   //   title: 'December 22, 2024',
+  //   //   notifications: [
+  //   //     {
+  //   //       id: 201,
+  //   //       message: 'Credit Card Connected!',
+  //   //       timestamp: '2023-09-30T17:30:00',
+  //   //       title: "Credit Card has been linked!",
+  //   //       image: "https://cdn-icons-png.flaticon.com/128/147/147258.png"
+
+  //   //     },
+  //   //     {
+  //   //       id: 202,
+  //   //       message: 'Account Steup Successful',
+  //   //       timestamp: '2023-09-30T20:15:00',
+  //   //       title: "Your account has been creadited",
+
+  //   //       image: "https://cdn-icons-png.flaticon.com/128/2102/2102633.png"
+
+  //   //     },
+  //   //     // Add more notifications for "Yesterday"
+  //   //   ],
+  //   // },
+  // ];
 
   const BannerErrorCallback = error => {
     ShowConsoleLogMessage('Banner call back called');
@@ -186,48 +245,40 @@ const Notification = ({ navigation }) => {
         style={[
           GlobalStyle.commonToolbarBG,
           {
-            backgroundColor: theme?.colors?.bg_color_onBoard,
+            backgroundColor: theme.colors.bg_color_onBoard,
+            elevation: 0,
+            marginTop:10
           },
         ]}>
-        <Ionicons
-          name="ios-arrow-back"
-          // color={COLORS.black}
-          color={theme.colors.textColor}
-          size={25}
-          style={[
-            styles.backIcon,
-            {
-              opacity: !show ? 1 : 0.0,
-              transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
-              marginStart: 10,
-            },
-          ]}
+        <ToolBarIcon
+          title={Ionicons}
+          iconName={'chevron-back'}
+          icSize={20}
+          icColor={COLORS.black}
+          borderRadius={20}
+          style={{
+            marginEnd: 10,
+            backgroundColor: theme.colors.toolbar_icon_bg,
+            borderRadius: 20
+          }}
           onPress={() => {
             navigation.goBack();
-            // ShowToastMessage('Coming Soon!');
           }}
         />
-
         <VegUrbanCommonToolBar
-          title={STRING.notifications}
+          title="Notifications"
           style={{
             backgroundColor: theme.colors.bg_color_onBoard,
           }}
           textStyle={{
             color: theme.colors.textColor,
-            marginStart: 20,
-            fontFamily: FONTS?.bold,
+            fontFamily:FONTS?.bold,
+            
           }}
         />
-        {/*<MaterialCommunityIcons*/}
-        {/*  name={'dots-horizontal-circle-outline'}*/}
-        {/*  size={26}*/}
-        {/*  // color={COLORS.colorPrimary}*/}
-        {/*  style={{*/}
-        {/*    marginEnd: 10,*/}
-        {/*  }}*/}
-        {/*  color={theme?.colors?.textColor}*/}
-        {/*/>*/}
+
+
+
       </View>
       {/* <FlatList
         data={notificationList}
@@ -267,22 +318,22 @@ const Notification = ({ navigation }) => {
           );
         }}
       /> */}
-      {notificationList && notificationList.length > 0 && (
+      {/* {staticNotifications && staticNotifications.length > 0 && ( */}
 
-        <Text
-          style={{
-            fontFamily: FONTS?.bold,
-            color: COLORS?.black,
-            fontSize: 17,
-            marginLeft: 20,
-            marginVertical: 10
-          }}
-        >
-          New
-        </Text>
-      )}
+      <Text
+        style={{
+          fontFamily: FONTS?.bold,
+          color: COLORS?.black,
+          fontSize: 17,
+          marginLeft: 20,
+          marginVertical: 10
+        }}
+      >
+        New
+      </Text>
+      {/* )} */}
       <FlatList
-        data={notificationList}
+        data={NewNotifications}
         style={{
           marginTop: 0
         }}
@@ -324,7 +375,7 @@ const Notification = ({ navigation }) => {
                 },
               ]}
               onPress={() => {
-                navigation.navigate('NotificationDetails',item)
+                navigation.navigate('NotificationDetails', item)
               }}>
               {/* <Image
                 source={{
@@ -396,21 +447,21 @@ const Notification = ({ navigation }) => {
         )}
       />
 
-      {oldNotification && oldNotification.length > 0 && (
-        <Text
-          style={{
-            fontFamily: FONTS?.bold,
-            color: COLORS?.black,
-            fontSize: 17,
-            marginLeft: 20,
-            marginVertical: 10
-          }}
-        >
-          Old
-        </Text>
-      )}
+      {/* {staticNotifications && staticNotifications.length > 0 && ( */}
+      <Text
+        style={{
+          fontFamily: FONTS?.bold,
+          color: COLORS?.black,
+          fontSize: 17,
+          marginLeft: 20,
+          marginVertical: 10
+        }}
+      >
+        Old
+      </Text>
+      {/* )} */}
       <FlatList
-        data={oldNotification}
+        data={oldNotifi}
         style={{
           flexGrow: -20
         }}

@@ -1,19 +1,21 @@
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React, {lazy, useContext} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
-import {icons, STRING} from '../constants';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React, { lazy, useContext } from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { icons, STRING } from '../constants';
 import Home from '../screens/Home';
 import themeContext from '../constants/themeContext';
 import Order from '../screens/Order';
 import Profile from '../screens/Profile';
 import Wallet from '../screens/Wallet/Index';
-import {FONTS} from '../constants/Fonts';
-import {useSelector} from 'react-redux';
-import {COLORS} from '../constants/Colors';
+import { FONTS } from '../constants/Fonts';
+import { useSelector } from 'react-redux';
+import { COLORS } from '../constants/Colors';
 import OrderList from '../screens/Order/OrderList';
 import TabOfferScreen from '../screens/Flash/TabOfferScreen';
 import FlashSale from '../screens/Flash/FlashSale';
 import Fontisto from 'react-native-vector-icons/Fontisto'
+import Entypo from 'react-native-vector-icons/Entypo'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 const Category = lazy(() => import('../screens/Category'));
 const Favorite = lazy(() => import('../screens/Favorite'));
@@ -29,12 +31,14 @@ const BottomTabNav = () => {
 
   return (
     <View
-    style={{
-      backgroundColor: theme?.colors.bg_color_onBoard,
-      flex:1,
-      elevation:5
+      style={{
+        backgroundColor: theme?.colors.bg_color_onBoard,
+        flex: 1,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        height: 100,
 
-    }}
+      }}
     >
 
     <Tab.Navigator
@@ -42,62 +46,56 @@ const BottomTabNav = () => {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
-          // backgroundColor: 'yellow',
           backgroundColor: theme?.colors.bg_color_onBoard,
-          minHeight: 68,
-          // paddingTop: 20,
-          // paddingBottom: 18,
+          height: 80,
           justifyContent: 'space-evenly',
           alignItems: 'center',
           borderTopWidth: 0,
-          // elevation:10,
-          elevation:3,
+          elevation: 3,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          paddingTop: 18,
 
-          marginHorizontal:20,
-          borderRadius:10,
-          marginBottom:10,
-          paddingVertical:10,
-          marginTop:10
-
+          overflow: 'hidden',
         },
-        tabBarItemStyle: {
-
-        },
+        tabBarItemStyle: {},
       }}
-      // initialRouteName="Home"
       style={{
-        elevation:5,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
 
-      }}>
+        overflow: 'hidden',
+      }}
+    >
       <Tab.Screen
         name="Home"
         component={Home}
         options={{
           unmountOnBlur: true,
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View
               style={{
                 alignItems: 'center',
 
                 flexGrow: 1,
               }}>
-              {/*<Entypo*/}
-              {/*  name="home"*/}
-              {/*  size={25}*/}
-              {/*  color={*/}
-              {/*    focused ? theme?.colors.colorPrimary : theme?.colors.grey*/}
-              {/*  }*/}
-              {/*/>*/}
-              <Image
-                source={icons.tab_home}
-                style={{
-                  height: 25,
-                  width: 25,
-                  tintColor: focused
-                    ? theme?.colors.colorPrimary
-                    : theme?.colors.grey,
-                }}
+              <Entypo
+                name="home"
+                size={25}
+                color={
+                  focused ? theme?.colors.colorPrimary : theme?.colors.grey
+                }
               />
+              {/* <Image
+                  source={icons.tab_home}
+                  style={{
+                    height: 25,
+                    width: 25,
+                    tintColor: focused
+                      ? theme?.colors.colorPrimary
+                      : theme?.colors.grey,
+                  }}
+                /> */}
               <Text
                 style={[
                   styles.text,
@@ -119,7 +117,7 @@ const BottomTabNav = () => {
         component={Cart}
         options={{
           unmountOnBlur: true,
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View
               style={{
                 alignItems: 'center',
@@ -127,11 +125,11 @@ const BottomTabNav = () => {
                 flexGrow: 1,
               }}>
               <Fontisto
-               name="shopping-basket"
+                name="shopping-basket"
                 size={25}
-            color={
-                focused ? theme?.colors.colorPrimary : theme?.colors.grey
-              }
+                color={
+                  focused ? theme?.colors.colorPrimary : theme?.colors.grey
+                }
               />
               {/* <Image
                 source={icons.tab_cart}
@@ -194,7 +192,7 @@ const BottomTabNav = () => {
         component={OrderList}
         options={{
           unmountOnBlur: true,
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View
               style={{
                 alignItems: 'center',
@@ -203,10 +201,13 @@ const BottomTabNav = () => {
                 // backgroundColor: 'red',
               }}>
               <Image
-                source={icons.tab_order}
+                source={{
+                  uri: 'https://cdn-icons-png.flaticon.com/128/2891/2891516.png'
+                }}
+                // source={icons.tab_order}
                 style={{
-                  height: 25,
-                  width: 25,
+                  height: 28,
+                  width: 28,
                   tintColor: focused
                     ? theme?.colors.colorPrimary
                     : theme?.colors.grey,
@@ -241,14 +242,14 @@ const BottomTabNav = () => {
         }}
       />
 
-    
+
 
       <Tab.Screen
         name="Profile"
         component={Profile}
         options={{
           unmountOnBlur: true,
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <View
               style={{
                 alignItems: 'center',
@@ -263,17 +264,23 @@ const BottomTabNav = () => {
               {/*    focused ? theme?.colors.colorPrimary : theme?.colors.grey*/}
               {/*  }*/}
               {/*/>*/}
-
-              <Image
-                source={icons.tab_profile}
-                style={{
-                  height: 25,
-                  width: 25,
-                  tintColor: focused
-                    ? theme?.colors.colorPrimary
-                    : theme?.colors.grey,
-                }}
+              <FontAwesome
+                name="user"
+                size={25}
+                color={
+                  focused ? theme?.colors.colorPrimary : theme?.colors.grey
+                }
               />
+              {/* <Image
+                  source={icons.tab_profile}
+                  style={{
+                    height: 25,
+                    width: 25,
+                    tintColor: focused
+                      ? theme?.colors.colorPrimary
+                      : theme?.colors.grey,
+                  }}
+                /> */}
               <Text
                 style={[
                   styles.text,
@@ -290,7 +297,7 @@ const BottomTabNav = () => {
         }}
       />
     </Tab.Navigator>
-    </View>
+   </View>
 
   );
 };

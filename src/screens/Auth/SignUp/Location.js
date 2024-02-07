@@ -17,7 +17,7 @@ import { FONTS } from '../../../constants/Fonts';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { COLORS } from '../../../constants/Colors';
 import Octicons from 'react-native-vector-icons/Octicons';
-import { images } from '../../../constants/images'
+import images from '../../../constants/images';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import GlobalStyle from '../../../styles/GlobalStyle';
@@ -312,9 +312,9 @@ const Location = ({ navigation }) => {
                         iconName={'chevron-back'}
                         icSize={20}
                         borderRadius={20}
-                        icColor={theme?.colors?.colorPrimary}
+                        icColor={theme?.colors?.white}
                         style={{
-                            backgroundColor: theme?.colors?.bg,
+                            // backgroundColor: theme?.colors?.bg,
                             // marginEnd: 10,
                             borderRadius: 20,
                         }}
@@ -327,8 +327,8 @@ const Location = ({ navigation }) => {
                             styles.heading,
                             {
                                 marginStart: 10,
-                                fontFamily: COLORS?.regular,
-                                color: COLORS?.black
+                                fontFamily: FONTS?.bold,
+                                color: theme?.colors?.white
                             },
                         ]}>
                         Location
@@ -340,7 +340,18 @@ const Location = ({ navigation }) => {
 
 
                 <View style={styles.section}>
+                    <View style={{
+                    }}>
+                        <Image
+                            source={images.location}
 
+                            // source={{
+                            //       // uri:'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0a/9a/68/49/caper-s-roof-top-fine.jpg?w=600&h=400&s=1'
+                            //   }}
+                            style={styles.app_logo} />
+                    </View>
+
+                    {/* 
                     <View style={{
                         borderRadius: 10
                     }}>
@@ -363,13 +374,14 @@ const Location = ({ navigation }) => {
                         >
 
                         </MapView>
-                    </View>
+                    </View> */}
                     <Text style={{
-                        fontSize: 15,
+                        fontSize: 14,
                         color: COLORS?.black,
-                        fontFamily: FONTS?.regular,
-                        marginTop: 20,
-                        textAlign: 'center'
+                        fontFamily: FONTS?.semi_old,
+                        marginTop: 30,
+                        textAlign: 'center',
+                        marginHorizontal:20
                     }}>
                         set your location to start exploring
                         restaurant around you.
@@ -382,7 +394,8 @@ const Location = ({ navigation }) => {
                         GlobalStyle.loginModalBg,
                         {
                             backgroundColor: theme.colors?.bg_color_onBoard,
-                            marginHorizontal: 10
+                            marginHorizontal: 10,
+                            marginTop:30
                         },
                     ]}>
 
@@ -398,7 +411,7 @@ const Location = ({ navigation }) => {
                             height={55}
                             width={'100%'}
                             borderRadius={30}
-                            textSize={18}
+                            textSize={16}
                             text={'Enable Location'}
                             textColor={theme.colors?.text}
                             backgroundColor={theme?.colors?.colorPrimary}
@@ -409,7 +422,7 @@ const Location = ({ navigation }) => {
                                 navigation.navigate('Login');
                             }}
                             textStyle={{
-                                fontFamily: FONTS?.bold,
+                                fontFamily: FONTS?.semi_old,
                             }}
                         />
 
@@ -424,7 +437,7 @@ const Location = ({ navigation }) => {
                             height={55}
                             width={'100%'}
                             borderRadius={30}
-                            textSize={18}
+                            textSize={16}
                             text={'No, I do it later'}
                             textColor={COLORS?.black}
                             backgroundColor={theme?.colors?.bg}
@@ -435,7 +448,7 @@ const Location = ({ navigation }) => {
                                 navigation.navigate('Login');
                             }}
                             textStyle={{
-                                fontFamily: FONTS?.bold,
+                                fontFamily: FONTS?.semi_old,
                             }}
                             style={{
                             }}
@@ -470,8 +483,7 @@ const styles = StyleSheet.create({
 
     },
     heading: {
-        fontFamily: FONTS?.bold,
-        fontSize: 27,
+        fontSize: 22,
         color: COLORS?.black
     },
     heading11: {
@@ -497,14 +509,12 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     app_logo: {
-        height: 350,
-        resizeMode: 'cover',
+        height: 200,
+        resizeMode: 'stretch',
         alignSelf: 'center',
         width: '100%',
-        marginTop: 30,
-
+        marginTop: 10,
         borderRadius: 20,
-
     },
 
     resendWrapper: {

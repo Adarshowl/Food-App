@@ -88,12 +88,12 @@ const Splash = ({ navigation }) => {
         await getAppConfiguration();
       }
     };
-  
+
     const timeoutId = setTimeout(fetchData, 1000);
-  
+
     return () => clearTimeout(timeoutId); // Cleanup the timer on unmount
   }, []);
-  
+
 
   // useEffect(() => {
   //   setTimeout(async () => {
@@ -173,43 +173,62 @@ const Splash = ({ navigation }) => {
   //     console.log('ERROR IN GETTING USER FROM STORAGE');
   //   }
   // };
+  // const getUserFromStorage = async () => {
+  //   try {
+  //     // await AsyncStorage.getItem(STRING.app_cur, (error, value) => {
+  //     //   if (error) {
+  //     //   } else {
+  //     //     if (value !== null) {
+  //     //       STRING.APP_CURRENCY = value;
+  //     //     } else {
+  //     //       STRING.APP_CURRENCY = '$';
+  //     //     }
+  //     //   }
+  //     // });
+  //     await AsyncStorage.getItem(USER_TOKEN, async (error, value) => {
+  //       if (error) {
+  //       } else {
+  //         if (value !== null) {
+  //           dispatch(userTokenSuccess(value));
+  //         } else {
+  //           // navigation.replace('Login');
+  //         }
+  //       }
+  //     });
+  //     await AsyncStorage.getItem(USER_DATA, async (error, value) => {
+  //       if (error) {
+  //       } else {
+  //         if (value !== null) {
+  //           dispatch(loginUserSuccess(JSON.parse(value)));
+  //           dispatch(updateLoginCount(1));
+  //         } else {
+  //           // navigation.replace('Login');
+  //         }
+  //       }
+  //     });
+  //   } catch (err) {
+  //     console.log('ERROR IN GETTING USER FROM STORAGE');
+  //   }
+  // };
+
   const getUserFromStorage = async () => {
     try {
-      // await AsyncStorage.getItem(STRING.app_cur, (error, value) => {
-      //   if (error) {
-      //   } else {
-      //     if (value !== null) {
-      //       STRING.APP_CURRENCY = value;
-      //     } else {
-      //       STRING.APP_CURRENCY = '$';
-      //     }
-      //   }
-      // });
-      await AsyncStorage.getItem(USER_TOKEN, async (error, value) => {
-        if (error) {
-        } else {
-          if (value !== null) {
-            dispatch(userTokenSuccess(value));
-          } else {
-            // navigation.replace('Login');
-          }
-        }
-      });
-      await AsyncStorage.getItem(USER_DATA, async (error, value) => {
-        if (error) {
-        } else {
-          if (value !== null) {
-            dispatch(loginUserSuccess(JSON.parse(value)));
-            dispatch(updateLoginCount(1));
-          } else {
-            // navigation.replace('Login');
-          }
-        }
-      });
+      const userToken = await AsyncStorage.getItem(USER_TOKEN);
+      const userData = await AsyncStorage.getItem(USER_DATA);
+
+      if (userToken && userData) {
+        dispatch(userTokenSuccess(userToken));
+        dispatch(loginUserSuccess(JSON.parse(userData)));
+        dispatch(updateLoginCount(1));
+        navigation.replace('MainContainer');
+      } else {
+        navigation.replace('HomeLogin');
+      }
     } catch (err) {
       console.log('ERROR IN GETTING USER FROM STORAGE');
     }
   };
+
 
   return (
     <View style={[styles.background]}>
@@ -217,7 +236,7 @@ const Splash = ({ navigation }) => {
         style={styles.image}
         source={images.newlogo}
       />
-         <Image
+      <Image
         style={styles.image}
         source={images.splash}
       />

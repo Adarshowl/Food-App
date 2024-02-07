@@ -37,6 +37,9 @@ import {
 import { showProgressBar } from '../../redux/actions';
 import { confirmPayment, usePaymentSheet } from '@stripe/stripe-react-native';
 import { updateCartDataLength } from '../../redux/actions/HomeApi';
+import AddNewCardModal from './AddNewCardModal';
+import ToolBarIcon from '../../utils/ToolBarIcon';
+import Checkout from '../Checkout/Checkout';
 
 const Payment = ({ route }) => {
   const { initPaymentSheet, presentPaymentSheet, loading } = usePaymentSheet();
@@ -52,32 +55,36 @@ const Payment = ({ route }) => {
 
 
   const [payData, setPayData] = useState([
-   
     {
-      image: "https://cdn-icons-png.flaticon.com/128/732/732096.png",
+      image: 'https://cdn-icons-png.flaticon.com/128/9221/9221727.png',
+      name: "My Wallet"
+    },
+    {
+      image: "https://cdn-icons-png.flaticon.com/128/174/174861.png",
       name: 'Paypal',
     },
     {
-      image: 'https://cdn-icons-png.flaticon.com/128/37/37760.png',
-      name: 'Apple Pay',
+      image: 'https://cdn-icons-png.flaticon.com/128/14062/14062982.png',
+      name: '**** **** **** 1249',
     },
 
     {
-      image: 'https://cdn-icons-png.flaticon.com/128/299/299409.png',
+      image: 'https://cdn-icons-png.flaticon.com/128/537/537231.png',
       // 'https://play-lh.googleusercontent.com/HArtbyi53u0jnqhnnxkQnMx9dHOERNcprZyKnInd2nrfM7Wd9ivMNTiz7IJP6-mSpwk',
-      name: 'Google Pay',
+      name: 'Cash Money',
     },
-    {
-      image: "https://static.vecteezy.com/system/resources/thumbnails/000/512/317/small/235_-_2_-_Wallet.jpg",
-      name: 'Wallet',
-    },
+    // {
+    //   image: "https://static.vecteezy.com/system/resources/thumbnails/000/512/317/small/235_-_2_-_Wallet.jpg",
+    //   name: 'Wallet',
+    // },
 
 
   ]);
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
   const [selectedPaymentId, setSelectedPaymentId] = useState(null);
   const [currencyData, setCurrencyData] = useState(null);
+  const [isModalVisibleChekOut, setModalVisibleChekout] = useState(false);
 
   const navigation = useNavigation();
   const [show, setShow] = useState(false);
@@ -86,6 +93,48 @@ const Payment = ({ route }) => {
   const { t, i18n } = useTranslation();
 
   const [receivedItem, setReceivedItem] = useState(null);
+
+  const [isModalAddNewCard, setModalAddNewCard] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [addresses, setAddresses] = useState([
+    {
+      id: 'home',
+      label: 'Home',
+      address: '123 Main Street, Home City',
+      type: 'Home',
+      def: true,
+      selected: false,
+    },
+    {
+      id: 'office',
+      label: 'Office',
+      address: '456 Office Road, Office City',
+      type: 'Home',
+      def: true,
+      selected: false,
+
+    },
+  ]);
+  const openModalCheckout = () => {
+    setModalVisibleChekout(true);
+  };
+
+  const closeModalChekout = () => {
+    setModalVisibleChekout(false);
+  };
+  const openModal = () => {
+    setModalAddNewCard(true);
+  };
+
+  const closeModal = () => {
+    setModalAddNewCard(false);
+  };
+
+
+  const onSelectAddress = (address) => {
+    setSelectedAddress(address);
+    closeModal();
+  };
 
   // useEffect(() => {
   //   // let {item} = route?.params;
@@ -159,7 +208,7 @@ const Payment = ({ route }) => {
   //   paymentIntent,
   //   customer,
   // ) => {
-   
+
 
   //   const { error } = await initPaymentSheet({
   //     customerId: customer,
@@ -444,20 +493,21 @@ const Payment = ({ route }) => {
           GlobalStyle.commonToolbarBG,
           {
             backgroundColor: theme.colors.bg_color_onBoard,
+            // marginTop: 10
+            paddingTop: 10
           },
         ]}>
-        <Ionicons
-          name="ios-arrow-back"
-          color={theme.colors.textColor}
-          size={25}
-          style={[
-            styles.backIcon,
-            {
-              opacity: !show ? 1 : 0.0,
-              transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
-              marginStart: 10,
-            },
-          ]}
+        <ToolBarIcon
+          title={Ionicons}
+          iconName={'chevron-back'}
+          icSize={20}
+          icColor={COLORS.black}
+          borderRadius={20}
+          style={{
+            marginEnd: 10,
+            backgroundColor: theme.colors.bg_color_onBoard,
+            borderRadius: 20
+          }}
           onPress={() => {
             navigation.goBack();
           }}
@@ -544,84 +594,84 @@ const Payment = ({ route }) => {
           />
 
         </View>
-        <View
-          style={{
-            alignItems: 'center',
-            marginHorizontal: 22,
-            marginVertical: 10,
-          }}>
-          {/*<VegUrbanCommonBtn*/}
-          {/*  height={40}*/}
-          {/*  width={'100%'}*/}
-          {/*  borderRadius={15}*/}
-          {/*  textSize={16}*/}
-          {/*  fontWeight={'bold'}*/}
-          {/*  // marginTop={0}*/}
-          {/*  text={t('Add New Card')}*/}
-          {/*  textColor={theme.colors?.textColor}*/}
-          {/*  backgroundColor={theme.colors?.colorimageback}*/}
-          {/*  onPress={() => {*/}
-          {/*    ShowToastMessage('Coming soon!');*/}
-          {/*    // navigation.navigate('AddNewCard');*/}
-          {/*  }}*/}
-          {/*  textStyle={{*/}
-          {/*    fontFamily: FONTS?.bold,*/}
-          {/*  }}*/}
-          {/*/>*/}
-        </View>
+
       </ScrollView>
+
+      <View
+        style={{
+          alignItems: 'center',
+          marginHorizontal: 22,
+          marginVertical: 10,
+        }}>
+        <VegUrbanCommonBtn
+          height={55}
+          width={'100%'}
+          borderRadius={15}
+          textSize={16}
+          fontWeight={'bold'}
+          // marginTop={0}
+          text={t('Add New Card')}
+          textColor={theme.colors?.textColor}
+          backgroundColor={theme.colors?.colorimageback}
+          onPress={openModal}
+          textStyle={{
+            fontFamily: FONTS?.bold
+          }}
+        />
+      </View>
       <View
         style={{
           alignItems: 'center',
           marginTop: 10,
-          marginBottom: 10,
+          marginBottom: 20,
         }}>
         <VegUrbanCommonBtn
-          height={40}
+          height={55}
           width={'90%'}
           borderRadius={20}
           textSize={18}
-          text={'Confirm Order'}
+          text={'Apply'}
           textColor={theme?.colors?.text}
           backgroundColor={theme.colors?.colorPrimary}
           onPress={() => {
-            // navigation.navigate('ConfirmPayment');
-            if (validateFieldNotEmpty(selectedPaymentId)) {
-              ShowToastMessage('Please select payment method');
-            } else {
-              if (
-                selectedPaymentId?.payment_method_name?.toLowerCase() ==
-                'stripe'
-              ) {
-                // getStripeDetails();
-                // navigation.navigate('StripePayment');
-                navigation.navigate('StripePayment', {
-                  item: {
-                    finalAmount: receivedItem?.finalAmount,
-                    selectedPaymentId: selectedPaymentId?.payment_method_name,
-                    addressId: receivedItem?.addressId,
-                  },
-                });
-              } else if (
-                selectedPaymentId?.payment_method_name?.toLowerCase() ==
-                'paypal'
-              ) {
-                // getStripeDetails();
-                // navigation.navigate('StripePayment');
-                navigation.navigate('PayPalPayment', {
-                  item: {
-                    finalAmount: receivedItem?.finalAmount,
-                    selectedPaymentId: selectedPaymentId?.payment_method_name,
-                    addressId: receivedItem?.addressId,
-                    paymentItem: selectedPaymentId,
-                    currencyData: currencyData,
-                  },
-                });
-              } else {
-                handleConfirmPayment();
-              }
-              // setIsModalVisible(!isModalVisible);
-            }
+            openModalCheckout();
+            // navigation.navigate('Checkout');
+            // if (validateFieldNotEmpty(selectedPaymentId)) {
+            //   ShowToastMessage('Please select payment method');
+            // } else {
+            //   if (
+            //     selectedPaymentId?.payment_method_name?.toLowerCase() ==
+            //     'stripe'
+            //   ) {
+            //     // getStripeDetails();
+            //     // navigation.navigate('StripePayment');
+            //     navigation.navigate('StripePayment', {
+            //       item: {
+            //         finalAmount: receivedItem?.finalAmount,
+            //         selectedPaymentId: selectedPaymentId?.payment_method_name,
+            //         addressId: receivedItem?.addressId,
+            //       },
+            //     });
+            //   } else if (
+            //     selectedPaymentId?.payment_method_name?.toLowerCase() ==
+            //     'paypal'
+            //   ) {
+            //     // getStripeDetails();
+            //     // navigation.navigate('StripePayment');
+            //     navigation.navigate('PayPalPayment', {
+            //       item: {
+            //         finalAmount: receivedItem?.finalAmount,
+            //         selectedPaymentId: selectedPaymentId?.payment_method_name,
+            //         addressId: receivedItem?.addressId,
+            //         paymentItem: selectedPaymentId,
+            //         currencyData: currencyData,
+            //       },
+            //     });
+            //   } else {
+            //     handleConfirmPayment();
+            //   }
+            //   // setIsModalVisible(!isModalVisible);
+            // }
           }}
           textStyle={{
             fontFamily: FONTS?.bold,
@@ -630,6 +680,42 @@ const Payment = ({ route }) => {
           }}
         />
       </View>
+
+      <Modal
+        transparent={true}
+        animationType="slide"
+        visible={isModalAddNewCard}
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <AddNewCardModal
+              addresses={addresses}
+              onSelectAddress={onSelectAddress}
+              onClose={closeModal}
+            />
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        transparent={true}
+        animationType="slide"
+        visible={isModalVisibleChekOut}
+        onRequestClose={closeModalChekout}
+      >
+        <View style={styles.modalContainer}>
+          {/* <View style={[styles.modalContent,{
+            marginTop:20
+          }]}> */}
+            <Checkout
+              // addresses={addresses}
+              // onSelectAddress={onSelectAddress}
+              onClose={closeModalChekout}
+            />
+          </View>
+        {/* </View> */}
+      </Modal>
       {renderModal()}
     </View>
   );
@@ -644,6 +730,38 @@ const styles = StyleSheet.create({
     color: COLORS.colorPrimary,
     marginStart: 15,
     marginTop: 8,
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    marginBottom: 20,
+    backgroundColor: 'lightblue',
+    padding: 10,
+    borderRadius: 8,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    // backgroundColor: COLORS?.black
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 5,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    // marginBottom: '30%',
+    // marginHorizontal:15,
+    // borderRadius:15
+  },
+  selectedAddressContainer: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: 'lightgreen', // Adjust the background color as needed
+    borderRadius: 8,
   },
   divLine: {
     height: 0.5,

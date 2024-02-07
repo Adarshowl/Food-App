@@ -31,11 +31,11 @@ import { FONTS } from '../../constants/Fonts';
 import { useDispatch, useSelector } from 'react-redux';
 import VegUrbanCommonBtn from '../../utils/VegUrbanCommonBtn';
 
-const CancelledOrderList = ({navigation}) => {
+const CancelledOrderList = ({ navigation }) => {
   const [amount, setAmount] = useState(100);
 
   const theme = useContext(themeContext);
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [count, setCount] = useState(1);
   const [show, setShow] = useState(false);
   const [showEmpty, setShowEmpty] = useState(false);
@@ -130,7 +130,7 @@ const CancelledOrderList = ({navigation}) => {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{name: 'Auth'}],
+          routes: [{ name: 'Auth' }],
         }),
       );
     } catch (error) {
@@ -142,9 +142,9 @@ const CancelledOrderList = ({navigation}) => {
     return (
       <TouchableOpacity
         activeOpacity={0.8}
-        // onPress={() => {
-        //   navigation.navigate('RestaurantDetails');
-        // }}
+        onPress={() => {
+          navigation.navigate('OrderDetails');
+        }}
         style={[
           styles.Wrapper,
           {
@@ -243,7 +243,7 @@ const CancelledOrderList = ({navigation}) => {
             justifyContent: 'space-between',
             alinItem: 'center',
             marginEnd: 15,
-            marginTop:4
+            marginTop: 4
           }}>
             <View style={{
               flexDirection: 'row',
@@ -251,7 +251,7 @@ const CancelledOrderList = ({navigation}) => {
             }}>
               <AntDesign
                 name="calendar"
-                color={COLORS?.black}
+                color={theme?.colors?.colorPrimary}
                 size={16}
               />
               <Text
@@ -277,7 +277,7 @@ const CancelledOrderList = ({navigation}) => {
             }}>
               <FontAwesome
                 name="location-arrow"
-                color={COLORS?.black}
+                color={theme?.colors?.colorPrimary}
                 size={20}
               />
               <Text
@@ -304,7 +304,7 @@ const CancelledOrderList = ({navigation}) => {
             justifyContent: 'space-between',
             alinItem: 'center',
             marginEnd: 15,
-            marginTop:4
+            marginTop: 4
 
           }}>
             <View style={{
@@ -313,7 +313,7 @@ const CancelledOrderList = ({navigation}) => {
             }}>
               <MaterialIcons
                 name="payment"
-                color={COLORS?.black}
+                color={theme?.colors?.colorPrimary}
                 size={18}
               />
               <Text
@@ -358,29 +358,36 @@ const CancelledOrderList = ({navigation}) => {
             </View>
           </View>
           <View style={{
-            flexDirection:'row',
-            justifyContent:'space-around',
-            marginTop:6
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            marginTop: 6
 
 
           }}>
             <VegUrbanCommonBtn
-              height={35}
+              height={30}
               width={'100%'}
               borderRadius={20}
               textSize={11}
-              textColor={theme.colors?.white}
+              textColor={theme.colors?.colorPrimary}
               text={t('Canceled')}
-              backgroundColor={theme?.colors?.bg}
+              borderWidth={1}
+              borderColor={theme?.colors?.colorPrimary}
+              backgroundColor={theme?.colors?.bg_color_onBoard}
               onPress={() => {
+                navigation.navigate('CancelledOrderScreen')
                 // ShowConsoleLogMessage('Coming soon');
 
+              }}
+              style={{
+                borderColor: theme?.colors?.colorPrimary,
+                borderWidth: 1
               }}
               textStyle={{
                 fontFamily: FONTS?.bold,
               }}
             />
-            
+
           </View>
 
         </View>
@@ -424,7 +431,7 @@ const CancelledOrderList = ({navigation}) => {
                     justifyContent: 'center',
                     flex: 1,
                   }}>
-                  <Text style={{fontSize: 20, marginTop: 50}}>
+                  <Text style={{ fontSize: 20, marginTop: 50 }}>
                     No data found !
                   </Text>
                 </View>
@@ -436,7 +443,7 @@ const CancelledOrderList = ({navigation}) => {
             showsVerticalScrollIndicator={false}
             data={tradingList}
             renderItem={renderItem}
-            // renderItem={({item, index}) => <RefundRequestList item={item} />}
+          // renderItem={({item, index}) => <RefundRequestList item={item} />}
           />
         </View>
       </ScrollView>

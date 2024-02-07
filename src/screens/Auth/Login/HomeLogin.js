@@ -332,7 +332,7 @@ const HomeLogin = ({ navigation }) => {
               height={55}
               width={'100%'}
               borderRadius={30}
-              textSize={18}
+              textSize={16}
               text={'Sign In'}
               textColor={theme.colors?.text}
               backgroundColor={theme?.colors?.colorPrimary}
@@ -343,7 +343,7 @@ const HomeLogin = ({ navigation }) => {
                 navigation.navigate('Login');
               }}
               textStyle={{
-                fontFamily: FONTS?.bold,
+                fontFamily: FONTS?.semi_old,
               }}
             />
 
@@ -362,10 +362,10 @@ const HomeLogin = ({ navigation }) => {
               height={55}
               width={'100%'}
               borderRadius={30}
-              textSize={18}
+              textSize={16}
               text={'Sign Up'}
-              textColor={theme.colors?.text}
-              backgroundColor={theme?.colors?.colorPrimary}
+              textColor={theme.colors?.colorPrimary}
+              backgroundColor={theme?.colors?.bg}
               // onPress={() => {
               //   closeSignUpModal();
               // }}
@@ -373,7 +373,7 @@ const HomeLogin = ({ navigation }) => {
                 navigation.navigate('SignUp');
               }}
               textStyle={{
-                fontFamily: FONTS?.bold,
+                fontFamily: FONTS?.semi_old,
               }}
               style={{
               }}
@@ -520,7 +520,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   app_logo: {
-    height: 350,
+    height: 320,
     resizeMode: 'cover',
     alignSelf: 'center',
     width: '100%',

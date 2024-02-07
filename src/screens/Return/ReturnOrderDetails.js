@@ -7,24 +7,24 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
-import {SIZES, STRING} from '../../constants';
-import {FONTS} from '../../constants/Fonts';
+import React, { useContext, useEffect, useState } from 'react';
+import { SIZES, STRING } from '../../constants';
+import { FONTS } from '../../constants/Fonts';
 import GlobalStyle from '../../styles/GlobalStyle';
 import VegUrbanCommonToolBar from '../../utils/VegUrbanCommonToolBar';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {COLORS} from '../../constants/Colors';
+import { COLORS } from '../../constants/Colors';
 import themeContext from '../../constants/themeContext';
-import {useIsFocused} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
-import {showProgressBar} from '../../redux/actions';
-import {getUserOrderReturnById} from '../../redux/actions/CartApi';
-import {ShowConsoleLogMessage, ShowToastMessage} from '../../utils/Utility';
+import { useIsFocused } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { showProgressBar } from '../../redux/actions';
+import { getUserOrderReturnById } from '../../redux/actions/CartApi';
+import { ShowConsoleLogMessage, ShowToastMessage } from '../../utils/Utility';
 import moment from 'moment/moment';
 
 let check = false;
 
-const ReturnOrderDetails = ({navigation, route}) => {
+const ReturnOrderDetails = ({ navigation, route }) => {
   const theme = useContext(themeContext);
 
   const [receivedData, setReceivedData] = useState(null);
@@ -38,7 +38,7 @@ const ReturnOrderDetails = ({navigation, route}) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    let {item} = route?.params;
+    let { item } = route?.params;
     setReceivedData(item);
     ShowConsoleLogMessage(item?._id);
     // ShowConsoleLogMessage(userToken);
@@ -79,7 +79,7 @@ const ReturnOrderDetails = ({navigation, route}) => {
     dispatch(showProgressBar(false));
     ShowConsoleLogMessage(error);
   };
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     // ShowConsoleLogMessage(item);
     const fa =
       ((parseInt(item?.amount) * parseInt(item?.flash_discount_percentage)) /
@@ -87,7 +87,7 @@ const ReturnOrderDetails = ({navigation, route}) => {
       parseInt(item?.quantity);
     return (
       <View
-        onPress={() => {}}
+        onPress={() => { }}
         // activeOpacity={0.8}
         style={[
           styles.wrapperOrder,
@@ -214,7 +214,7 @@ const ReturnOrderDetails = ({navigation, route}) => {
           style={[
             styles.backIcon,
             {
-              transform: [{scaleX: I18nManager.isRTL ? -1 : 1}],
+              transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
               marginStart: 10,
             },
           ]}
@@ -530,7 +530,7 @@ const styles = StyleSheet.create({
     height: 10, // Height of the right arrow
     borderRightWidth: 2, // Width of the right arrow line
     borderBottomWidth: 2, // Height of the right arrow line
-    transform: [{rotate: '45deg'}], // To rotate it to form a right arrow
+    transform: [{ rotate: '45deg' }], // To rotate it to form a right arrow
     borderColor: 'white', // Color of the right arrow
   },
   dots: {

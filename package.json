@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@gorhom/bottom-sheet": "^4.6.0",
     "@notifee/react-native": "^7.7.1",
     "@react-native-async-storage/async-storage": "^1.18.1",
     "@react-native-community/datetimepicker": "^7.6.0",
@@ -50,7 +51,7 @@
     "react-native-elements": "^3.4.3",
     "react-native-event-listeners": "^1.0.7",
     "react-native-fast-image": "^8.6.3",
-    "react-native-gesture-handler": "^2.9.0",
+    "react-native-gesture-handler": "^2.14.1",
     "react-native-google-places-autocomplete": "^2.5.1",
     "react-native-html-to-pdf": "^0.12.0",
     "react-native-image-base64": "^0.1.4",
@@ -63,7 +64,7 @@
     "react-native-next-input": "^0.10.8",
     "react-native-onboarding-swiper": "^1.2.0",
     "react-native-otp-inputs": "^7.4.0",
-    "react-native-pager-view": "^6.2.0",
+    "react-native-pager-view": "^6.2.3",
     "react-native-paper": "^4.12.6",
     "react-native-phone-number-input": "^2.1.0",
     "react-native-push-notification": "^8.1.1",

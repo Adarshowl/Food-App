@@ -68,9 +68,9 @@ const CartItem = ({
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      // onPress={() => {
-      //   navigation.navigate('BannerOfferDetails');
-      // }}
+      onPress={() => {
+        navigation.navigate('OfferDetails');
+      }}
       style={[
         styles.Wrapper,
         {
@@ -100,7 +100,7 @@ const CartItem = ({
             alignSelf: 'center',
           },
         ]}>
-       
+
         <VegUrbanImageLoader
           styles={{
             width: 130,
@@ -122,13 +122,14 @@ const CartItem = ({
           <LinearGradient
             colors={[COLORS?.white, 'white']}
             style={{
-              padding: 3,
+              padding: 0,
               borderRadius: 12,
               flexDirection: 'row',
               alignItems: 'center',
-              width: 90,
-              height: 30,
+              width: '100%',
+              height: 27,
               justifyContent: 'center',
+              // paddingHorizontal:10
             }}
             start={{ x: 0, y: 1 }}
             end={{ x: 1, y: 0 }}
@@ -140,7 +141,7 @@ const CartItem = ({
               backgroundColor: theme?.colors?.colorPrimary,
               alinItem: 'center',
               justifyContent: 'center',
-              flex: 1
+              // flex: 1
             }}>
               <AntDesign
                 name="star"

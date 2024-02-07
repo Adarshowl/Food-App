@@ -9,7 +9,7 @@ import {
     Image
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-
+import images from '../../constants/images';
 import { COLORS } from '../../constants/Colors';
 import { SIZES, STRING } from '../../constants';
 import GlobalStyle from '../../styles/GlobalStyle';
@@ -84,11 +84,14 @@ const HomeResturentList = () => {
     const renderItem = ({ item, index }) => {
         return (
             <View style={{
+
+                elevation: 5,
+                marginTop: 10
             }}>
                 <TouchableOpacity
                     activeOpacity={0.8}
                     onPress={() => {
-                        navigation.navigate('RestaurantDetails');
+                        navigation.navigate('OfferDetails');
                     }}
                     style={[
                         styles.Wrapper,
@@ -96,7 +99,9 @@ const HomeResturentList = () => {
                             // elevation:1,
                             // padding:5,
                             // borderWidth: 0.2,
-                            borderColor: COLORS?.gray
+                            borderColor: COLORS?.gray,
+                            paddingHorizontal: 0,
+                            paddingVertical: 0
                         },
                     ]}>
                     {/* <View
@@ -128,7 +133,7 @@ const HomeResturentList = () => {
                         />
 
 
-                        <View style={{ position: 'absolute', top: 40, left: 0 }}>
+                        {/* <View style={{ position: 'absolute', top: 40, left: 0 }}>
                             <LinearGradient
                                 colors={[theme?.colors?.colorPrimary, '#FF774F', '#FF8F6F']}
                                 style={{
@@ -139,16 +144,49 @@ const HomeResturentList = () => {
                                     width: 70,
                                     height: 30,
                                     justifyContent: 'center',
+
+                                    marginLeft: -6
                                 }}
                                 start={{ x: 0, y: 1 }}
                                 end={{ x: 1, y: 0 }}
                             >
                                 <Text style={{ color: COLORS?.white, fontSize: 13 }}>RESCUED</Text>
                             </LinearGradient>
-                        </View>
+                        </View> */}
+
+                        <ImageBackground
+                            style={{
+                                height: 35,
+                                position: 'absolute',
+                                top: 30,
+                                left: -8,
+                                Index: 1,
+                                width: 90,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                            // resizeMode={'stretch'}
+                            source={images.Rescued}>
+                            {/* <Text style={{ color: 'white' }}>10% off</Text> */}
+                        </ImageBackground>
+                        <ImageBackground
+                            style={{
+                                height: 35,
+                                position: 'absolute',
+                                top: 80,
+                                left: -8,
+                                Index: 1,
+                                width: 80,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                            // resizeMode={'stretch'}
+                            source={images.offerImage}>
+                            {/* <Text style={{ color: 'white' }}>10% off</Text> */}
+                        </ImageBackground>
 
 
-                        <View style={{
+                        {/* <View style={{
                             position: 'absolute',
                             top: 80,
                             left: 0,
@@ -158,7 +196,7 @@ const HomeResturentList = () => {
                             <LinearGradient
                                 colors={['#54AA53', '#54AA53']}
                                 style={{
-                                    flex: 1,
+                                    // flex: 1,
                                     padding: 3,
                                     // borderRadius: 20,
                                     flexDirection: 'row',
@@ -168,7 +206,10 @@ const HomeResturentList = () => {
                                     height: 30,
                                     borderTopRightRadius: 20,
                                     borderBottomRightRadius: 20,
-                                    justifyContent: 'center'
+                                    justifyContent: 'center',
+                                    marginLeft: -6,
+                                    borderTopEndRadius: 3,
+                                    borderBottomLeftRadius: 3
 
                                 }}
                                 start={{ x: 0, y: 1 }}
@@ -176,7 +217,8 @@ const HomeResturentList = () => {
                             >
                                 <Text style={{ color: COLORS?.white, fontSize: 13 }}>50% off</Text>
                             </LinearGradient>
-                        </View>
+                        </View> */}
+
 
 
                         <View style={{
@@ -396,7 +438,7 @@ const HomeResturentList = () => {
             style={[
                 // GlobalStyle.mainContainerBgColor,
                 {
-                    backgroundColor: COLORS?.bg_color,
+                    backgroundColor: theme?.colors?.bg_color_onBoard,
                     // borderRadius: 5,
                 },
             ]}>
@@ -440,7 +482,8 @@ const styles = StyleSheet.create({
         // marginHorizontal:20,
         // borderWidth:0.2,
         marginVertical: 5,
-        // elevation: 5
+        marginHorizontal: 10,
+        elevation: 5
         // borderWidth:0.2,
         // borderColor:COLORS?.gray,
         // elevation: 2

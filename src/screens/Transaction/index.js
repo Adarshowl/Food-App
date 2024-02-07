@@ -166,7 +166,7 @@ const Transaction = ({ navigation }) => {
               }}
               // style={styles.itemImage}
               source={{
-                uri: 'https://cdn-icons-png.flaticon.com/128/8231/8231679.png'
+                uri: 'https://cdn-icons-png.flaticon.com/128/2195/2195322.png'
                 // uri: item?.image,
               }}
             />
@@ -196,7 +196,7 @@ const Transaction = ({ navigation }) => {
                   // styles.finalPriceText,
                   {
                     alignSelf: 'flex-start',
-                    color: theme?.colors?.textColor,
+                    color: theme?.colors?.grey,
                     marginTop: 3,
                     fontFamily: FONTS?.regular,
                     fontSize: 12
@@ -231,12 +231,12 @@ const Transaction = ({ navigation }) => {
                 numberOfLines={1}
                 ellipsizeMode="tail"
                 style={{
-                  color: theme?.colors?.white,
-                  fontSize: 14,
+                  color: theme?.colors?.grey,
+                  fontSize: 13,
                   fontFamily: FONTS?.regular,
                 }}>
-                  {item?.paymentby}
-                {/* order */}
+                {/* {item?.paymentby} */}
+                order
               </Text>
             </TouchableOpacity>
           </View>
@@ -259,24 +259,22 @@ const Transaction = ({ navigation }) => {
           GlobalStyle.commonToolbarBG,
           {
             backgroundColor: theme.colors.bg_color_onBoard,
+            elevation: 0
           },
         ]}>
-        <Ionicons
-          name="ios-arrow-back"
-          // color={COLORS.black}
-          color={theme.colors.textColor}
-          size={25}
-          style={[
-            styles.backIcon,
-            {
-              opacity: !show ? 1 : 0.0,
-              transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
-              marginStart: 10,
-            },
-          ]}
+        <ToolBarIcon
+          title={Ionicons}
+          iconName={'chevron-back'}
+          icSize={20}
+          icColor={COLORS.black}
+          borderRadius={20}
+          style={{
+            marginEnd: 10,
+            backgroundColor: theme.colors.bg,
+            borderRadius: 20
+          }}
           onPress={() => {
             navigation.goBack();
-            // ShowToastMessage('Coming Soon!');
           }}
         />
 
@@ -323,7 +321,7 @@ const Transaction = ({ navigation }) => {
             paddingTop: 5,
           }}
           showsVerticalScrollIndicator={false}
-          data={paymentHistory}
+          data={data}
           renderItem={renderItem}
         />
 

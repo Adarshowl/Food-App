@@ -7,9 +7,14 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Modal,
+  Button
 } from 'react-native';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import GlobalStyle from '../../styles/GlobalStyle';
+import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import 'react-native-gesture-handler';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { icons, STRING } from '../../constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import VegUrbanCommonToolBar from '../../utils/VegUrbanCommonToolBar';
@@ -38,6 +43,9 @@ import {
 } from '../../utils/RealmUtility';
 import VegUrbanEditText from '../../utils/EditText/VegUrbanEditText';
 import { updateCartDataLength } from '../../redux/actions/HomeApi';
+import AddressSelectionScreen from './AddressSelectionScreen';
+import { COLORS } from '../../constants/Colors';
+import ToolBarIcon from '../../utils/ToolBarIcon';
 
 const Cart = ({ navigation }) => {
   const theme = useContext(themeContext);
@@ -49,19 +57,64 @@ const Cart = ({ navigation }) => {
 
   const isFocused = useIsFocused();
 
+  const bottomSheetModalRef = useRef(null);
+
+  // function to open bottom sheet
+  const openBottomSheet = () => {
+    bottomSheetModalRef.current?.present();
+  };
+
+  // function to close bottom sheet
+  const closeBottomSheet = () => {
+    bottomSheetModalRef.current?.dismiss();
+  };
+
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [addresses, setAddresses] = useState([
+    {
+      id: 'home',
+      label: 'Home',
+      address: '123 Main Street, Home City',
+      type: 'Home',
+      def: true,
+      selected: false,
+    },
+    {
+      id: 'office',
+      label: 'Office',
+      address: '456 Office Road, Office City',
+      type: 'Home',
+      def: true,
+      selected: false,
+
+    },
+  ]);
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const onSelectAddress = (address) => {
+    setSelectedAddress(address);
+    closeModal();
+  };
+
   const [text, setText] = useState('');
   const [showSearch, setShowSearch] = useState(false);
   const tradingList = [
 
     {
       id: '3', name: 'Chinese', address: 'bhawaercuaa',
-      quantity:1,
+      quantity: 1,
       image: 'https://www.london-unattached.com/wp-content/uploads/2015/06/The-Trading-House-City-Bank-London-Launch-Party-1032.jpg'
     },
 
 
   ];
-
   useEffect(() => {
     // ShowConsoleLogMessage(userToken);
     if (loginCount == 1) {
@@ -442,20 +495,21 @@ const Cart = ({ navigation }) => {
           GlobalStyle.commonToolbarBG,
           {
             backgroundColor: theme.colors.bg_color_onBoard,
+            elevation: 0,
+            marginTop: 10
           },
         ]}>
-        <Ionicons
-          name="ios-arrow-back"
-          color={theme.colors.white}
-          size={25}
-          style={[
-            styles.backIcon,
-            {
-              opacity: !show ? 1 : 0.0,
-              transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }],
-              marginStart: 10,
-            },
-          ]}
+        <ToolBarIcon
+          title={Ionicons}
+          iconName={'chevron-back'}
+          icSize={20}
+          icColor={COLORS.black}
+          borderRadius={20}
+          style={{
+            marginEnd: 10,
+            backgroundColor: theme.colors.bg_color_onBoard,
+            borderRadius: 20
+          }}
           onPress={() => {
             navigation.goBack();
           }}
@@ -697,6 +751,93 @@ const Cart = ({ navigation }) => {
             />
           </View>
         )} */}
+
+        <View
+          style={{
+            // paddingStart: 5,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent:'space-between',
+            // justifyContent:'space-between'
+            marginVertical: 10
+          }}>
+          <Text
+            style={{
+              fontFamily: FONTS?.semi_old,
+              fontSize: 18,
+              // fontWeight:'bold',
+              color: theme?.colors?.textColor,
+              marginLeft: 10,
+            }}>
+            Discount Code
+          </Text>
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center'
+          }}>
+            <View style={{
+              borderRadius: 10,
+              backgroundColor: theme?.colors?.bg,
+              // width: '55%',
+              paddingVertical: 13,
+              paddingHorizontal:10,
+              // alignSelf: 'center',
+              borderColor: theme?.colors?.gray,
+              borderWidth: 0.5,
+              marginRight:6
+            }}>
+              <Text
+                style={{
+                  fontFamily: FONTS?.semi_old,
+                  textAlign: 'center',
+                  fontSize: 15,
+                  color: theme?.colors?.grey,
+                  // marginLeft: 20,
+                }}>
+                Enter or choose a code
+              </Text>
+            </View>
+            <MaterialIcons
+              name="keyboard-arrow-right"
+              size={30}
+              color={COLORS?.black}
+            />
+          </View>
+          {/* <View
+              style={{
+                // marginRight: 50,
+                // flex: 1,
+                marginHorizontal: 12,
+                marginBottom: 15
+              }}
+            >
+              <VegUrbanCommonBtn
+                height={50}
+                width={'100%'}
+                borderRadius={30}
+                textSize={16}
+
+                textColor={theme.colors?.text}
+                text={t('Go to Checkout')}
+                backgroundColor={theme?.colors?.colorPrimary}
+                onPress={openBottomSheet}
+                // onPress={openModal}
+                // onPress={() => {
+                //   // ShowConsoleLogMessage('Coming soon');
+                //   navigation.navigate('Address');
+
+                //   // if (loginCount == 1) {
+                //   //   navigation.navigate('Checkout');
+                //   // } else {
+                //   //   navigation.navigate('Auth', { screen: 'Login' });
+                //   // }
+                // }}
+                textStyle={{
+                  fontFamily: FONTS?.semi_old,
+                }}
+              />
+            </View> */}
+        </View>
         {tradingList?.length > 0 ? (
           <View
             style={{
@@ -718,7 +859,7 @@ const Cart = ({ navigation }) => {
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                marginVertical: 20
+                marginVertical: 10
               }}>
               <Text
                 style={{
@@ -726,7 +867,7 @@ const Cart = ({ navigation }) => {
                   fontSize: 18,
                   // fontWeight:'bold',
                   color: theme?.colors?.textColor,
-                  marginLeft: 20,
+                  marginLeft: 10,
                 }}>
                 Total
               </Text>
@@ -736,55 +877,145 @@ const Cart = ({ navigation }) => {
 
                   fontSize: 20,
                   color: theme?.colors?.white,
-                  marginLeft: 20,
+                  marginLeft: 10,
                 }}>
                 {STRING.APP_CURRENCY}
                 46.45
               </Text>
             </View>
-            <View
+            {/* <View
               style={{
                 // marginRight: 50,
                 // flex: 1,
                 marginHorizontal: 12,
-                marginBottom:15
+                marginBottom: 15
               }}
             >
               <VegUrbanCommonBtn
                 height={50}
                 width={'100%'}
                 borderRadius={30}
-                textSize={18}
-                // iconPosition={'right'}
-                // icon={
-                //   <Octicons
-                //     name={'arrow-right'}
-                //     size={20}
-                //     color={theme?.colors?.text}
-                //     style={{
-                //       // marginHorizontal: 20,
-                //       marginStart: 15,
-                //     }}
-                //   />
-                // }
+                textSize={16}
+
                 textColor={theme.colors?.text}
                 text={t('Go to Checkout')}
                 backgroundColor={theme?.colors?.colorPrimary}
-                onPress={() => {
-                  // ShowConsoleLogMessage('Coming soon');
-                  if (loginCount == 1) {
-                    navigation.navigate('Checkout');
-                  } else {
-                    navigation.navigate('Auth', { screen: 'Login' });
-                  }
-                }}
+                onPress={openBottomSheet}
+                // onPress={openModal}
+                // onPress={() => {
+                //   // ShowConsoleLogMessage('Coming soon');
+                //   navigation.navigate('Address');
+
+                //   // if (loginCount == 1) {
+                //   //   navigation.navigate('Checkout');
+                //   // } else {
+                //   //   navigation.navigate('Auth', { screen: 'Login' });
+                //   // }
+                // }}
                 textStyle={{
-                  fontFamily: FONTS?.bold,
+                  fontFamily: FONTS?.semi_old,
+                }}
+              />
+            </View> */}
+          </View>
+        ) : null}
+
+        <View>
+
+          <BottomSheetModalProvider>
+            {/* <TouchableOpacity onPress={openBottomSheet}>
+              <Text>Open Bottom Sheet</Text>
+            </TouchableOpacity> */}
+            <View
+              style={{
+                // marginRight: 50,
+                // flex: 1,
+                marginHorizontal: 12,
+                marginBottom: 15
+              }}
+            >
+              <VegUrbanCommonBtn
+                height={50}
+                width={'100%'}
+                borderRadius={30}
+                textSize={16}
+
+                textColor={theme.colors?.text}
+                text={t('Go to Checkout')}
+                backgroundColor={theme?.colors?.colorPrimary}
+                // onPress={openBottomSheet}
+                onPress={openModal}
+                // onPress={() => {
+                //   // ShowConsoleLogMessage('Coming soon');
+                //   navigation.navigate('Address');
+
+                //   // if (loginCount == 1) {
+                //   //   navigation.navigate('Checkout');
+                //   // } else {
+                //   //   navigation.navigate('Auth', { screen: 'Login' });
+                //   // }
+                // }}
+                textStyle={{
+                  fontFamily: FONTS?.semi_old,
                 }}
               />
             </View>
-          </View>
-        ) : null}
+            <BottomSheetModal
+              ref={bottomSheetModalRef}
+              index={0}
+              snapPoints={[100, 199]}
+              style={{
+                flex: 1
+              }}
+              backgroundComponent={({ style }) => (
+
+                <View style={[style, {
+                  // backgroundColor: 'rgba(0,0,0,0.5)',
+                  flexGrow: 1,
+                  backgroundColor: COLORS?.white
+
+                  // padding: 50
+                }]} />
+              )}
+            >
+
+              <View style={{ flex: 1, backgroundColor: 'white', padding: 100 }}>
+                <View style={styles.modalContainer}>
+                  <View style={styles.modalContent}>
+                    <AddressSelectionScreen
+                      addresses={addresses}
+                      onSelectAddress={onSelectAddress}
+                      onClose={closeModal}
+                    />
+                  </View>
+
+                  <Text>Your Bottom Sheet Content Goes Here</Text>
+                  <Button title="Close Bottom Sheet" onPress={closeBottomSheet} />
+                </View>
+              </View>
+            </BottomSheetModal>
+          </BottomSheetModalProvider>
+
+          <Modal
+            transparent={true}
+            animationType="slide"
+            visible={isModalVisible}
+            onRequestClose={closeModal}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <AddressSelectionScreen
+                  addresses={addresses}
+                  onSelectAddress={onSelectAddress}
+                  onClose={closeModal}
+                />
+              </View>
+            </View>
+          </Modal>
+
+
+        </View>
+
       </View>
       {/*) : (*/}
       {/*  <View*/}
@@ -830,4 +1061,37 @@ const Cart = ({ navigation }) => {
 
 export default Cart;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    marginBottom: 20,
+    backgroundColor: 'lightblue',
+    padding: 10,
+    borderRadius: 8,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    // backgroundColor: COLORS?.black
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 5,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    // marginBottom: '30%',
+    // marginHorizontal:15,
+    // borderRadius:15
+  },
+  selectedAddressContainer: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: 'lightgreen', // Adjust the background color as needed
+    borderRadius: 8,
+  },
+});

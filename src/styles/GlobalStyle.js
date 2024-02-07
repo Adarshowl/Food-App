@@ -320,9 +320,10 @@ export default StyleSheet.create({
     marginStart: 15,
     marginEnd: 10,
     borderRadius: 5,
-    backgroundColor: COLORS.light_gray,
+    backgroundColor: COLORS?.white,
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 0.2
   },
   toolbarAppIcon: {
     width: 30,

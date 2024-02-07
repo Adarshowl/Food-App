@@ -20,6 +20,8 @@ const VegUrbanCommonBtn = ({
   icon,  paddingHorizontal,
   marginHorizontal,
   textStyle,
+  borderWidth,
+  borderColor
 }) => {
 
 
@@ -61,6 +63,8 @@ const VegUrbanCommonBtn = ({
       style={{
         width: width,
         height: height,
+        borderWidth: borderWidth || 0,
+    borderColor: borderColor,
         borderRadius: borderRadius,
         justifyContent: 'center',
         alignItems: 'center',

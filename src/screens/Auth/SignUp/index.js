@@ -72,7 +72,7 @@ const SignUp = ({ navigation }) => {
   const [show, setShow] = useState(false);
   const [showAfter, setShowAfter] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
- 
+
 
   const isEmail = email => {
     // Regular expression for email validation
@@ -117,7 +117,7 @@ const SignUp = ({ navigation }) => {
     return emailRegex.test(email);
   };
 
-  
+
   const getBorderWidth = () => {
     if (error) {
       return 1;
@@ -136,7 +136,7 @@ const SignUp = ({ navigation }) => {
     if (focused) {
       return COLORS?.black;
     } else {
-      return COLORS.bg_color;
+      return theme?.colors?.grey;
     }
   };
   const getBgColor = () => {
@@ -170,7 +170,7 @@ const SignUp = ({ navigation }) => {
     if (focused2) {
       return COLORS?.black;
     } else {
-      return COLORS.bg_color;
+      return theme?.colors?.grey;
     }
   };
   const getBgColor1 = () => {
@@ -186,7 +186,7 @@ const SignUp = ({ navigation }) => {
     }
   };
 
-  
+
 
   const handleRememberMeToggle = () => {
     setRememberMe(!rememberMe);
@@ -223,17 +223,14 @@ const SignUp = ({ navigation }) => {
       /> */}
         {/* <Image source={images.app_logo} style={styles.app_logo} /> */}
         <View>
-          <LinearGradient
-            colors={['#FD5F30', '#FF774F', '#FF8F6F']}
+          <View
             style={{
               borderBottomEndRadius: 30,
               borderBottomLeftRadius: 30,
-              borderBottomRightRadius:30,
               flexDirection: 'row',
+              borderBottomRightRadius: 30,
               height: 130,
               alignItems: 'center',
-              // justifyContent: 'space-between',
-              paddingHorizontal: 20,
             }}
           >
             <ToolBarIcon
@@ -241,7 +238,8 @@ const SignUp = ({ navigation }) => {
               iconName={'chevron-back'}
               icSize={20}
               borderRadius={20}
-              icColor={theme?.colors?.colorPrimary}
+              borderWidth={0.2}
+              icColor={theme?.colors?.textColor}
               style={{
                 borderRadius: 20,
               }}
@@ -249,30 +247,33 @@ const SignUp = ({ navigation }) => {
                 navigation.goBack();
               }}
             />
-            <Text
-              style={[
-                styles.heading,
-                {
-                  marginStart: 10,
-                  color: COLORS?.white,
-                },
-              ]}
-            >
-              {!show ? t('Sign Up') : ' '}
-            </Text>
-          </LinearGradient>
+
+          </View>
         </View>
         <View
           style={[
             GlobalStyle.loginModalBg,
             {
               backgroundColor: theme.colors?.bg_color_onBoard,
-              marginTop: '20%',
-              marginHorizontal:10
+              marginTop: '10%',
+              marginHorizontal: 10
             },
           ]}>
 
           {/* </View> */}
+
+          <Text
+            style={[
+              styles.heading,
+              {
+                marginStart: 10,
+                color: theme?.colors?.textColor,
+                marginBottom: 20
+              },
+            ]}
+          >
+            {!show ? t('Sign Up') : ' '}
+          </Text>
 
           <VegUrbanEditText
             placeholder={STRING.emailHint}
@@ -334,7 +335,7 @@ const SignUp = ({ navigation }) => {
                 backgroundColor: getBgColor(),
                 borderWidth: getBorderWidth(),
 
-                borderRadius: 25,
+                borderRadius: 30,
                 // elevation: getElevation(),
               },
             ]}>
@@ -407,7 +408,7 @@ const SignUp = ({ navigation }) => {
                 backgroundColor: getBgColor1(),
                 borderWidth: getBorderWidth1(),
 
-                borderRadius: 25,
+                borderRadius: 30,
                 // elevation: getElevation(),
               },
             ]}>
@@ -463,8 +464,8 @@ const SignUp = ({ navigation }) => {
           </View>
 
 
-       
-         
+
+
           <View
             style={{
               // justifyContent:'center',
@@ -477,7 +478,7 @@ const SignUp = ({ navigation }) => {
               height={55}
               width={'100%'}
               borderRadius={30}
-              textSize={18}
+              textSize={16}
               text={'Sign Up'}
               textColor={theme.colors?.text}
               backgroundColor={theme?.colors?.colorPrimary}
@@ -488,11 +489,11 @@ const SignUp = ({ navigation }) => {
                 navigation.navigate('Location');
               }}
               textStyle={{
-                fontFamily: FONTS?.bold,
+                fontFamily: FONTS?.semi_old,
               }}
             />
           </View>
-         
+
           <View style={styles.container}>
             <View style={styles.line} />
             <Text
@@ -590,7 +591,7 @@ const SignUp = ({ navigation }) => {
               />
             </TouchableOpacity>
           </View>
-         
+
         </View>
       </ScrollView>
     </SafeAreaView >
@@ -608,7 +609,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontFamily: FONTS?.bold,
-    fontSize: 27,
+    fontSize: 20,
   },
   heading11: {
     fontFamily: FONTS?.regular,

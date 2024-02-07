@@ -76,7 +76,9 @@ const CancelledOrderScreen = ({ navigation }) => {
           GlobalStyle.commonToolbarBG,
           {
             backgroundColor: theme.colors.bg_color_onBoard,
-            elevation: 0
+            elevation: 0,
+            marginTop: 10,
+
           },
         ]}>
         <ToolBarIcon
@@ -87,22 +89,32 @@ const CancelledOrderScreen = ({ navigation }) => {
           borderRadius={20}
           style={{
             marginEnd: 10,
-            backgroundColor: theme.colors.toolbar_icon_bg,
+            backgroundColor: theme.colors.bg_color_onBoard,
             borderRadius: 20
           }}
           onPress={() => {
             navigation.goBack();
           }}
         />
-        <VegUrbanCommonToolBar
+        {/* <VegUrbanCommonToolBar
           title="Cancel Order"
           style={{
-            backgroundColor: theme.colors.bg_color_onBoard,
+            // backgroundColor: theme.colors.bg_color_onBoard,
           }}
           textStyle={{
             color: theme.colors.textColor,
+            fontFamily: FONTS?.bold,
+            fontSize: 18
           }}
-        />
+        /> */}
+
+        <Text style={{
+          fontFamily: FONTS?.bold,
+          color: theme?.colors?.white,
+          fontSize: 20
+        }}>
+          Cancel Order
+        </Text>
 
 
       </View>
@@ -113,12 +125,18 @@ const CancelledOrderScreen = ({ navigation }) => {
 
         <View style={{ padding: 20 }}>
           {/* Reason for cancellation */}
-          <Text style={[styles?.boldText, {
+          {/* <Text style={[styles?.boldText, {
             fontSize: 17
           }]}>
             Reason for cancellation:
-          </Text>
-          <Text style={{ marginBottom: 20 }}>
+          </Text> */}
+          <Text style={{
+            marginBottom: 20,
+            fontSize: 16,
+            color: theme?.colors?.gray,
+            fontFamily: FONTS?.regular,
+            marginEnd: 15
+          }}>
             {/* Add cancellation reason here */}
             Your food in the bag and on the moval
             so we'll beed to change you for the order if you cancel
@@ -126,17 +144,19 @@ const CancelledOrderScreen = ({ navigation }) => {
 
           {/* Image */}
           <View style={{
-             alignItems: 'center', 
-             marginBottom: 20 ,
-             backgroundColor:theme?.colors?.bg,
-             borderRadius:100,
-             width:150,
-             height:150,
-             alignSelf:'center',
-             justifyContent:'center'
-             }}>
+            alignItems: 'center',
+            marginBottom: 20,
+            backgroundColor: "#FEE9E8",
+            borderRadius: 100,
+            width: 150,
+            height: 150,
+            alignSelf: 'center',
+            justifyContent: 'center'
+          }}>
             <Image
-              source={{ uri: 'data:image/png;base64,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' }}
+              source={{
+                uri: 'https://cdn-icons-png.flaticon.com/128/3759/3759129.png'
+              }}
               style={{ width: 80, height: 80, }}
             />
           </View>
@@ -144,24 +164,48 @@ const CancelledOrderScreen = ({ navigation }) => {
           {/* Details */}
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
             <Text
-              style={styles?.normalText}
-            >Service:</Text>
+              style={[styles?.normalText, {
+                color: theme?.colors?.grey,
+                fontFamily:FONTS?.regular
+              }]}
+            >Services</Text>
             <Text
               style={styles?.boldText}
             >$0.30</Text>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
             <Text
-              style={styles?.normalText}
-            >Product Cost:</Text>
+              style={[styles?.normalText, {
+                color: theme?.colors?.grey
+              }]}
+            >Delivery fee:</Text>
+            <Text
+              style={styles?.boldText}
+            >$3.49</Text>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+            <Text
+              style={[styles?.normalText, {
+                color: theme?.colors?.grey
+              }]}
+            >Product Cost</Text>
             <Text
               style={styles?.boldText}
             >$25.00</Text>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
-            <Text
-              style={styles?.normalText}
-            >Delivery Fees:</Text>
+            <View>
+              <Text
+                style={[styles?.normalText, {
+                  color: theme?.colors?.grey
+                }]}
+              >Surcharges for orders below</Text>
+              <Text
+                style={[styles?.normalText, {
+                  color: theme?.colors?.grey
+                }]}
+              >$10.00 in this store</Text>
+            </View>
             <Text
               style={styles?.boldText}
             >$5.00</Text>
@@ -181,27 +225,28 @@ const CancelledOrderScreen = ({ navigation }) => {
                 fontFamily: FONTS?.bold,
                 fontSize: 20
               }]}
-            >$30.00</Text>
+            >$12.50</Text>
           </View>
           <View style={{
             flexDirection: 'row',
             marginBottom: 10,
-            alignItems: 'center'
+            alignItems: 'center',
+            marginTop:10
           }}>
             <MaterialIcons
               name="payment"
               size={20}
-              color={COLORS?.gray}
+              color={theme?.colors?.colorPrimary}
             />
             <Text
-            numberOfLines={2}
+              numberOfLines={2}
               style={{
-                fontSize:13,
-                marginLeft:10,
-                color:COLORS?.black,
-                fontFamily:FONTS?.regular
+                fontSize: 13.5,
+                marginLeft: 10,
+                color: theme?.colors?.grey,
+                fontFamily:FONTS?.semi_old
               }}
-            >Wil BE CHANGED TO YOUR CARD ENDING IN 2756</Text>
+            >Will be changed to your card ending in 2756</Text>
           </View>
 
         </View>
@@ -213,7 +258,7 @@ const CancelledOrderScreen = ({ navigation }) => {
           backgroundColor: theme.colors.bg_color_onBoard,
           padding: 10,
           alignItems: 'center',
-          marginHorizontal:10
+          marginHorizontal: 10
         }}>
         <VegUrbanCommonBtn
           height={50}
@@ -227,7 +272,7 @@ const CancelledOrderScreen = ({ navigation }) => {
             navigation.goBack('TrackOrder');
           }}
           textStyle={{
-            fontFamily: FONTS?.bold
+            fontFamily: FONTS?.semi_old
           }}
         />
 
@@ -255,14 +300,14 @@ const styles = StyleSheet.create({
   },
   normalText: {
     fontFamily: FONTS?.regular,
-    fontSize: 16,
+    fontSize: 17,
     color: COLORS.black,
     // textAlign: 'center',
     marginVertical: 5,
   },
   boldText: {
     fontFamily: FONTS?.semi_old,
-    fontSize: 16,
+    fontSize: 17,
     color: COLORS.black,
     // textAlign: 'center',
     marginVertical: 5,

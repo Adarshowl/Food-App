@@ -16,9 +16,9 @@ const VegUrbanCommonToolBar = props => {
         style={[
           {
             color: COLORS.black,
-            fontSize: 18,
+            fontSize: 20,
             ...props?.textStyle,
-            fontFamily: FONTS.semi_old,
+            fontFamily: FONTS.bold,
           },
         ]}>
         {props.title || ''}

@@ -22,6 +22,7 @@ import VegUrbanCommonBtn from '../../utils/VegUrbanCommonBtn';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import themeContext from '../../constants/themeContext';
 import { FONTS } from '../../constants/Fonts';
+import VegUrbanEditText from '../../utils/EditText/VegUrbanEditText';
 
 const PromoGetCode = ({ navigation }) => {
   const theme = useContext(themeContext);
@@ -30,6 +31,11 @@ const PromoGetCode = ({ navigation }) => {
 
   const handleApplyPromoCode = () => {
     // Handle logic for applying promo code
+    setModalVisible(false);
+
+  };
+
+  const closeModal = () => {
     setModalVisible(false);
   };
   const [cartData, setCartData] = useState([
@@ -85,7 +91,8 @@ const PromoGetCode = ({ navigation }) => {
           GlobalStyle.commonToolbarBG,
           {
             backgroundColor: theme.colors.bg_color_onBoard,
-            elevation: 0
+            elevation: 0,
+            marginTop: 10
           },
         ]}>
         <ToolBarIcon
@@ -96,7 +103,7 @@ const PromoGetCode = ({ navigation }) => {
           borderRadius={20}
           style={{
             marginEnd: 10,
-            backgroundColor: theme.colors.toolbar_icon_bg,
+            backgroundColor: theme.colors.bg_color_onBoard,
             borderRadius: 20
           }}
           onPress={() => {
@@ -118,19 +125,62 @@ const PromoGetCode = ({ navigation }) => {
       <ScrollView
         style={{
           // flex: 1,
+          marginTop: 10
         }}>
-        <TouchableOpacity 
-        onPress={() => setModalVisible(true)}
-        style={styles.getDiscountContainer}>
+        <TouchableOpacity
+          onPress={() => setModalVisible(true)}
+          style={styles.getDiscountContainer}>
 
           {/* <TouchableOpacity onPress={() => setModalVisible(true)}> */}
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            // justifyContent:'center'
+          }}>
             <Image
               source={{
-                uri: 'https://cdn-icons-png.flaticon.com/128/815/815252.png'
+                uri: "https://cdn-icons-png.flaticon.com/128/6737/6737610.png"
               }}
               style={{
-                width: 20,
-                height: 20
+                width: 30,
+                height: 30,
+                tintColor: theme?.colors?.colorPrimary
+              }}
+            />
+            <Text style={{
+              fontSize: 16,
+              color: COLORS?.black,
+              fontFamily: FONTS?.bold,
+              marginLeft: 20
+            }}>Enter Promo Code</Text>
+          </View>
+          <MaterialIcons
+            name='keyboard-arrow-right'
+            color={theme?.colors?.textColor}
+            size={25}
+          />
+
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+        onPress={() => {
+          navigation.navigate('GetDiscount')
+        }}
+        style={styles.getDiscountContainer}>
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            // justifyContent:'center'
+          }}>
+            <Image
+              source={{
+                uri: 'https://cdn-icons-png.flaticon.com/128/879/879757.png'
+              }}
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: COLORS?.light_green
+
               }}
             />
             <Text style={{
@@ -138,99 +188,90 @@ const PromoGetCode = ({ navigation }) => {
               color: COLORS?.black,
               fontFamily: FONTS?.bold,
               marginLeft: 15
-            }}>Apply Promo Code</Text>
-        </TouchableOpacity>
 
-        <View style={styles.getDiscountContainer}>
-          <Image
-            source={{
-              uri: 'https://cdn-icons-png.flaticon.com/128/879/879757.png'
-            }}
-            style={{
-              width: 25,
-              height: 25
-            }}
+            }}>Get Discount</Text>
+          </View>
+          <MaterialIcons
+            name='keyboard-arrow-right'
+            color={theme?.colors?.textColor}
+            size={25}
           />
-          <Text style={{
-            fontSize: 16,
-            color: COLORS?.black,
-            fontFamily: FONTS?.bold,
-            marginLeft: 15
-
-          }}>Get Discount</Text>
           {/* <TouchableOpacity onPress={() => setModalVisible(true)}>
             <Text>Get Discount</Text>
           </TouchableOpacity> */}
-        </View>
+        </TouchableOpacity>
 
-        <Modal visible={isModalVisible} transparent={true} animationType="slide">
+        <Modal
+          transparent={true}
+          animationType="slide"
+          visible={isModalVisible}
+          onRequestClose={closeModal}
+        >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text>Enter Promo Code</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter promo code"
-                value={promoCode}
-                onChangeText={(text) => setPromoCode(text)}
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={{
+                  width: '40%',
+                  height: 6,
+                  backgroundColor: theme?.colors?.white,
+                  justifyContent: 'center',
+                  alignSelf: 'center',
+                  marginBottom: 30,
+                  borderRadius: 10
+                }}
               />
-               {/* <VegUrbanEditText
-            placeholder={STRING.emailHint}
-            // label={STRING.email}
-            iconPosition={'left'}
-            value={email}
-            style={{
-              color: theme?.colors?.textColor,
-              // color: isEmailValid ? theme?.colors?.white : 'red', // Red color for invalid email
-            }}
-            icon={
-              <FontAwesome
-                name={'user-o'}
-                size={20}
-                color={theme?.colors?.grey}
-                // color={theme?.colors?.white}
-                style={{}}
-              />
-              // <Octicons
-              //   name={'check-circle'}
-              //   size={20}
-              //   style={{
-              //     marginHorizontal: 10,
-              //   }}
-              // />
-            }
-            keyBoardType={'email-address'}
-            onChangeText={v => {
-              setEmail(v);
-              setIsEmailValid(validateEmail(v)); // Update isEmailValid based on email validity
-            }}
-          /> */}
-                 {/* <VegUrbanCommonBtn
-              height={55}
-              width={'100%'}
-              borderRadius={30}
-              textSize={18}
-              text={'Sign Up'}
-              textColor={theme.colors?.text}
-              backgroundColor={COLORS?.black}
-              // onPress={() => {
-              //   closeSignUpModal();
+              <Text style={{
+                fontSize: 20,
+                marginBottom: 10,
+                color: theme?.colors?.black,
+                fontFamily: FONTS?.bold
+
+              }}>Promo Code</Text>
+
+              <View style={{
+                marginVertical:30
+              }}>
+              <VegUrbanEditText
+                placeholder="Enter Promo Code"
+                // label={}
+                // value={}
+                style={{
+                  color: theme?.colors?.textColor,
+                }}
+              // onChangeText={v => {
               // }}
-              onPress={() => {
-                navigation.navigate('Location');
-              }}
-              textStyle={{
-                fontFamily: FONTS?.bold,
-              }}
-            /> */}
-              <TouchableOpacity onPress={handleApplyPromoCode}>
+              />
+              </View>
+              <VegUrbanCommonBtn
+                height={55}
+                width={'100%'}
+                borderRadius={30}
+                textSize={16}
+                text={'Apply'}
+                textColor={theme.colors?.text}
+                backgroundColor={theme?.colors?.colorPrimary}
+                onPress={() => {
+                  handleApplyPromoCode();
+                }}
+
+                textStyle={{
+                  fontFamily: FONTS?.semi_old,
+                }}
+              />
+
+              {/* <TouchableOpacity onPress={handleApplyPromoCode}>
                 <Text>Apply Promo Code</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
                 <Text>Cancel</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
+
           </View>
         </Modal>
+
+
 
       </ScrollView>
     </SafeAreaView>
@@ -260,13 +301,15 @@ const styles = StyleSheet.create({
     // marginBottom: 20,
     marginHorizontal: 15,
     borderRadius: 8,
-    borderWidth: 0.2,
-    paddingVertical: 20,
+    // borderWidth: 0.2,
+    paddingVertical: 10,
     paddingHorizontal: 20,
     // elevation:5,
     marginVertical: 6,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'space-between',
+
   },
   input: {
     borderWidth: 1,
@@ -277,15 +320,17 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
-    alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    width:'100%'
+    // backgroundColor: COLORS?.black
   },
   modalContent: {
-    padding: 20,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    width:'100%',
-
+    backgroundColor: 'white',
+    padding: 15,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    paddingHorizontal: 20
+    // marginBottom: '30%',
+    // marginHorizontal:15,
+    // borderRadius:15
   },
 });

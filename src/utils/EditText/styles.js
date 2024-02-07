@@ -38,8 +38,9 @@ export default StyleSheet.create({
     // fontFamily: 'Quicksand-Regular',
   },
   label: {
-    fontSize: 16.5,
+    fontSize: 12,
     color: COLORS.black,
+    marginBottom:5
     // fontWeight:'bold',
     // fontFamily: 'Gilroy-Bold',
   },

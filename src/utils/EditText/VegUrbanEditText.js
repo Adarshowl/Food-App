@@ -57,7 +57,7 @@ const VegUrbanEditText = ({
     if (focused) {
       return theme?.colors?.colorPrimary;
     } else {
-      return COLORS.bg_color;
+      return theme?.colors?.grey;
     }
   };
 
@@ -129,7 +129,7 @@ const VegUrbanEditText = ({
           {
             backgroundColor: getBgColor(),
             borderWidth: getBorderWidth(),
-            borderRadius: 12,
+            borderRadius: 30,
             // elevation: getElevation(),
           },
         ]}>

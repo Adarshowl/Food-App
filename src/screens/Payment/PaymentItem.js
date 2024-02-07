@@ -1,19 +1,29 @@
-import {StyleSheet, Text, Image,TouchableOpacity, View} from 'react-native';
-import React, {memo, useContext} from 'react';
-import {COLORS} from '../../constants/Colors';
+import { StyleSheet, Text, Image, TouchableOpacity, View } from 'react-native';
+import React, { memo, useContext } from 'react';
+import { COLORS } from '../../constants/Colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import themeContext from '../../constants/themeContext';
-import {FONTS} from '../../constants/Fonts';
+import { FONTS } from '../../constants/Fonts';
 import VegUrbanImageLoader from '../../utils/VegUrbanImageLoader';
 
-const PaymentItem = ({item, show, onItemClick}) => {
+const PaymentItem = ({ item, show, onItemClick }) => {
   const theme = useContext(themeContext);
+
+
+
+
   return (
     <TouchableOpacity
-      style={[styles.wrapper, {backgroundColor: theme?.colors?.bg_color_onBoard}]}
-      onPress={onItemClick}>
+      style={[styles.wrapper, {
+        backgroundColor: theme?.colors?.bg_color_onBoard,
+        borderWidth: 1,
+        borderColor: item?.selected ? theme?.colors?.colorPrimary : theme?.colors?.bg_color_onBoard,
+
+      }]}
+      onPress={onItemClick}
+    >
       <View style={styles.innerWrapper}>
-      <Image
+        <Image
           source={{
             uri: item?.image,
           }}
@@ -23,7 +33,7 @@ const PaymentItem = ({item, show, onItemClick}) => {
           style={[
             styles.textName,
             {
-              color: theme?.colors?.textcolor,
+              color: theme?.colors?.white,
             },
           ]}>
           {/* {item?.payment_method_name || item?.payment_name} */}
@@ -32,7 +42,7 @@ const PaymentItem = ({item, show, onItemClick}) => {
         <MaterialCommunityIcons
           name={item?.selected ? 'circle-slice-8' : 'circle-outline'}
           size={22}
-          color={theme?.colors?.white}
+          color={theme?.colors?.colorPrimary}
         />
       </View>
     </TouchableOpacity>
@@ -51,7 +61,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignItems: 'center',
     // borderWidth:0.2,
-    elevation:5
+    elevation: 5
   },
   text: {
     maxHeight: 35,
@@ -73,8 +83,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textName: {
-    fontFamily: FONTS?.medium,
-    fontSize: 16,
+    fontFamily: FONTS?.bold,
+    fontSize: 17,
     color: COLORS.black,
     flex: 1,
     marginStart: 16,

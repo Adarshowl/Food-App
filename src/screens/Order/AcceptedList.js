@@ -141,9 +141,9 @@ const AcceptedList = ({navigation}) => {
     return (
       <TouchableOpacity
         activeOpacity={0.8}
-        // onPress={() => {
-        //   navigation.navigate('RestaurantDetails');
-        // }}
+        onPress={() => {
+          navigation.navigate('OrderDetails');
+        }}
         style={[
           styles.Wrapper,
           {
@@ -250,7 +250,7 @@ const AcceptedList = ({navigation}) => {
             }}>
               <AntDesign
                 name="calendar"
-                color={COLORS?.black}
+                color={theme?.colors?.colorPrimary}
                 size={16}
               />
               <Text
@@ -276,7 +276,7 @@ const AcceptedList = ({navigation}) => {
             }}>
               <FontAwesome
                 name="location-arrow"
-                color={COLORS?.black}
+                color={theme?.colors?.colorPrimary}
                 size={20}
               />
               <Text
@@ -312,7 +312,7 @@ const AcceptedList = ({navigation}) => {
             }}>
               <MaterialIcons
                 name="payment"
-                color={COLORS?.black}
+                color={theme?.colors?.colorPrimary}
                 size={18}
               />
               <Text
@@ -364,7 +364,7 @@ const AcceptedList = ({navigation}) => {
           }}>
             
              <VegUrbanCommonBtn
-              height={35}
+              height={30}
               width={'100%'}
               borderRadius={20}
               textSize={11}
